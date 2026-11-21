@@ -335,29 +335,80 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
     }
 
-    .settings-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 14px 0;
-    }
-
-    .settings-section-title {
+    .capture-section-header {
       font-size: 0.86rem;
       font-weight: 800;
       color: var(--text);
-      margin: 0 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0 0 9px 0;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
+    /* Acordeones plegables de Configuración (<details>/<summary>) */
+    .settings-accordion {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 9px;
+      overflow: hidden;
+      transition: border-color 0.15s ease;
+    }
+
+    .settings-accordion:last-child {
+      margin-bottom: 0;
+    }
+
+    .settings-accordion[open] {
+      border-color: rgba(59, 130, 246, 0.45);
+    }
+
+    .settings-accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 13px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      user-select: none;
+      background: rgba(30, 41, 59, 0.45);
+      transition: background-color 0.15s ease;
+    }
+
+    .settings-accordion summary:hover {
+      background: var(--surface-elevated);
+    }
+
+    .settings-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .settings-accordion summary::after {
+      content: '▸';
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      transition: transform 0.18s ease;
+      flex-shrink: 0;
+    }
+
+    .settings-accordion[open] summary::after {
+      transform: rotate(90deg);
+      color: #60a5fa;
+    }
+
+    .accordion-body {
+      padding: 12px 13px 13px 13px;
+      border-top: 1px solid var(--border);
+    }
+
     /* Panel manual de ayuda en Configuración */
     .manual-guide-box {
-      background: var(--input-bg);
-      border: 1px solid rgba(59, 130, 246, 0.45);
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 10px;
       font-size: 0.8rem;
       color: #cbd5e1;
       line-height: 1.45;
@@ -365,7 +416,7 @@
 
     .manual-guide-box h3 {
       margin: 0 0 8px 0;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       color: #93c5fd;
     }
 
@@ -1019,6 +1070,11 @@
       transform: scale(0.92);
     }
 
+    .action-mini-btn.delete-btn:hover {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+
     .meta-location-right {
       font-size: 0.72rem;
       font-weight: 600;
@@ -1072,98 +1128,98 @@
       <span id="localModeHintText">Firebase listo. Inicia sesión con Google para sincronizar en la nube.</span>
       <button type="button" id="localModeHintBtn" class="cloud-hint-action" onclick="handleHintAction()">G Entrar</button>
     </div>
-
-    <!-- Notificación Toast flotante auto-ocultable (3 segundos) -->
-    <div id="toastBanner" class="toast-banner hidden">
-      <span id="toastMessage"></span>
-    </div>
-
-    <!-- Snackbar inferior con botón Deshacer -->
-    <div id="undoSnackbar" class="undo-snackbar hidden">
-      <span id="undoMessage">Producto eliminado</span>
-      <button type="button" class="undo-btn" onclick="undoLastDelete()">↩️ Deshacer</button>
-    </div>
-
-    <!-- 2. Panel de Configuración ('⚙️') -->
+    <!-- 2. Panel de Configuración ('⚙️') con apartados plegables (<details>) -->
     <section id="settingsPanel" class="card hidden">
-      <!-- Botón Manual de ayuda -->
-      <button type="button" class="btn btn-purple" style="width: 100%; margin-bottom: 4px;" onclick="toggleManualGuide()">
-        <span>📖</span>
-        <span>Manual de ayuda: Configurar Gemini y App</span>
-      </button>
-
-      <div id="manualGuideBox" class="manual-guide-box hidden">
-        <h3>🚀 Guía rápida: Gemini y Sincronización</h3>
-        <ol>
-          <li><strong>API Key gratuita de Gemini:</strong> Entra en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a> con tu cuenta Google, pulsa <em>"Create API key"</em> y copia la clave (<code>AIzaSy...</code>).</li>
-          <li><strong>Configurar IA:</strong> Pega la clave abajo en <em>Google AI Studio API Key</em>, pulsa <strong>Guardar clave</strong> y luego <strong>🔄 Actualizar modelos</strong>.</li>
-          <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente tras la foto. Si la API está saturada o no quieres usar clave, pulsa <strong>Modo B</strong> para enviar la foto directamente a tu app oficial de Gemini y pegar su respuesta.</li>
-          <li><strong>Sincronización en la nube (Firebase):</strong> Crea un proyecto web en Firebase, activa <em>Authentication (Google)</em> y <em>Firestore Database</em>, pega el bloque <code>firebaseConfig</code> arriba y pulsa <strong>G Entrar</strong> en la cabecera.</li>
-          <li><strong>Gestos y alertas:</strong> Desliza cualquier producto hacia la izquierda para borrarlo (con botón <strong>Deshacer</strong>). Usa <code>📅</code> para añadir una alarma a tu calendario.</li>
-        </ol>
-        <div class="manual-tip">
-          💡 Consejo: Encuadra en la misma foto el nombre del envase y la fecha impresa para mayor precisión.
+      <!-- 1) Conexión Firebase -->
+      <details class="settings-accordion">
+        <summary><span>🔥 Conexión Firebase (Nube compartida)</span></summary>
+        <div class="accordion-body">
+          <p class="helper-text" style="margin-top: 0;">
+            Proyecto <strong>caduca2-app</strong> precargado por defecto. Solo necesitas editar este bloque si deseas usar otro proyecto de Firebase distinto.
+          </p>
+          <label for="firebaseConfigInput">Configuración firebaseConfig (Opcional / Avanzado)</label>
+          <textarea id="firebaseConfigInput" class="code-area" rows="5" placeholder="Usando configuración por defecto de caduca2-app..."></textarea>
+          <div class="flex-row">
+            <button type="button" class="btn btn-primary flex-1" onclick="saveAndConnectFirebase()">Guardar y conectar</button>
+            <button type="button" id="disconnectFirebaseBtn" class="btn btn-secondary" onclick="resetDefaultFirebase()">Restaurar defecto</button>
+          </div>
         </div>
-      </div>
+      </details>
 
-      <div class="settings-divider"></div>
+      <!-- 2) API Key y Modelo de Gemini -->
+      <details class="settings-accordion">
+        <summary><span>🤖 API Key y Modelo de Gemini (Modo A)</span></summary>
+        <div class="accordion-body">
+          <label for="apiKeyInput">Google AI Studio API Key</label>
+          <div class="flex-row" style="margin-bottom: 11px;">
+            <input type="password" id="apiKeyInput" placeholder="AIzaSy..." style="margin-bottom: 0; flex: 1;">
+            <button type="button" class="btn btn-secondary" onclick="saveApiKeyOnly()" style="white-space: nowrap;">Guardar clave</button>
+          </div>
 
-      <h2 class="settings-section-title">☁️ Sincronización Firebase (Nube)</h2>
-      <p class="helper-text" style="margin-top: 0;">
-        Proyecto <strong>caduca2-app</strong> precargado por defecto. Solo necesitas editar este bloque si deseas usar otro proyecto de Firebase distinto.
-      </p>
-      <label for="firebaseConfigInput">Configuración firebaseConfig (Opcional / Avanzado)</label>
-      <textarea id="firebaseConfigInput" class="code-area" rows="5" placeholder="Usando configuración por defecto de caduca2-app..."></textarea>
-      <div class="flex-row" style="margin-bottom: 4px;">
-        <button type="button" class="btn btn-primary flex-1" onclick="saveAndConnectFirebase()">Guardar personalizado</button>
-        <button type="button" id="disconnectFirebaseBtn" class="btn btn-secondary" onclick="resetDefaultFirebase()">Restaurar defecto</button>
-      </div>
+          <label for="modelSelect">Modelo Gemini (generateContent)</label>
+          <div class="model-sync-row">
+            <select id="modelSelect">
+              <option value="gemini-3.8-flash-lite">gemini-3.8-flash-lite</option>
+              <option value="gemini-3.8-flash">gemini-3.8-flash</option>
+              <option value="gemini-flash-latest">gemini-flash-latest</option>
+            </select>
+            <button type="button" id="syncModelsBtn" class="btn btn-secondary" onclick="syncModelsFromAPI()">🔄 Sincronizar modelos</button>
+          </div>
 
-      <div class="settings-divider"></div>
+          <button type="button" class="btn btn-primary" style="width: 100%;" onclick="saveGeneralSettings()">💾 Guardar modelo y clave</button>
+        </div>
+      </details>
 
-      <h2 class="settings-section-title">🤖 IA Gemini (Modo A)</h2>
-      <label for="apiKeyInput">Google AI Studio API Key</label>
-      <div class="flex-row" style="margin-bottom: 11px;">
-        <input type="password" id="apiKeyInput" placeholder="AIzaSy..." style="margin-bottom: 0; flex: 1;">
-        <button type="button" class="btn btn-secondary" onclick="saveApiKeyOnly()" style="white-space: nowrap;">Guardar clave</button>
-      </div>
+      <!-- 3) Notificaciones y Preaviso -->
+      <details class="settings-accordion">
+        <summary><span>🔔 Notificaciones y Preaviso</span></summary>
+        <div class="accordion-body">
+          <label for="warningDaysInput">Días de preaviso</label>
+          <input type="number" id="warningDaysInput" min="0" max="365" value="3" placeholder="3">
+          <p class="helper-text">
+            Controla el umbral rojo de las tarjetas, los avisos al abrir la app y los días de antelación de la alarma en los archivos .ics.
+          </p>
+          <button type="button" class="btn btn-success" style="width: 100%;" onclick="saveGeneralSettings()">💾 Guardar preaviso</button>
+        </div>
+      </details>
 
-      <label for="modelSelect">Modelo Gemini (generateContent)</label>
-      <div class="model-sync-row">
-        <select id="modelSelect">
-          <option value="gemini-3.8-flash-lite">gemini-3.8-flash-lite</option>
-          <option value="gemini-3.8-flash">gemini-3.8-flash</option>
-          <option value="gemini-flash-latest">gemini-flash-latest</option>
-        </select>
-        <button type="button" id="syncModelsBtn" class="btn btn-secondary" onclick="syncModelsFromAPI()">🔄 Actualizar modelos</button>
-      </div>
+      <!-- 4) Copia de seguridad (JSON) -->
+      <details class="settings-accordion">
+        <summary><span>💾 Copia de seguridad (JSON)</span></summary>
+        <div class="accordion-body">
+          <p class="helper-text" style="margin-top: 0;">
+            Exporta o importa tus productos. Si estás conectado a la nube, los productos importados se subirán a Firestore.
+          </p>
+          <div class="flex-row">
+            <button type="button" class="btn btn-secondary flex-1" onclick="exportJSON()">⬇️ Exportar JSON</button>
+            <button type="button" class="btn btn-secondary flex-1" onclick="document.getElementById('importFile').click()">⬆️ Importar JSON</button>
+            <input type="file" id="importFile" accept=".json" class="hidden" onchange="importJSON(event)">
+          </div>
+        </div>
+      </details>
 
-      <div class="settings-divider"></div>
-
-      <h2 class="settings-section-title">🔔 Alertas y Preaviso</h2>
-      <label for="warningDaysInput">Días de preaviso</label>
-      <input type="number" id="warningDaysInput" min="0" max="365" value="3" placeholder="3">
-      <p class="helper-text">
-        Define cuántos días antes se marca el producto en rojo, salta la notificación al abrir la app y se programa la alarma del calendario (.ics).
-      </p>
-
-      <button type="button" class="btn btn-success" style="width: 100%;" onclick="saveGeneralSettings()">💾 Guardar ajustes</button>
-
-      <div class="settings-divider"></div>
-
-      <h2 class="settings-section-title">📦 Copia de Seguridad (JSON)</h2>
-      <p class="helper-text">
-        Exporta o importa tus productos. Si estás conectado a la nube, los productos importados se subirán a Firestore.
-      </p>
-      <div class="flex-row">
-        <button type="button" class="btn btn-secondary flex-1" onclick="exportJSON()">⬇️ Exportar JSON</button>
-        <button type="button" class="btn btn-secondary flex-1" onclick="document.getElementById('importFile').click()">⬆️ Importar JSON</button>
-        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importJSON(event)">
-      </div>
+      <!-- 5) Manual de ayuda -->
+      <details class="settings-accordion">
+        <summary><span>📖 Manual de ayuda: Configurar Gemini y App</span></summary>
+        <div class="accordion-body manual-guide-box">
+          <h3>🚀 Guía rápida: Gemini y Sincronización</h3>
+          <ol>
+            <li><strong>API Key gratuita de Gemini:</strong> Entra en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a> con tu cuenta Google, pulsa <em>"Create API key"</em> y copia la clave (<code>AIzaSy...</code>).</li>
+            <li><strong>Configurar IA:</strong> Abre el apartado <em>🤖 API Key y Modelo de Gemini</em>, pega la clave, pulsa <strong>Guardar clave</strong> y luego <strong>🔄 Sincronizar modelos</strong>.</li>
+            <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente tras la foto. Si la API está saturada o no quieres usar clave, usa <strong>Modo B</strong> para enviar la foto directamente a tu app oficial de Gemini y pegar su respuesta.</li>
+            <li><strong>Sincronización en la nube:</strong> Pulsa <strong>G Entrar</strong> en la cabecera con tu cuenta Google para ver y compartir la lista en tiempo real con tu familia.</li>
+            <li><strong>Gestos y alertas:</strong> Usa <code>🗑️</code> o desliza cualquier producto hacia la izquierda para borrarlo (con opción <strong>Deshacer</strong>). Usa <code>📅</code> para añadir una alarma a tu calendario.</li>
+          </ol>
+          <div class="manual-tip">
+            💡 Consejo: Encuadra en la misma foto el nombre del envase y la fecha impresa para mayor precisión.
+          </div>
+        </div>
+      </details>
     </section>
 
     <!-- 3. Panel de Captura, Formulario y Modos -->
     <section id="mainCaptureCard" class="card">
+      <h2 class="capture-section-header">➕ Añadir producto</h2>
       <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImageSelected(event, 'Cámara')">
       <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="handleImageSelected(event, 'Galería')">
 
@@ -1228,17 +1284,17 @@
 
       <!-- Contenedor de Modos (Modo A arriba, Modo B debajo) -->
       <div id="modesHub" class="modes-stack hidden" style="margin-top: 10px;">
-        <!-- MODO A: Análisis directo con API -->
+        <!-- MODO A: Análisis directo con IA (API Gemini) -->
         <div class="mode-box highlight-api">
           <div class="mode-header">
-            <span class="mode-tag api">Modo A · Análisis directo con API Gemini</span>
+            <span class="mode-tag api">Modo A · Análisis directo con IA (API Gemini)</span>
           </div>
           <p class="mode-desc">
             Comprime a escala de grises (máx. 512px, ~25 KB), consulta la API con timeout de 25s y salta automáticamente a otros modelos disponibles si hay saturación.
           </p>
           <button type="button" id="runApiBtn" class="btn btn-primary" style="width: 100%;" onclick="runOptimizedApiAnalysis()">
             <span>⚡</span>
-            <span>Analizar vía API</span>
+            <span>Analizar foto con IA</span>
           </button>
 
           <!-- Monitor de progreso de 4 fases en vivo -->
@@ -1273,15 +1329,15 @@
 
             <button type="button" id="cancelAnalysisBtn" class="btn btn-danger" style="width: 100%; padding: 9px;" onclick="cancelApiAnalysis()">
               <span>🛑</span>
-              <span>Cancelar</span>
+              <span>Cancelar análisis</span>
             </button>
           </div>
         </div>
 
-        <!-- MODO B: App Gemini local -->
+        <!-- MODO B: Usar mi app Gemini local (Sin API Key) -->
         <div class="mode-box highlight-purple">
           <div class="mode-header">
-            <span class="mode-tag local-app">Modo B · App Gemini local</span>
+            <span class="mode-tag local-app">Modo B · Usar mi app Gemini local (Sin API Key)</span>
           </div>
           <p class="mode-desc">
             Copia el prompt <code>PRODUCTO | YYYY-MM-DD</code> y abre el menú compartir con la foto adjunta para enviarla a tu app de Gemini.
@@ -1310,7 +1366,7 @@
     </section>
 
     <!-- 5. Buscador y Lista Ultra-Compacta de Productos -->
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Filtrar por producto o ubicación..." oninput="renderProducts()">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Filtrar productos o ubicación..." oninput="renderProducts()">
 
     <div class="warning-summary-bar">
       <span id="totalCounterLabel">0 productos</span>
@@ -1667,7 +1723,10 @@
       if (firebaseAuth && firestoreDb) {
         signInWithGoogle();
       } else {
-        document.getElementById('settingsPanel').classList.remove('hidden');
+        const panel = document.getElementById('settingsPanel');
+        panel.classList.remove('hidden');
+        const firstAccordion = panel.querySelector('details.settings-accordion');
+        if (firstAccordion) firstAccordion.open = true;
         document.getElementById('firebaseConfigInput').focus();
       }
     }
@@ -2103,7 +2162,10 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       const apiKey = localStorage.getItem(API_KEY_STORAGE);
       if (!apiKey) {
         showToast('Para el Modo A configura tu API Key de Gemini en ⚙️ (o usa el Modo B).', 'warn');
-        document.getElementById('settingsPanel').classList.remove('hidden');
+        const panel = document.getElementById('settingsPanel');
+        panel.classList.remove('hidden');
+        const accordions = panel.querySelectorAll('details.settings-accordion');
+        if (accordions[1]) accordions[1].open = true;
         return;
       }
 
@@ -2708,6 +2770,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
                 <div class="card-actions">
                   <button type="button" class="action-mini-btn" onclick="editProduct('${jsId}')" title="Editar producto">✏️</button>
                   <button type="button" class="action-mini-btn" onclick="downloadICS('${jsTitle}', '${escapeHtml(item.date)}')" title="Descargar recordatorio .ics (${warningDays} días antes a las 09:00)">📅</button>
+                  <button type="button" class="action-mini-btn delete-btn" onclick="deleteProduct('${jsId}')" title="Eliminar producto">🗑️</button>
                 </div>
                 ${safeNote ? `<div class="meta-location-right">📍 ${safeNote}</div>` : ''}
               </div>
@@ -2936,7 +2999,6 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     // Exponer funciones al ámbito global window
     Object.assign(window, {
       toggleSettingsPanel,
-      toggleManualGuide,
       saveAndConnectFirebase,
       resetDefaultFirebase,
       saveApiKeyOnly,
