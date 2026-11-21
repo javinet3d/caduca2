@@ -39,7 +39,7 @@
       margin: 0;
       background-color: var(--bg);
       color: var(--text);
-      padding: 12px 12px 56px 12px;
+      padding: 12px 12px 92px 12px;
       line-height: 1.4;
     }
 
@@ -203,7 +203,7 @@
       transform: scale(0.94);
     }
 
-    /* Aviso discreto de modo local / invitación a nube */
+    /* Aviso discreto de estado nube */
     .cloud-hint-bar {
       background: rgba(59, 130, 246, 0.1);
       border: 1px solid rgba(59, 130, 246, 0.3);
@@ -239,7 +239,7 @@
       transform: translateX(-50%);
       width: calc(100% - 24px);
       max-width: 576px;
-      z-index: 1200;
+      z-index: 9500;
       background: var(--surface-elevated);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -251,26 +251,25 @@
       font-size: 0.85rem;
       font-weight: 600;
       word-break: break-word;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.48);
       animation: toastSlideDown 0.2s ease-out;
-      pointer-events: auto;
     }
 
     .toast-banner.info {
       background: #064e3b;
-      border-color: rgba(16, 185, 129, 0.65);
+      border-color: rgba(16, 185, 129, 0.75);
       color: #ecfdf5;
     }
 
     .toast-banner.warn {
       background: #78350f;
-      border-color: rgba(245, 158, 11, 0.65);
+      border-color: rgba(245, 158, 11, 0.75);
       color: #fffbeb;
     }
 
     .toast-banner.error {
       background: #7f1d1d;
-      border-color: rgba(239, 68, 68, 0.65);
+      border-color: rgba(239, 68, 68, 0.75);
       color: #fef2f2;
     }
 
@@ -279,27 +278,27 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
-    /* Snackbar inferior con botón Deshacer tras swipe */
+    /* Barra flotante inferior con botón Deshacer tras borrar o deslizar */
     .undo-snackbar {
       position: fixed;
-      bottom: 18px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       width: calc(100% - 24px);
       max-width: 576px;
-      z-index: 1250;
+      z-index: 9999;
       background: #1e293b;
-      border: 1px solid rgba(239, 68, 68, 0.55);
+      border: 1.5px solid #ef4444;
       color: #f8fafc;
       border-radius: 14px;
-      padding: 11px 14px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+      font-size: 0.86rem;
+      font-weight: 700;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
       animation: undoSlideUp 0.2s ease-out;
     }
 
@@ -307,13 +306,14 @@
       background: var(--primary);
       border: none;
       color: #ffffff;
-      padding: 7px 12px;
+      padding: 8px 13px;
       border-radius: 9px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
     }
 
     .undo-btn:active {
@@ -321,7 +321,7 @@
     }
 
     @keyframes undoSlideUp {
-      from { opacity: 0; transform: translate(-50%, 14px); }
+      from { opacity: 0; transform: translate(-50%, 16px); }
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
@@ -598,63 +598,120 @@
       font-size: 0.8rem;
     }
 
-    /* Vista previa */
+    /* Galería de vista previa multi-foto (hasta 3 fotos) */
     .preview-hub {
       margin-top: 12px;
       padding-top: 12px;
       border-top: 1px solid var(--border);
     }
 
-    .preview-card {
+    .preview-header-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 8px 10px;
-      margin-bottom: 10px;
+      justify-content: space-between;
+      margin-bottom: 8px;
     }
 
-    .preview-thumb {
-      width: 54px;
-      height: 54px;
-      border-radius: 8px;
-      object-fit: cover;
+    .preview-counter {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #93c5fd;
+    }
+
+    .clear-all-photos-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 7px;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .clear-all-photos-btn:hover {
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+
+    .thumbs-strip {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 9px;
+    }
+
+    .thumb-item {
+      position: relative;
+      width: 78px;
+      height: 78px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       background: #000;
       flex-shrink: 0;
-    }
-
-    .preview-meta {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .preview-title {
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--text);
-      margin: 0 0 2px 0;
-      white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .preview-sub {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin: 0;
+    .thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    /* Formulario de creación / edición (Debajo de la imagen, encima de Modo A/B) */
+    .thumb-badge {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      background: rgba(15, 23, 42, 0.82);
+      color: #f8fafc;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 5px;
+    }
+
+    .thumb-remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.92);
+      color: #ffffff;
+      border: none;
+      font-size: 0.78rem;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .add-more-photos-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .add-more-btn {
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      border-radius: 9px;
+    }
+
+    /* Formulario de creación / edición (Debajo de la imagen y encima de mensajes / Modo B) */
     .form-section {
-      margin-top: 10px;
+      margin-top: 12px;
       margin-bottom: 12px;
       padding: 12px;
       border-radius: 12px;
-      background: rgba(15, 23, 42, 0.72);
-      border: 1px solid rgba(16, 185, 129, 0.45);
+      background: rgba(15, 23, 42, 0.78);
+      border: 1.5px solid rgba(16, 185, 129, 0.55);
     }
 
     .form-section.editing-active {
@@ -673,7 +730,7 @@
       margin: 0;
       font-size: 0.92rem;
       font-weight: 800;
-      color: var(--text);
+      color: #6ee7b7;
     }
 
     .form-title.is-editing {
@@ -731,6 +788,7 @@
       display: flex;
       flex-direction: column;
       gap: 9px;
+      margin-top: 10px;
     }
 
     .mode-box {
@@ -1123,16 +1181,17 @@
       </div>
     </header>
 
-    <!-- Barra discreta de estado local / conexión nube -->
+    <!-- Barra discreta de estado nube -->
     <div id="localModeHint" class="cloud-hint-bar">
       <span id="localModeHintText">Firebase listo. Inicia sesión con Google para sincronizar en la nube.</span>
       <button type="button" id="localModeHintBtn" class="cloud-hint-action" onclick="handleHintAction()">G Entrar</button>
     </div>
+
     <!-- 2. Panel de Configuración ('⚙️') con apartados plegables (<details>) -->
     <section id="settingsPanel" class="card hidden">
       <!-- 1) Conexión Firebase -->
       <details class="settings-accordion">
-        <summary><span>🔥 Conexión Firebase (Nube compartida)</span></summary>
+        <summary><span>🔥 Conexión Firebase</span></summary>
         <div class="accordion-body">
           <p class="helper-text" style="margin-top: 0;">
             Proyecto <strong>caduca2-app</strong> precargado por defecto. Solo necesitas editar este bloque si deseas usar otro proyecto de Firebase distinto.
@@ -1141,14 +1200,14 @@
           <textarea id="firebaseConfigInput" class="code-area" rows="5" placeholder="Usando configuración por defecto de caduca2-app..."></textarea>
           <div class="flex-row">
             <button type="button" class="btn btn-primary flex-1" onclick="saveAndConnectFirebase()">Guardar y conectar</button>
-            <button type="button" id="disconnectFirebaseBtn" class="btn btn-secondary" onclick="resetDefaultFirebase()">Restaurar defecto</button>
+            <button type="button" class="btn btn-secondary" onclick="resetDefaultFirebase()">Restaurar por defecto</button>
           </div>
         </div>
       </details>
 
       <!-- 2) API Key y Modelo de Gemini -->
       <details class="settings-accordion">
-        <summary><span>🤖 API Key y Modelo de Gemini (Modo A)</span></summary>
+        <summary><span>🤖 API Key y Modelo de Gemini</span></summary>
         <div class="accordion-body">
           <label for="apiKeyInput">Google AI Studio API Key</label>
           <div class="flex-row" style="margin-bottom: 11px;">
@@ -1163,7 +1222,7 @@
               <option value="gemini-3.8-flash">gemini-3.8-flash</option>
               <option value="gemini-flash-latest">gemini-flash-latest</option>
             </select>
-            <button type="button" id="syncModelsBtn" class="btn btn-secondary" onclick="syncModelsFromAPI()">🔄 Sincronizar modelos</button>
+            <button type="button" id="syncModelsBtn" class="btn btn-secondary" onclick="syncModelsFromAPI()">🔄 Actualizar modelos</button>
           </div>
 
           <button type="button" class="btn btn-primary" style="width: 100%;" onclick="saveGeneralSettings()">💾 Guardar modelo y clave</button>
@@ -1179,13 +1238,16 @@
           <p class="helper-text">
             Controla el umbral rojo de las tarjetas, los avisos al abrir la app y los días de antelación de la alarma en los archivos .ics.
           </p>
-          <button type="button" class="btn btn-success" style="width: 100%;" onclick="saveGeneralSettings()">💾 Guardar preaviso</button>
+          <div class="flex-row">
+            <button type="button" class="btn btn-success flex-1" onclick="saveGeneralSettings()">💾 Guardar preaviso</button>
+            <button type="button" class="btn btn-secondary" onclick="requestNotifPermission()">🔔 Permiso avisos</button>
+          </div>
         </div>
       </details>
 
-      <!-- 4) Copia de seguridad (JSON) -->
+      <!-- 4) Copia de seguridad JSON -->
       <details class="settings-accordion">
-        <summary><span>💾 Copia de seguridad (JSON)</span></summary>
+        <summary><span>💾 Copia de seguridad JSON</span></summary>
         <div class="accordion-body">
           <p class="helper-text" style="margin-top: 0;">
             Exporta o importa tus productos. Si estás conectado a la nube, los productos importados se subirán a Firestore.
@@ -1205,23 +1267,29 @@
           <h3>🚀 Guía rápida: Gemini y Sincronización</h3>
           <ol>
             <li><strong>API Key gratuita de Gemini:</strong> Entra en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a> con tu cuenta Google, pulsa <em>"Create API key"</em> y copia la clave (<code>AIzaSy...</code>).</li>
-            <li><strong>Configurar IA:</strong> Abre el apartado <em>🤖 API Key y Modelo de Gemini</em>, pega la clave, pulsa <strong>Guardar clave</strong> y luego <strong>🔄 Sincronizar modelos</strong>.</li>
-            <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente tras la foto. Si la API está saturada o no quieres usar clave, usa <strong>Modo B</strong> para enviar la foto directamente a tu app oficial de Gemini y pegar su respuesta.</li>
-            <li><strong>Sincronización en la nube:</strong> Pulsa <strong>G Entrar</strong> en la cabecera con tu cuenta Google para ver y compartir la lista en tiempo real con tu familia.</li>
-            <li><strong>Gestos y alertas:</strong> Usa <code>🗑️</code> o desliza cualquier producto hacia la izquierda para borrarlo (con opción <strong>Deshacer</strong>). Usa <code>📅</code> para añadir una alarma a tu calendario.</li>
+            <li><strong>Configurar IA:</strong> Abre el apartado <em>🤖 API Key y Modelo de Gemini</em>, pega la clave, pulsa <strong>Guardar clave</strong> y luego <strong>🔄 Actualizar modelos</strong>.</li>
+            <li><strong>Varias fotos a la vez:</strong> Si el envase y la fecha están en lados distintos, añade hasta 3 fotos con <strong>+ 📸 Otra foto (Cámara)</strong> o <strong>+ 🖼️ Otra foto (Galería)</strong>; la IA las analizará todas juntas.</li>
+            <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente desde la API. Si hay saturación o no tienes clave, usa <strong>Modo B</strong> para enviar las fotos a tu app oficial de Gemini y pegar su respuesta.</li>
+            <li><strong>Sincronización en la nube:</strong> Pulsa <strong>G Entrar</strong> en la cabecera con tu cuenta Google para ver y compartir la lista en tiempo real.</li>
           </ol>
           <div class="manual-tip">
-            💡 Consejo: Encuadra en la misma foto el nombre del envase y la fecha impresa para mayor precisión.
+            💡 Consejo: Puedes borrar cualquier producto pulsando <code>🗑️</code> o deslizándolo hacia la izquierda; aparecerá abajo el botón <strong>↩️ Deshacer</strong> durante 6 segundos.
           </div>
         </div>
       </details>
     </section>
 
-    <!-- 3. Panel de Captura, Formulario y Modos -->
+    <!-- 3. Panel de Captura, Galería Multi-Foto, Formulario y Modos -->
     <section id="mainCaptureCard" class="card">
       <h2 class="capture-section-header">➕ Añadir producto</h2>
-      <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImageSelected(event, 'Cámara')">
-      <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="handleImageSelected(event, 'Galería')">
+
+      <!-- Inputs principales (reemplazan las fotos actuales) -->
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handlePrimaryImageSelected(event, 'Cámara')">
+      <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="handlePrimaryImageSelected(event, 'Galería')">
+
+      <!-- Inputs adicionales (añaden hasta 3 fotos al conjunto) -->
+      <input type="file" id="extraCameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleExtraImageSelected(event, 'Cámara')">
+      <input type="file" id="extraGalleryInput" accept="image/*" class="hidden" onchange="handleExtraImageSelected(event, 'Galería')">
 
       <div class="capture-grid">
         <button type="button" class="btn btn-primary" onclick="document.getElementById('cameraInput').click()">
@@ -1238,19 +1306,26 @@
         </button>
       </div>
 
-      <!-- Vista previa de foto seleccionada -->
+      <!-- Galería de miniaturas (hasta 3 fotos) + botones para añadir más fotos -->
       <div id="previewHub" class="preview-hub hidden">
-        <div class="preview-card">
-          <img id="previewThumb" class="preview-thumb" alt="Vista previa del producto">
-          <div class="preview-meta">
-            <p id="previewFileName" class="preview-title">imagen.jpg</p>
-            <p id="previewFileStats" class="preview-sub">Preparando imagen...</p>
-          </div>
-          <button type="button" class="btn btn-secondary" style="padding: 6px 9px; font-size: 0.78rem;" onclick="clearSelectedImage()" title="Quitar imagen">✕</button>
+        <div class="preview-header-row">
+          <span id="previewCounter" class="preview-counter">1 / 3 fotos adjuntas</span>
+          <button type="button" class="clear-all-photos-btn" onclick="clearAllSelectedImages()">✕ Quitar fotos</button>
+        </div>
+
+        <div id="thumbsStrip" class="thumbs-strip"></div>
+
+        <div id="addMorePhotosRow" class="add-more-photos-row">
+          <button type="button" class="btn btn-secondary add-more-btn" onclick="document.getElementById('extraCameraInput').click()">
+            + 📸 Otra foto (Cámara)
+          </button>
+          <button type="button" class="btn btn-secondary add-more-btn" onclick="document.getElementById('extraGalleryInput').click()">
+            + 🖼️ Otra foto (Galería)
+          </button>
         </div>
       </div>
 
-      <!-- Formulario editable (Debajo de la imagen y encima de mensajes de análisis / Modo B) -->
+      <!-- Formulario editable (Debajo de la vista previa de fotos y encima de los mensajes de análisis / Modo B) -->
       <div id="productFormSection" class="form-section hidden">
         <div class="form-title-bar">
           <h2 id="formHeading" class="form-title">Nuevo producto</h2>
@@ -1283,18 +1358,18 @@
       </div>
 
       <!-- Contenedor de Modos (Modo A arriba, Modo B debajo) -->
-      <div id="modesHub" class="modes-stack hidden" style="margin-top: 10px;">
+      <div id="modesHub" class="modes-stack hidden">
         <!-- MODO A: Análisis directo con IA (API Gemini) -->
         <div class="mode-box highlight-api">
           <div class="mode-header">
-            <span class="mode-tag api">Modo A · Análisis directo con IA (API Gemini)</span>
+            <span class="mode-tag api">Modo A · Análisis con IA (API Gemini)</span>
           </div>
           <p class="mode-desc">
-            Comprime a escala de grises (máx. 512px, ~25 KB), consulta la API con timeout de 25s y salta automáticamente a otros modelos disponibles si hay saturación.
+            Comprime todas las fotos adjuntas a escala de grises (máx. 512px, ~25 KB c/u) y las envía juntas a la API con timeout de 25s y salto automático entre modelos.
           </p>
           <button type="button" id="runApiBtn" class="btn btn-primary" style="width: 100%;" onclick="runOptimizedApiAnalysis()">
             <span>⚡</span>
-            <span>Analizar foto con IA</span>
+            <span>Analizar con IA (API)</span>
           </button>
 
           <!-- Monitor de progreso de 4 fases en vivo -->
@@ -1311,11 +1386,11 @@
             <ul class="steps-list">
               <li id="step1" class="step-item">
                 <span class="step-icon" id="step1Icon">⏳</span>
-                <span id="step1Text">Paso 1: Convirtiendo a escala de grises (máx. 512px)...</span>
+                <span id="step1Text">Paso 1: Convirtiendo fotos a escala de grises (máx. 512px)...</span>
               </li>
               <li id="step2" class="step-item">
                 <span class="step-icon" id="step2Icon">⏳</span>
-                <span id="step2Text">Paso 2: Enviando imagen a la API...</span>
+                <span id="step2Text">Paso 2: Enviando imágenes a la API...</span>
               </li>
               <li id="step3" class="step-item">
                 <span class="step-icon" id="step3Icon">⏳</span>
@@ -1329,7 +1404,7 @@
 
             <button type="button" id="cancelAnalysisBtn" class="btn btn-danger" style="width: 100%; padding: 9px;" onclick="cancelApiAnalysis()">
               <span>🛑</span>
-              <span>Cancelar análisis</span>
+              <span>Cancelar</span>
             </button>
           </div>
         </div>
@@ -1340,7 +1415,7 @@
             <span class="mode-tag local-app">Modo B · Usar mi app Gemini local (Sin API Key)</span>
           </div>
           <p class="mode-desc">
-            Copia el prompt <code>PRODUCTO | YYYY-MM-DD</code> y abre el menú compartir con la foto adjunta para enviarla a tu app de Gemini.
+            Copia el prompt <code>PRODUCTO | YYYY-MM-DD</code> y abre el menú compartir con todas las fotos adjuntas para enviarlas a tu app de Gemini.
           </p>
           <div class="flex-row" style="flex-wrap: wrap;">
             <button type="button" class="btn btn-purple flex-1" onclick="sendToLocalGeminiApp()">
@@ -1376,6 +1451,16 @@
     <main id="itemsList" class="items-container"></main>
   </div>
 
+  <!-- Contenedor persistente fuera del listado para Toast y Barra flotante de Deshacer -->
+  <div id="toastBanner" class="toast-banner hidden">
+    <span id="toastMessage"></span>
+  </div>
+
+  <div id="undoSnackbar" class="undo-snackbar hidden" role="status" aria-live="polite">
+    <span id="undoMessage">🗑️ Eliminado</span>
+    <button type="button" class="undo-btn" onclick="undoLastDelete()">↩️ Deshacer</button>
+  </div>
+
   <script type="module">
     // Importación modular oficial de Firebase v11.0.2 desde gstatic.com
     import { initializeApp, getApps, deleteApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
@@ -1402,10 +1487,13 @@
     // Claves de almacenamiento local
     const FIREBASE_CONFIG_STORAGE = 'caduca2_fb_config';
     const LOCAL_DB_STORAGE = 'caduca2_local_db';
-    const WARNING_DAYS_STORAGE = 'warning_days_v5';
+    const WARNING_DAYS_STORAGE = 'caduca2_warning_days';
+    const LEGACY_WARNING_DAYS_STORAGE = 'warning_days_v5';
     const API_KEY_STORAGE = 'caduca2_gemini_api_key_v1';
     const SELECTED_MODEL_STORAGE = 'caduca2_selected_model_v1';
     const MODELS_CACHE_STORAGE = 'caduca2_models_list_v1';
+
+    const MAX_ATTACHED_IMAGES = 3;
 
     // Configuración de Firebase precargada por defecto para acceso directo en GitHub Pages
     const DEFAULT_FIREBASE_CONFIG = {
@@ -1424,7 +1512,7 @@
       'gemini-flash-latest'
     ];
 
-    const LOCAL_GEMINI_PROMPT = 'Identifica el producto y su fecha de caducidad. Responde únicamente en una línea con este formato exacto: PRODUCTO | YYYY-MM-DD';
+    const LOCAL_GEMINI_PROMPT = 'Identifica el producto y su fecha de caducidad combinando todas las fotos adjuntas. Responde únicamente en una línea con este formato exacto: PRODUCTO | YYYY-MM-DD';
 
     // Estado de la aplicación
     let firebaseApp = null;
@@ -1435,11 +1523,13 @@
     let unsubscribeAuth = null;
 
     let products = [];
-    let editingProductId = null;
+    let editingId = null;
     let warningDays = 3;
     let availableModels = [...DEFAULT_MODELS];
-    let currentImageFile = null;
-    let currentPreviewUrl = null;
+
+    // Lista de imágenes adjuntas: [{ file: File, url: string, source: string }]
+    let attachedImages = [];
+
     let activeAbortController = null;
     let userCancelled = false;
     let timerInterval = null;
@@ -1475,7 +1565,7 @@
       const savedKey = localStorage.getItem(API_KEY_STORAGE) || '';
       const savedModel = localStorage.getItem(SELECTED_MODEL_STORAGE) || '';
 
-      const storedWarn = localStorage.getItem(WARNING_DAYS_STORAGE);
+      const storedWarn = localStorage.getItem(WARNING_DAYS_STORAGE) ?? localStorage.getItem(LEGACY_WARNING_DAYS_STORAGE);
       if (storedWarn !== null && !isNaN(parseInt(storedWarn, 10))) {
         warningDays = Math.max(0, parseInt(storedWarn, 10));
       } else {
@@ -1520,15 +1610,12 @@
     }
 
     function hideToast() {
-      document.getElementById('toastBanner').classList.add('hidden');
+      const banner = document.getElementById('toastBanner');
+      if (banner) banner.classList.add('hidden');
       if (toastAutoHideTimer) {
         clearTimeout(toastAutoHideTimer);
         toastAutoHideTimer = null;
       }
-    }
-
-    function toggleManualGuide() {
-      document.getElementById('manualGuideBox').classList.toggle('hidden');
     }
 
     // =========================================================================
@@ -1932,51 +2019,127 @@
     }
 
     // =========================================================================
-    // Captura de imagen, Formulario debajo de imagen, Modo A y Modo B
+    // Captura Multi-Foto (Cámara / Galería) y Apertura Directa de IA
     // =========================================================================
-    function handleImageSelected(event, sourceLabel) {
-      const file = event.target.files[0];
-      if (!file) return;
+    function handlePrimaryImageSelected(event, sourceLabel) {
+      const files = Array.from(event.target.files || []);
+      event.target.value = '';
+      if (files.length === 0) return;
 
       hideToast();
-      editingProductId = null;
-      currentImageFile = file;
+      cancelApiAnalysis(true);
 
-      if (currentPreviewUrl) {
-        URL.revokeObjectURL(currentPreviewUrl);
-      }
-      currentPreviewUrl = URL.createObjectURL(file);
-
-      const sizeKB = Math.max(1, Math.round(file.size / 1024));
-      document.getElementById('previewThumb').src = currentPreviewUrl;
-      document.getElementById('previewFileName').textContent = file.name || 'Imagen capturada';
-      document.getElementById('previewFileStats').textContent = `Origen: ${sourceLabel} • Original: ${sizeKB} KB`;
-
-      document.getElementById('previewHub').classList.remove('hidden');
-      document.getElementById('modesHub').classList.remove('hidden');
-      document.getElementById('progressPanel').classList.add('hidden');
-      document.getElementById('pasteFallbackBox').classList.add('hidden');
+      // Limpiar estado previo del formulario para iniciar detección limpia
+      editingId = null;
+      document.getElementById('prodName').value = '';
+      document.getElementById('prodDate').value = '';
+      document.getElementById('prodNote').value = '';
       document.getElementById('productFormSection').classList.add('hidden');
+      document.getElementById('productFormSection').classList.remove('editing-active');
 
-      event.target.value = '';
+      // Revocar URLs anteriores y cargar nueva selección (hasta 3 fotos)
+      revokeAttachedUrls();
+      attachedImages = files.slice(0, MAX_ATTACHED_IMAGES).map((file) => ({
+        file,
+        url: URL.createObjectURL(file),
+        source: sourceLabel
+      }));
+
+      refreshPreviewGalleryAndModes();
     }
 
-    function clearSelectedImage() {
-      cancelApiAnalysis(true);
-      currentImageFile = null;
-      if (currentPreviewUrl) {
-        URL.revokeObjectURL(currentPreviewUrl);
-        currentPreviewUrl = null;
+    function handleExtraImageSelected(event, sourceLabel) {
+      const files = Array.from(event.target.files || []);
+      event.target.value = '';
+      if (files.length === 0) return;
+
+      const remainingSlots = MAX_ATTACHED_IMAGES - attachedImages.length;
+      if (remainingSlots <= 0) {
+        showToast(`Máximo ${MAX_ATTACHED_IMAGES} fotos por análisis.`, 'warn');
+        return;
       }
+
+      const toAdd = files.slice(0, remainingSlots).map((file) => ({
+        file,
+        url: URL.createObjectURL(file),
+        source: sourceLabel
+      }));
+
+      attachedImages.push(...toAdd);
+      refreshPreviewGalleryAndModes();
+      showToast(`Foto añadida (${attachedImages.length}/${MAX_ATTACHED_IMAGES}). Pulsa "Analizar con IA (API)".`, 'info');
+    }
+
+    function removeAttachedImage(index) {
+      if (index < 0 || index >= attachedImages.length) return;
+      const removed = attachedImages.splice(index, 1)[0];
+      if (removed && removed.url) {
+        URL.revokeObjectURL(removed.url);
+      }
+
+      if (attachedImages.length === 0) {
+        clearAllSelectedImages();
+      } else {
+        refreshPreviewGalleryAndModes();
+      }
+    }
+
+    function revokeAttachedUrls() {
+      attachedImages.forEach((item) => {
+        if (item.url) URL.revokeObjectURL(item.url);
+      });
+      attachedImages = [];
+    }
+
+    function clearAllSelectedImages() {
+      cancelApiAnalysis(true);
+      revokeAttachedUrls();
       document.getElementById('previewHub').classList.add('hidden');
       document.getElementById('modesHub').classList.add('hidden');
+      document.getElementById('thumbsStrip').innerHTML = '';
     }
 
-    // MODO A: Compresión a escala de grises (máx 512px, ~25KB) + timeout 25s
+    function refreshPreviewGalleryAndModes() {
+      const previewHub = document.getElementById('previewHub');
+      const modesHub = document.getElementById('modesHub');
+      const strip = document.getElementById('thumbsStrip');
+      const counter = document.getElementById('previewCounter');
+      const addMoreRow = document.getElementById('addMorePhotosRow');
+
+      if (attachedImages.length === 0) {
+        previewHub.classList.add('hidden');
+        modesHub.classList.add('hidden');
+        return;
+      }
+
+      counter.textContent = `${attachedImages.length} / ${MAX_ATTACHED_IMAGES} ${attachedImages.length === 1 ? 'foto adjunta' : 'fotos adjuntas'}`;
+
+      strip.innerHTML = attachedImages.map((imgObj, idx) => `
+        <div class="thumb-item">
+          <img src="${imgObj.url}" alt="Foto ${idx + 1}">
+          <span class="thumb-badge">#${idx + 1}</span>
+          <button type="button" class="thumb-remove-btn" onclick="removeAttachedImage(${idx})" title="Quitar esta foto">×</button>
+        </div>
+      `).join('');
+
+      if (attachedImages.length >= MAX_ATTACHED_IMAGES) {
+        addMoreRow.classList.add('hidden');
+      } else {
+        addMoreRow.classList.remove('hidden');
+      }
+
+      // Mostrar inmediatamente la galería y las opciones de análisis IA (Modo A y Modo B)
+      previewHub.classList.remove('hidden');
+      modesHub.classList.remove('hidden');
+      document.getElementById('progressPanel').classList.add('hidden');
+      document.getElementById('pasteFallbackBox').classList.add('hidden');
+    }
+
+    // MODO A: Compresión a escala de grises (máx 512px, ~25KB) + envío conjunto de todas las fotos
     function compressToGrayscaleBase64(file, maxDimension = 512, quality = 0.72) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+        reader.onerror = () => reject(new Error('No se pudo leer una de las imágenes.'));
         reader.onload = (e) => {
           const img = new Image();
           img.onerror = () => reject(new Error('Archivo de imagen inválido.'));
@@ -2032,10 +2195,10 @@
       }
     }
 
-    function resetProgressUI() {
+    function resetProgressUI(photoCount) {
       document.getElementById('progressFill').style.width = '8%';
-      setStep(1, 'active', 'Paso 1: Convirtiendo a escala de grises (máx. 512px)...');
-      setStep(2, 'pending', 'Paso 2: Enviando imagen a la API...');
+      setStep(1, 'active', `Paso 1: Comprimiendo ${photoCount} ${photoCount === 1 ? 'foto' : 'fotos'} en escala de grises (512px)...`);
+      setStep(2, 'pending', 'Paso 2: Enviando imágenes a la API...');
       setStep(3, 'pending', 'Paso 3: Control de timeout (25s) y fallback...');
       setStep(4, 'pending', 'Paso 4: Extrayendo producto y fecha...');
     }
@@ -2069,8 +2232,10 @@
         activeAbortController = null;
       }
       stopLiveTimer();
-      document.getElementById('progressPanel').classList.add('hidden');
-      document.getElementById('runApiBtn').disabled = false;
+      const progressPanel = document.getElementById('progressPanel');
+      const runApiBtn = document.getElementById('runApiBtn');
+      if (progressPanel) progressPanel.classList.add('hidden');
+      if (runApiBtn) runApiBtn.disabled = false;
       if (!silent) {
         showToast('Análisis cancelado. Puedes usar el Modo B o rellenar manualmente.', 'warn');
       }
@@ -2092,7 +2257,7 @@
       );
     }
 
-    async function callModelWith25sTimeout(modelName, apiKey, base64Data, todayStr) {
+    async function callModelWith25sTimeout(modelName, apiKey, compressedList, todayStr) {
       const controller = new AbortController();
       activeAbortController = controller;
       let timedOut = false;
@@ -2102,11 +2267,16 @@
         controller.abort();
       }, 25000);
 
-      const prompt = `Analiza esta imagen en escala de grises de un producto o envase. Hoy es ${todayStr}.
-1. Identifica qué producto es (nombre corto y claro en español, ej. "Yogur natural", "Leche entera"). Si solo se ve la etiqueta de fecha y no el envase, devuelve "Producto sin identificar".
-2. Lee la fecha de caducidad o consumo preferente en formato YYYY-MM-DD. Si solo pone mes y año (ej. 12/2026), usa el último día de ese mes (2026-12-31). Si no hay fecha visible, devuelve "".
+      const count = compressedList.length;
+      const prompt = `Analiza ${count > 1 ? `estas ${count} imágenes del mismo producto/envase` : 'esta imagen de un producto o envase'}. Hoy es ${todayStr}.
+1. Identifica qué producto es combinando la información visual de todas las fotos (nombre corto y claro en español, ej. "Yogur natural", "Leche entera"). Si en ninguna foto se identifica el envase, devuelve "Producto sin identificar".
+2. Lee la fecha de caducidad o consumo preferente en formato YYYY-MM-DD (puede estar en cualquiera de las fotos). Si solo pone mes y año (ej. 12/2026), usa el último día de ese mes (2026-12-31). Si no hay fecha visible, devuelve "".
 Responde ÚNICAMENTE con un objeto JSON válido:
 {"producto": "string", "fecha": "YYYY-MM-DD"}`;
+
+      const imageParts = compressedList.map((item) => ({
+        inline_data: { mime_type: 'image/jpeg', data: item.base64 }
+      }));
 
       try {
         const res = await fetch(
@@ -2119,7 +2289,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
               contents: [{
                 parts: [
                   { text: prompt },
-                  { inline_data: { mime_type: 'image/jpeg', data: base64Data } }
+                  ...imageParts
                 ]
               }],
               generationConfig: {
@@ -2154,8 +2324,8 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     async function runOptimizedApiAnalysis() {
-      if (!currentImageFile) {
-        showToast('Selecciona primero una foto con Cámara o Galería.', 'warn');
+      if (attachedImages.length === 0) {
+        showToast('Selecciona primero al menos una foto con Cámara o Galería.', 'warn');
         return;
       }
 
@@ -2179,14 +2349,17 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       document.getElementById('cancelAnalysisBtn').classList.remove('hidden');
       runApiBtn.disabled = true;
 
-      resetProgressUI();
+      resetProgressUI(attachedImages.length);
       startLiveTimer();
 
       try {
-        const compressed = await compressToGrayscaleBase64(currentImageFile, 512, 0.72);
+        const compressedList = await Promise.all(
+          attachedImages.map((imgObj) => compressToGrayscaleBase64(imgObj.file, 512, 0.72))
+        );
         if (userCancelled) return;
 
-        setStep(1, 'done', `Paso 1: Imagen optimizada (${compressed.width}x${compressed.height}px gris, ~${compressed.approxKB} KB).`);
+        const totalKB = compressedList.reduce((acc, c) => acc + c.approxKB, 0);
+        setStep(1, 'done', `Paso 1: ${compressedList.length} ${compressedList.length === 1 ? 'foto optimizada' : 'fotos optimizadas'} (~${totalKB} KB total).`);
         document.getElementById('progressFill').style.width = '28%';
 
         const primaryModel = document.getElementById('modelSelect').value || localStorage.getItem(SELECTED_MODEL_STORAGE) || availableModels[0];
@@ -2208,7 +2381,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
           usedModel = modelName;
 
           if (i === 0) {
-            setStep(2, 'active', `Paso 2: Consultando ${modelName} (~${compressed.approxKB} KB)...`);
+            setStep(2, 'active', `Paso 2: Consultando ${modelName} (~${totalKB} KB)...`);
             setStep(3, 'pending', 'Paso 3: Límite de espera 25s por intento...');
             document.getElementById('progressFill').style.width = '50%';
           } else {
@@ -2218,7 +2391,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
           }
 
           try {
-            apiResponse = await callModelWith25sTimeout(modelName, apiKey, compressed.base64, todayStr);
+            apiResponse = await callModelWith25sTimeout(modelName, apiKey, compressedList, todayStr);
             setStep(2, 'done', `Paso 2: Respuesta recibida de ${modelName}.`);
             setStep(3, 'done', i === 0
               ? 'Paso 3: Completado en el primer intento (<25s).'
@@ -2251,7 +2424,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         document.getElementById('cancelAnalysisBtn').classList.add('hidden');
         stopLiveTimer();
 
-        // Mostrar formulario justo debajo de la imagen y encima de los mensajes de análisis
+        // Mostrar formulario inmediatamente debajo de la vista previa y encima de los mensajes de análisis
         openNewProductForm(false);
         document.getElementById('prodName').value = parsed.producto || '';
         document.getElementById('prodDate').value = normalizeExtractedDate(parsed.fecha || '') || parsed.fecha || '';
@@ -2273,7 +2446,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       }
     }
 
-    // MODO B: App Gemini local + Portapapeles
+    // MODO B: App Gemini local + Portapapeles (comparte todas las fotos adjuntas)
     function copyToClipboardFallback(text) {
       const area = document.createElement('textarea');
       area.value = text;
@@ -2288,8 +2461,8 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     async function sendToLocalGeminiApp() {
-      if (!currentImageFile) {
-        showToast('Selecciona primero una foto con Cámara o Galería.', 'warn');
+      if (attachedImages.length === 0) {
+        showToast('Selecciona primero al menos una foto con Cámara o Galería.', 'warn');
         return;
       }
 
@@ -2309,15 +2482,16 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         openNewProductForm(false);
       }
 
+      const filesToShare = attachedImages.map((item) => item.file);
       const shareData = {
-        files: [currentImageFile],
+        files: filesToShare,
         title: 'Analizar caducidad',
         text: LOCAL_GEMINI_PROMPT
       };
 
-      if (navigator.canShare && navigator.canShare({ files: [currentImageFile] })) {
+      if (navigator.canShare && navigator.canShare({ files: filesToShare })) {
         try {
-          showToast('Prompt copiado. Elige "Gemini" en el menú para enviar la imagen.', 'info');
+          showToast('Prompt copiado. Elige "Gemini" en el menú para enviar las fotos.', 'info');
           await navigator.share(shareData);
         } catch (err) {
           if (err.name !== 'AbortError') {
@@ -2325,7 +2499,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
           }
         }
       } else {
-        showToast('Prompt copiado. Abre Gemini manualmente, adjunta la foto y pega el texto.', 'warn');
+        showToast('Prompt copiado. Abre Gemini manualmente, adjunta las fotos y pega el texto.', 'warn');
       }
     }
 
@@ -2447,7 +2621,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     // =========================================================================
-    // CRUD de Productos (Firestore o localStorage) + Deslizar para borrar y Deshacer
+    // CRUD de Productos (Firestore o localStorage) + Deslizar y Deshacer
     // =========================================================================
     function loadLocalProducts() {
       try {
@@ -2464,7 +2638,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     function openNewProductForm(clearFields = true) {
-      editingProductId = null;
+      editingId = null;
 
       const section = document.getElementById('productFormSection');
       const heading = document.getElementById('formHeading');
@@ -2486,7 +2660,10 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       const target = products.find((p) => String(p.id) === String(id));
       if (!target) return;
 
-      editingProductId = target.id;
+      // Si había fotos de una captura previa, limpiarlas al abrir edición de un registro existente
+      clearAllSelectedImages();
+
+      editingId = target.id;
 
       const section = document.getElementById('productFormSection');
       const heading = document.getElementById('formHeading');
@@ -2505,10 +2682,13 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     function closeProductForm() {
-      editingProductId = null;
+      editingId = null;
       const section = document.getElementById('productFormSection');
       section.classList.add('hidden');
       section.classList.remove('editing-active');
+      document.getElementById('prodName').value = '';
+      document.getElementById('prodDate').value = '';
+      document.getElementById('prodNote').value = '';
       renderProducts();
     }
 
@@ -2537,12 +2717,14 @@ Responde ÚNICAMENTE con un objeto JSON válido:
 
       const saveBtn = document.getElementById('saveProductBtn');
       saveBtn.disabled = true;
+      const wasEditing = editingId !== null;
+      const targetEditId = editingId;
 
       try {
         if (isCloudModeActive()) {
           const author = currentUser.displayName || currentUser.email || 'Usuario Google';
-          if (editingProductId !== null) {
-            const docRef = doc(firestoreDb, 'productos', String(editingProductId));
+          if (wasEditing) {
+            const docRef = doc(firestoreDb, 'productos', String(targetEditId));
             await updateDoc(docRef, {
               name,
               date,
@@ -2550,7 +2732,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
               updatedBy: author,
               updatedAt: serverTimestamp()
             });
-            showToast(`"${name}" actualizado en la nube.`, 'info');
+            showToast(`Producto actualizado en la nube: "${name}"`, 'info');
           } else {
             await addDoc(collection(firestoreDb, 'productos'), {
               name,
@@ -2563,8 +2745,8 @@ Responde ÚNICAMENTE con un objeto JSON válido:
             showToast(`"${name}" guardado en la nube.`, 'info');
           }
         } else {
-          if (editingProductId !== null) {
-            const idx = products.findIndex((p) => String(p.id) === String(editingProductId));
+          if (wasEditing) {
+            const idx = products.findIndex((p) => String(p.id) === String(targetEditId));
             if (idx !== -1) {
               products[idx] = {
                 ...products[idx],
@@ -2572,7 +2754,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
                 date,
                 note
               };
-              showToast(`"${name}" actualizado localmente.`, 'info');
+              showToast(`Producto actualizado: "${name}"`, 'info');
             }
           } else {
             products.push({
@@ -2587,8 +2769,9 @@ Responde ÚNICAMENTE con un objeto JSON válido:
           renderProducts();
         }
 
+        // Cerrar y limpiar siempre el formulario de edición/creación y las fotos adjuntas
         closeProductForm();
-        clearSelectedImage();
+        clearAllSelectedImages();
       } catch (err) {
         showToast('Error al guardar: ' + err.message, 'error');
       } finally {
@@ -2600,7 +2783,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       const targetItem = products.find((p) => String(p.id) === String(id));
       if (!targetItem) return;
 
-      if (String(editingProductId) === String(id)) {
+      if (String(editingId) === String(id)) {
         closeProductForm();
       }
 
@@ -2627,7 +2810,9 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     function showUndoSnackbar(productName) {
       const snackbar = document.getElementById('undoSnackbar');
       const msg = document.getElementById('undoMessage');
-      msg.textContent = `Eliminado: "${productName}"`;
+      if (!snackbar || !msg) return;
+
+      msg.textContent = `🗑️ Eliminado: ${productName}`;
       snackbar.classList.remove('hidden');
 
       if (undoSnackbarTimer) {
@@ -2649,7 +2834,8 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         clearTimeout(undoSnackbarTimer);
         undoSnackbarTimer = null;
       }
-      document.getElementById('undoSnackbar').classList.add('hidden');
+      const snackbar = document.getElementById('undoSnackbar');
+      if (snackbar) snackbar.classList.add('hidden');
 
       try {
         if (wasCloud && isCloudModeActive()) {
@@ -2724,7 +2910,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         const days = getDaysRemaining(item.date);
         let cardClass = '';
         let pillClass = 'ok';
-        let statusLabel = `Quedan ${days} días`;
+        let statusLabel = `Quedan ${days} d.`;
 
         if (days < 0) {
           cardClass = 'danger';
@@ -2741,10 +2927,10 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         } else if (days <= warnThreshold) {
           cardClass = 'warn';
           pillClass = 'warn';
-          statusLabel = `Quedan ${days} días`;
+          statusLabel = `Quedan ${days} d.`;
         }
 
-        const editingHighlight = String(editingProductId) === String(item.id) ? ' being-edited' : '';
+        const editingHighlight = String(editingId) === String(item.id) ? ' being-edited' : '';
         const safeName = escapeHtml(item.name);
         const formattedDate = escapeHtml(formatDisplayDate(item.date));
         const safeNote = item.note ? escapeHtml(item.note) : '';
@@ -2821,14 +3007,14 @@ Responde ÚNICAMENTE con un objeto JSON válido:
 
         const finishSwipe = () => {
           card.classList.remove('dragging');
-          const threshold = Math.min(115, card.offsetWidth * 0.32);
+          const threshold = -80;
 
-          if (isHorizontalSwipe && currentDeltaX < -threshold) {
+          if (isHorizontalSwipe && currentDeltaX < threshold) {
             const productId = card.getAttribute('data-id');
             card.style.transform = 'translateX(-110%)';
             setTimeout(() => {
               deleteProduct(productId);
-            }, 170);
+            }, 160);
           } else {
             card.style.transform = 'translateX(0)';
           }
@@ -3009,8 +3195,10 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       handleHintAction,
       requestNotifPermission,
       hideToast,
-      handleImageSelected,
-      clearSelectedImage,
+      handlePrimaryImageSelected,
+      handleExtraImageSelected,
+      removeAttachedImage,
+      clearAllSelectedImages,
       runOptimizedApiAnalysis,
       cancelApiAnalysis,
       sendToLocalGeminiApp,
