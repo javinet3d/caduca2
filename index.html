@@ -1,0 +1,2993 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Caduca2 · Control de Caducidades</title>
+  <!-- Favicon y Apple Touch Icon embebido (Lata de tomate) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥫</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><text x='50' y='78' font-size='72' text-anchor='middle'>🥫</text></svg>">
+  <style>
+    /* Variables de diseño oscuro */
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-elevated: #273549;
+      --input-bg: #0b1120;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --purple: #8b5cf6;
+      --purple-hover: #7c3aed;
+      --success: #10b981;
+      --success-hover: #059669;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.14);
+      --warning-bg: rgba(245, 158, 11, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 12px 12px 56px 12px;
+      line-height: 1.4;
+    }
+
+    .app-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* 1. Cabecera */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .sync-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+    }
+
+    .sync-badge.cloud {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: rgba(16, 185, 129, 0.45);
+      color: #34d399;
+    }
+
+    .sync-badge.local {
+      background: rgba(148, 163, 184, 0.14);
+      border-color: rgba(148, 163, 184, 0.35);
+      color: #cbd5e1;
+    }
+
+    .header-buttons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .auth-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      height: 38px;
+      padding: 0 10px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+
+    .auth-btn:hover {
+      background: var(--surface-elevated);
+    }
+
+    .auth-btn:active {
+      transform: scale(0.95);
+    }
+
+    .g-letter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #2563eb;
+      font-weight: 900;
+      font-size: 0.75rem;
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      height: 38px;
+      padding: 0 8px 0 4px;
+      border-radius: 10px;
+    }
+
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logout-link {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      border-radius: 7px;
+      padding: 3px 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .icon-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s ease, background-color 0.15s ease;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* Aviso discreto de modo local / invitación a nube */
+    .cloud-hint-bar {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      border-radius: 10px;
+      padding: 7px 10px;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .cloud-hint-action {
+      background: rgba(59, 130, 246, 0.22);
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      color: #dbeafe;
+      padding: 3px 8px;
+      border-radius: 7px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Notificación Toast flotante auto-ocultable (3s) */
+    .toast-banner {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 576px;
+      z-index: 1200;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      word-break: break-word;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+      animation: toastSlideDown 0.2s ease-out;
+      pointer-events: auto;
+    }
+
+    .toast-banner.info {
+      background: #064e3b;
+      border-color: rgba(16, 185, 129, 0.65);
+      color: #ecfdf5;
+    }
+
+    .toast-banner.warn {
+      background: #78350f;
+      border-color: rgba(245, 158, 11, 0.65);
+      color: #fffbeb;
+    }
+
+    .toast-banner.error {
+      background: #7f1d1d;
+      border-color: rgba(239, 68, 68, 0.65);
+      color: #fef2f2;
+    }
+
+    @keyframes toastSlideDown {
+      from { opacity: 0; transform: translate(-50%, -12px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* Snackbar inferior con botón Deshacer tras swipe */
+    .undo-snackbar {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 576px;
+      z-index: 1250;
+      background: #1e293b;
+      border: 1px solid rgba(239, 68, 68, 0.55);
+      color: #f8fafc;
+      border-radius: 14px;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+      animation: undoSlideUp 0.2s ease-out;
+    }
+
+    .undo-btn {
+      background: var(--primary);
+      border: none;
+      color: #ffffff;
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .undo-btn:active {
+      transform: scale(0.95);
+    }
+
+    @keyframes undoSlideUp {
+      from { opacity: 0; transform: translate(-50%, 14px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* Tarjetas estructurales */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .settings-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+
+    .settings-section-title {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel manual de ayuda en Configuración */
+    .manual-guide-box {
+      background: var(--input-bg);
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .manual-guide-box h3 {
+      margin: 0 0 8px 0;
+      font-size: 0.88rem;
+      color: #93c5fd;
+    }
+
+    .manual-guide-box ol {
+      margin: 0 0 8px 0;
+      padding-left: 18px;
+    }
+
+    .manual-guide-box li {
+      margin-bottom: 6px;
+    }
+
+    .manual-guide-box a {
+      color: #60a5fa;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .manual-tip {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #a7f3d0;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+      font-size: 0.76rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 11px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      margin-bottom: 11px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    textarea.code-area {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.78rem;
+      line-height: 1.35;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .helper-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin: -6px 0 11px 0;
+      line-height: 1.35;
+    }
+
+    /* Botones */
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-purple {
+      background: var(--purple);
+      color: #ffffff;
+    }
+
+    .btn-purple:hover:not(:disabled) {
+      background: var(--purple-hover);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #ffffff;
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background: var(--success-hover);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #fecaca;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.32);
+    }
+
+    .btn-secondary {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-elevated);
+    }
+
+    /* Botones superiores de captura: Cámara | Galería | Manual */
+    .capture-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 8px;
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+
+    .model-sync-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 11px;
+    }
+
+    .model-sync-row select {
+      margin-bottom: 0;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .model-sync-row button {
+      white-space: nowrap;
+      padding: 0 11px;
+      font-size: 0.8rem;
+    }
+
+    /* Vista previa */
+    .preview-hub {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .preview-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+
+    .preview-thumb {
+      width: 54px;
+      height: 54px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: #000;
+      flex-shrink: 0;
+    }
+
+    .preview-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .preview-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 2px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .preview-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Formulario de creación / edición (Debajo de la imagen, encima de Modo A/B) */
+    .form-section {
+      margin-top: 10px;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+    }
+
+    .form-section.editing-active {
+      border: 1.5px solid var(--warning);
+      background: rgba(245, 158, 11, 0.08);
+    }
+
+    .form-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+    }
+
+    .form-title {
+      margin: 0;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .form-title.is-editing {
+      color: #fbbf24;
+    }
+
+    .quick-date-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .quick-date-btn {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 4px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .quick-date-btn:hover {
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .location-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 7px;
+    }
+
+    .chip-btn {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .chip-btn:hover {
+      color: var(--text);
+      border-color: var(--primary);
+    }
+
+    /* Modos (Modo A arriba, Modo B debajo) */
+    .modes-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .mode-box {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 10px;
+    }
+
+    .mode-box.highlight-api {
+      border-color: rgba(59, 130, 246, 0.45);
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, var(--input-bg) 100%);
+    }
+
+    .mode-box.highlight-purple {
+      border-color: rgba(139, 92, 246, 0.4);
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.07) 0%, var(--input-bg) 100%);
+    }
+
+    .mode-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .mode-tag {
+      font-size: 0.69rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .mode-tag.api {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+    }
+
+    .mode-tag.local-app {
+      background: rgba(139, 92, 246, 0.22);
+      color: #c4b5fd;
+    }
+
+    .mode-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin: 0 0 8px 0;
+      line-height: 1.3;
+    }
+
+    /* Monitor de progreso en vivo (Modo A) */
+    .progress-panel {
+      margin-top: 9px;
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .progress-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #93c5fd;
+    }
+
+    .timer-badge {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.76rem;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.18);
+      color: #60a5fa;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--input-bg);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 9px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .steps-list {
+      list-style: none;
+      margin: 0 0 9px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .step-item.active {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .step-item.done {
+      color: #6ee7b7;
+    }
+
+    .step-item.error {
+      color: #fca5a5;
+    }
+
+    .step-icon {
+      flex-shrink: 0;
+      width: 16px;
+      text-align: center;
+    }
+
+    /* Cuadro alternativo de pegado manual (Modo B) */
+    .paste-fallback-box {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .paste-fallback-box textarea {
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      resize: vertical;
+    }
+
+    /* Buscador y resumen */
+    .search-input {
+      background: var(--surface) !important;
+      margin-bottom: 8px !important;
+    }
+
+    .warning-summary-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 9px;
+      padding-inline: 2px;
+    }
+
+    /* 5. Lista Ultra-Compacta de Productos con Swipe hacia la izquierda */
+    .items-container {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .swipe-wrapper {
+      position: relative;
+      border-radius: 11px;
+      overflow: hidden;
+      background: var(--danger);
+      touch-action: pan-y;
+      user-select: none;
+    }
+
+    .swipe-delete-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 18px;
+      gap: 6px;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      pointer-events: none;
+    }
+
+    .product-card {
+      position: relative;
+      z-index: 2;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--success);
+      border-radius: 11px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 10px;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s ease;
+      will-change: transform;
+    }
+
+    .product-card.dragging {
+      transition: none;
+    }
+
+    .product-card.warn {
+      border-left-color: var(--warning);
+      background: linear-gradient(90deg, #2d2618 0%, var(--surface) 45%);
+    }
+
+    .product-card.danger {
+      border-left-color: var(--danger);
+      background: linear-gradient(90deg, #311c24 0%, var(--surface) 45%);
+    }
+
+    .product-card.being-edited {
+      border-color: var(--warning);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+    }
+
+    .product-left-col {
+      min-width: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .product-name {
+      margin: 0;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.25;
+    }
+
+    .product-date-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: nowrap;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.2;
+    }
+
+    .meta-date {
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: #cbd5e1;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.69rem;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .status-pill.ok {
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+    }
+
+    .status-pill.warn {
+      background: rgba(245, 158, 11, 0.22);
+      color: #fbbf24;
+    }
+
+    .status-pill.danger {
+      background: rgba(239, 68, 68, 0.22);
+      color: #fca5a5;
+    }
+
+    /* Columna derecha: Iconos arriba alineados horizontalmente, ubicación justo debajo */
+    .product-right-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 4px;
+      flex-shrink: 0;
+      max-width: 44%;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .action-mini-btn {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 30px;
+      height: 28px;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+
+    .action-mini-btn:hover {
+      background: var(--surface-elevated);
+    }
+
+    .action-mini-btn:active {
+      transform: scale(0.92);
+    }
+
+    .meta-location-right {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-align: right;
+      line-height: 1.2;
+    }
+
+    .empty-state {
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 20px 14px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- 1. Cabecera -->
+    <header>
+      <div class="brand-group">
+        <h1>🥫 Caduca2</h1>
+        <span id="syncStatusBadge" class="sync-badge local">📱 Local</span>
+      </div>
+
+      <div class="header-buttons">
+        <button type="button" id="googleLoginBtn" class="auth-btn hidden" onclick="signInWithGoogle()" title="Iniciar sesión con Google">
+          <span class="g-letter">G</span>
+          <span>Entrar</span>
+        </button>
+
+        <div id="userProfileBox" class="user-pill hidden">
+          <img id="userAvatarImg" class="user-avatar hidden" alt="Perfil">
+          <span id="userAvatarInitial" class="user-avatar">U</span>
+          <button type="button" class="logout-link" onclick="signOutGoogle()" title="Cerrar sesión">Salir</button>
+        </div>
+
+        <button type="button" class="icon-btn" onclick="requestNotifPermission()" title="Activar notificaciones">🔔</button>
+        <button type="button" class="icon-btn" onclick="toggleSettingsPanel()" title="Configuración">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Barra discreta de estado local / conexión nube -->
+    <div id="localModeHint" class="cloud-hint-bar">
+      <span id="localModeHintText">Modo local activo. Configura Firebase en ⚙️ para sincronizar entre dispositivos.</span>
+      <button type="button" id="localModeHintBtn" class="cloud-hint-action" onclick="handleHintAction()">Configurar</button>
+    </div>
+
+    <!-- Notificación Toast flotante auto-ocultable (3 segundos) -->
+    <div id="toastBanner" class="toast-banner hidden">
+      <span id="toastMessage"></span>
+    </div>
+
+    <!-- Snackbar inferior con botón Deshacer -->
+    <div id="undoSnackbar" class="undo-snackbar hidden">
+      <span id="undoMessage">Producto eliminado</span>
+      <button type="button" class="undo-btn" onclick="undoLastDelete()">↩️ Deshacer</button>
+    </div>
+
+    <!-- 2. Panel de Configuración ('⚙️') -->
+    <section id="settingsPanel" class="card hidden">
+      <!-- Botón Manual de ayuda -->
+      <button type="button" class="btn btn-purple" style="width: 100%; margin-bottom: 4px;" onclick="toggleManualGuide()">
+        <span>📖</span>
+        <span>Manual de ayuda: Configurar Gemini y App</span>
+      </button>
+
+      <div id="manualGuideBox" class="manual-guide-box hidden">
+        <h3>🚀 Guía rápida: Gemini y Sincronización</h3>
+        <ol>
+          <li><strong>API Key gratuita de Gemini:</strong> Entra en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a> con tu cuenta Google, pulsa <em>"Create API key"</em> y copia la clave (<code>AIzaSy...</code>).</li>
+          <li><strong>Configurar IA:</strong> Pega la clave abajo en <em>Google AI Studio API Key</em>, pulsa <strong>Guardar clave</strong> y luego <strong>🔄 Actualizar modelos</strong>.</li>
+          <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente tras la foto. Si la API está saturada o no quieres usar clave, pulsa <strong>Modo B</strong> para enviar la foto directamente a tu app oficial de Gemini y pegar su respuesta.</li>
+          <li><strong>Sincronización en la nube (Firebase):</strong> Crea un proyecto web en Firebase, activa <em>Authentication (Google)</em> y <em>Firestore Database</em>, pega el bloque <code>firebaseConfig</code> arriba y pulsa <strong>G Entrar</strong> en la cabecera.</li>
+          <li><strong>Gestos y alertas:</strong> Desliza cualquier producto hacia la izquierda para borrarlo (con botón <strong>Deshacer</strong>). Usa <code>📅</code> para añadir una alarma a tu calendario.</li>
+        </ol>
+        <div class="manual-tip">
+          💡 Consejo: Encuadra en la misma foto el nombre del envase y la fecha impresa para mayor precisión.
+        </div>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <h2 class="settings-section-title">☁️ Sincronización Firebase (Nube)</h2>
+      <label for="firebaseConfigInput">Configuración firebaseConfig (JSON o snippet JS)</label>
+      <textarea id="firebaseConfigInput" class="code-area" rows="5" placeholder='const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "tu-app.firebaseapp.com",
+  projectId: "tu-app",
+  storageBucket: "tu-app.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};'></textarea>
+      <div class="flex-row" style="margin-bottom: 4px;">
+        <button type="button" class="btn btn-primary flex-1" onclick="saveAndConnectFirebase()">Guardar y conectar Firebase</button>
+        <button type="button" id="disconnectFirebaseBtn" class="btn btn-danger hidden" onclick="disconnectFirebase()">Desconectar Firebase</button>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <h2 class="settings-section-title">🤖 IA Gemini (Modo A)</h2>
+      <label for="apiKeyInput">Google AI Studio API Key</label>
+      <div class="flex-row" style="margin-bottom: 11px;">
+        <input type="password" id="apiKeyInput" placeholder="AIzaSy..." style="margin-bottom: 0; flex: 1;">
+        <button type="button" class="btn btn-secondary" onclick="saveApiKeyOnly()" style="white-space: nowrap;">Guardar clave</button>
+      </div>
+
+      <label for="modelSelect">Modelo Gemini (generateContent)</label>
+      <div class="model-sync-row">
+        <select id="modelSelect">
+          <option value="gemini-3.8-flash-lite">gemini-3.8-flash-lite</option>
+          <option value="gemini-3.8-flash">gemini-3.8-flash</option>
+          <option value="gemini-flash-latest">gemini-flash-latest</option>
+        </select>
+        <button type="button" id="syncModelsBtn" class="btn btn-secondary" onclick="syncModelsFromAPI()">🔄 Actualizar modelos</button>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <h2 class="settings-section-title">🔔 Alertas y Preaviso</h2>
+      <label for="warningDaysInput">Días de preaviso</label>
+      <input type="number" id="warningDaysInput" min="0" max="365" value="3" placeholder="3">
+      <p class="helper-text">
+        Define cuántos días antes se marca el producto en rojo, salta la notificación al abrir la app y se programa la alarma del calendario (.ics).
+      </p>
+
+      <button type="button" class="btn btn-success" style="width: 100%;" onclick="saveGeneralSettings()">💾 Guardar ajustes</button>
+
+      <div class="settings-divider"></div>
+
+      <h2 class="settings-section-title">📦 Copia de Seguridad (JSON)</h2>
+      <p class="helper-text">
+        Exporta o importa tus productos. Si estás conectado a la nube, los productos importados se subirán a Firestore.
+      </p>
+      <div class="flex-row">
+        <button type="button" class="btn btn-secondary flex-1" onclick="exportJSON()">⬇️ Exportar JSON</button>
+        <button type="button" class="btn btn-secondary flex-1" onclick="document.getElementById('importFile').click()">⬆️ Importar JSON</button>
+        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importJSON(event)">
+      </div>
+    </section>
+
+    <!-- 3. Panel de Captura, Formulario y Modos -->
+    <section id="mainCaptureCard" class="card">
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImageSelected(event, 'Cámara')">
+      <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="handleImageSelected(event, 'Galería')">
+
+      <div class="capture-grid">
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('cameraInput').click()">
+          <span>📸</span>
+          <span>Cámara</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('galleryInput').click()">
+          <span>🖼️</span>
+          <span>Galería</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="openNewProductForm()">
+          <span>✍️</span>
+          <span>Manual</span>
+        </button>
+      </div>
+
+      <!-- Vista previa de foto seleccionada -->
+      <div id="previewHub" class="preview-hub hidden">
+        <div class="preview-card">
+          <img id="previewThumb" class="preview-thumb" alt="Vista previa del producto">
+          <div class="preview-meta">
+            <p id="previewFileName" class="preview-title">imagen.jpg</p>
+            <p id="previewFileStats" class="preview-sub">Preparando imagen...</p>
+          </div>
+          <button type="button" class="btn btn-secondary" style="padding: 6px 9px; font-size: 0.78rem;" onclick="clearSelectedImage()" title="Quitar imagen">✕</button>
+        </div>
+      </div>
+
+      <!-- Formulario editable (Debajo de la imagen y encima de mensajes de análisis / Modo B) -->
+      <div id="productFormSection" class="form-section hidden">
+        <div class="form-title-bar">
+          <h2 id="formHeading" class="form-title">Nuevo producto</h2>
+        </div>
+
+        <label for="prodName">Producto detectado</label>
+        <input type="text" id="prodName" placeholder="Ej. Yogur natural, Leche entera...">
+
+        <label for="prodDate">Fecha de caducidad</label>
+        <div class="quick-date-grid">
+          <button type="button" class="quick-date-btn" onclick="addDaysToDate(3)">+3d</button>
+          <button type="button" class="quick-date-btn" onclick="addDaysToDate(7)">+7d</button>
+          <button type="button" class="quick-date-btn" onclick="addDaysToDate(15)">+15d</button>
+          <button type="button" class="quick-date-btn" onclick="addDaysToDate(30)">+30d</button>
+        </div>
+        <input type="date" id="prodDate">
+
+        <label for="prodNote">Ubicación / Notas</label>
+        <div class="location-chips">
+          <button type="button" class="chip-btn" onclick="setNote('Nevera')">❄️ Nevera</button>
+          <button type="button" class="chip-btn" onclick="setNote('Congelador')">🧊 Congelador</button>
+          <button type="button" class="chip-btn" onclick="setNote('Despensa')">🗄️ Despensa</button>
+        </div>
+        <input type="text" id="prodNote" placeholder="Nevera, Congelador, Despensa...">
+
+        <div class="flex-row">
+          <button type="button" id="saveProductBtn" class="btn btn-success flex-1" onclick="saveProduct()">💾 Guardar producto</button>
+          <button type="button" class="btn btn-secondary" onclick="closeProductForm()">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- Contenedor de Modos (Modo A arriba, Modo B debajo) -->
+      <div id="modesHub" class="modes-stack hidden" style="margin-top: 10px;">
+        <!-- MODO A: Análisis directo con API -->
+        <div class="mode-box highlight-api">
+          <div class="mode-header">
+            <span class="mode-tag api">Modo A · Análisis directo con API Gemini</span>
+          </div>
+          <p class="mode-desc">
+            Comprime a escala de grises (máx. 512px, ~25 KB), consulta la API con timeout de 25s y salta automáticamente a otros modelos disponibles si hay saturación.
+          </p>
+          <button type="button" id="runApiBtn" class="btn btn-primary" style="width: 100%;" onclick="runOptimizedApiAnalysis()">
+            <span>⚡</span>
+            <span>Analizar vía API</span>
+          </button>
+
+          <!-- Monitor de progreso de 4 fases en vivo -->
+          <div id="progressPanel" class="progress-panel hidden">
+            <div class="progress-header">
+              <span class="progress-title">Progreso API en vivo</span>
+              <span id="liveTimer" class="timer-badge">0.0s</span>
+            </div>
+
+            <div class="progress-track">
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
+
+            <ul class="steps-list">
+              <li id="step1" class="step-item">
+                <span class="step-icon" id="step1Icon">⏳</span>
+                <span id="step1Text">Paso 1: Convirtiendo a escala de grises (máx. 512px)...</span>
+              </li>
+              <li id="step2" class="step-item">
+                <span class="step-icon" id="step2Icon">⏳</span>
+                <span id="step2Text">Paso 2: Enviando imagen a la API...</span>
+              </li>
+              <li id="step3" class="step-item">
+                <span class="step-icon" id="step3Icon">⏳</span>
+                <span id="step3Text">Paso 3: Control de timeout (25s) y fallback...</span>
+              </li>
+              <li id="step4" class="step-item">
+                <span class="step-icon" id="step4Icon">⏳</span>
+                <span id="step4Text">Paso 4: Extrayendo producto y fecha...</span>
+              </li>
+            </ul>
+
+            <button type="button" id="cancelAnalysisBtn" class="btn btn-danger" style="width: 100%; padding: 9px;" onclick="cancelApiAnalysis()">
+              <span>🛑</span>
+              <span>Cancelar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- MODO B: App Gemini local -->
+        <div class="mode-box highlight-purple">
+          <div class="mode-header">
+            <span class="mode-tag local-app">Modo B · App Gemini local</span>
+          </div>
+          <p class="mode-desc">
+            Copia el prompt <code>PRODUCTO | YYYY-MM-DD</code> y abre el menú compartir con la foto adjunta para enviarla a tu app de Gemini.
+          </p>
+          <div class="flex-row" style="flex-wrap: wrap;">
+            <button type="button" class="btn btn-purple flex-1" onclick="sendToLocalGeminiApp()">
+              <span>🤖</span>
+              <span>Enviar a mi app Gemini</span>
+            </button>
+            <button type="button" class="btn btn-success flex-1" onclick="pasteFromGeminiClipboard()">
+              <span>📋</span>
+              <span>Pegar respuesta de Gemini</span>
+            </button>
+          </div>
+
+          <div id="pasteFallbackBox" class="paste-fallback-box hidden">
+            <label for="manualPasteArea">Pega aquí la respuesta de Gemini:</label>
+            <textarea id="manualPasteArea" rows="2" placeholder="Ej. Yogur natural | 2026-12-05"></textarea>
+            <div class="flex-row">
+              <button type="button" class="btn btn-success flex-1" style="padding: 8px;" onclick="applyManualPasteText()">Aplicar texto</button>
+              <button type="button" class="btn btn-secondary" style="padding: 8px;" onclick="document.getElementById('pasteFallbackBox').classList.add('hidden')">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Buscador y Lista Ultra-Compacta de Productos -->
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Filtrar por producto o ubicación..." oninput="renderProducts()">
+
+    <div class="warning-summary-bar">
+      <span id="totalCounterLabel">0 productos</span>
+      <span id="warningDaysBadge">Preaviso: 3 días</span>
+    </div>
+
+    <main id="itemsList" class="items-container"></main>
+  </div>
+
+  <script type="module">
+    // Importación modular oficial de Firebase v11.0.2 desde gstatic.com
+    import { initializeApp, getApps, deleteApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signInWithRedirect,
+      getRedirectResult,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      onSnapshot,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      doc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+    // Claves de almacenamiento local
+    const FIREBASE_CONFIG_STORAGE = 'caduca2_firebase_config';
+    const LOCAL_DB_STORAGE = 'caduca2_local_db';
+    const WARNING_DAYS_STORAGE = 'warning_days_v5';
+    const API_KEY_STORAGE = 'caduca2_gemini_api_key_v1';
+    const SELECTED_MODEL_STORAGE = 'caduca2_selected_model_v1';
+    const MODELS_CACHE_STORAGE = 'caduca2_models_list_v1';
+
+    const DEFAULT_MODELS = [
+      'gemini-3.8-flash-lite',
+      'gemini-3.8-flash',
+      'gemini-flash-latest'
+    ];
+
+    const LOCAL_GEMINI_PROMPT = 'Identifica el producto y su fecha de caducidad. Responde únicamente en una línea con este formato exacto: PRODUCTO | YYYY-MM-DD';
+
+    // Estado de la aplicación
+    let firebaseApp = null;
+    let firebaseAuth = null;
+    let firestoreDb = null;
+    let currentUser = null;
+    let unsubscribeFirestore = null;
+    let unsubscribeAuth = null;
+
+    let products = [];
+    let editingProductId = null;
+    let warningDays = 3;
+    let availableModels = [...DEFAULT_MODELS];
+    let currentImageFile = null;
+    let currentPreviewUrl = null;
+    let activeAbortController = null;
+    let userCancelled = false;
+    let timerInterval = null;
+    let analysisStartTime = 0;
+    let initialNotifChecked = false;
+    let toastAutoHideTimer = null;
+    let lastDeletedBackup = null;
+    let undoSnackbarTimer = null;
+
+    // =========================================================================
+    // Arranque de la aplicación
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', async () => {
+      loadSettingsFromStorage();
+      loadLocalProducts();
+      renderProducts();
+
+      const savedFirebaseRaw = localStorage.getItem(FIREBASE_CONFIG_STORAGE);
+      if (savedFirebaseRaw) {
+        document.getElementById('firebaseConfigInput').value = savedFirebaseRaw;
+        const parsedConfig = parseFirebaseConfigText(savedFirebaseRaw);
+        if (parsedConfig) {
+          await initFirebaseServices(parsedConfig, true);
+        } else {
+          updateSyncUIState();
+          checkUrgentNotificationsOnLoad();
+        }
+      } else {
+        updateSyncUIState();
+        checkUrgentNotificationsOnLoad();
+      }
+    });
+
+    function loadSettingsFromStorage() {
+      const savedKey = localStorage.getItem(API_KEY_STORAGE) || '';
+      const savedModel = localStorage.getItem(SELECTED_MODEL_STORAGE) || '';
+
+      const storedWarn = localStorage.getItem(WARNING_DAYS_STORAGE);
+      if (storedWarn !== null && !isNaN(parseInt(storedWarn, 10))) {
+        warningDays = Math.max(0, parseInt(storedWarn, 10));
+      } else {
+        warningDays = 3;
+        localStorage.setItem(WARNING_DAYS_STORAGE, String(warningDays));
+      }
+
+      try {
+        const cachedModels = JSON.parse(localStorage.getItem(MODELS_CACHE_STORAGE) || 'null');
+        if (Array.isArray(cachedModels) && cachedModels.length > 0) {
+          availableModels = cachedModels;
+        }
+      } catch (e) {}
+
+      document.getElementById('apiKeyInput').value = savedKey;
+      document.getElementById('warningDaysInput').value = warningDays;
+      updateWarningSummaryLabel();
+      renderModelSelect(availableModels, savedModel);
+    }
+
+    function updateWarningSummaryLabel() {
+      const badge = document.getElementById('warningDaysBadge');
+      badge.textContent = `Preaviso: ${warningDays} ${warningDays === 1 ? 'día' : 'días'}`;
+    }
+
+    // =========================================================================
+    // Notificación Toast auto-ocultable (3 segundos)
+    // =========================================================================
+    function showToast(msg, type = 'info', durationMs = 3000) {
+      const banner = document.getElementById('toastBanner');
+      const text = document.getElementById('toastMessage');
+      banner.className = `toast-banner ${type}`;
+      text.textContent = msg;
+      banner.classList.remove('hidden');
+
+      if (toastAutoHideTimer) {
+        clearTimeout(toastAutoHideTimer);
+      }
+      toastAutoHideTimer = setTimeout(() => {
+        hideToast();
+      }, durationMs);
+    }
+
+    function hideToast() {
+      document.getElementById('toastBanner').classList.add('hidden');
+      if (toastAutoHideTimer) {
+        clearTimeout(toastAutoHideTimer);
+        toastAutoHideTimer = null;
+      }
+    }
+
+    function toggleManualGuide() {
+      document.getElementById('manualGuideBox').classList.toggle('hidden');
+    }
+
+    // =========================================================================
+    // Firebase Authentication & Cloud Firestore
+    // =========================================================================
+    function parseFirebaseConfigText(rawInput) {
+      if (!rawInput || !rawInput.trim()) return null;
+      const text = rawInput.trim();
+
+      try {
+        const obj = JSON.parse(text);
+        if (obj && typeof obj === 'object' && obj.apiKey && obj.projectId) {
+          return obj;
+        }
+      } catch (e) {}
+
+      const keys = [
+        'apiKey',
+        'authDomain',
+        'databaseURL',
+        'projectId',
+        'storageBucket',
+        'messagingSenderId',
+        'appId',
+        'measurementId'
+      ];
+
+      const extracted = {};
+      keys.forEach((key) => {
+        const regex = new RegExp(`["']?${key}["']?\\s*:\\s*["']([^"']+)["']`);
+        const match = text.match(regex);
+        if (match && match[1]) {
+          extracted[key] = match[1].trim();
+        }
+      });
+
+      if (extracted.apiKey && extracted.projectId) {
+        return extracted;
+      }
+
+      return null;
+    }
+
+    async function initFirebaseServices(configObj, isAutoBoot = false) {
+      try {
+        if (unsubscribeFirestore) {
+          unsubscribeFirestore();
+          unsubscribeFirestore = null;
+        }
+        if (unsubscribeAuth) {
+          unsubscribeAuth();
+          unsubscribeAuth = null;
+        }
+
+        const existingApps = getApps();
+        for (const appInstance of existingApps) {
+          await deleteApp(appInstance);
+        }
+
+        firebaseApp = initializeApp(configObj);
+        firebaseAuth = getAuth(firebaseApp);
+        firestoreDb = getFirestore(firebaseApp);
+
+        document.getElementById('disconnectFirebaseBtn').classList.remove('hidden');
+
+        try {
+          await getRedirectResult(firebaseAuth);
+        } catch (redirectErr) {
+          showToast('Error al completar acceso con Google: ' + redirectErr.message, 'error');
+        }
+
+        unsubscribeAuth = onAuthStateChanged(firebaseAuth, (user) => {
+          currentUser = user;
+          updateSyncUIState();
+
+          if (user) {
+            subscribeToFirestoreProducts();
+          } else {
+            if (unsubscribeFirestore) {
+              unsubscribeFirestore();
+              unsubscribeFirestore = null;
+            }
+            loadLocalProducts();
+            renderProducts();
+            if (!initialNotifChecked) {
+              initialNotifChecked = true;
+              checkUrgentNotificationsOnLoad();
+            }
+          }
+        });
+
+        if (!isAutoBoot) {
+          showToast('Firebase conectado. Pulsa "G Entrar" en la cabecera.', 'info');
+        }
+      } catch (err) {
+        firebaseApp = null;
+        firebaseAuth = null;
+        firestoreDb = null;
+        currentUser = null;
+        updateSyncUIState();
+        showToast('Error al inicializar Firebase: ' + err.message, 'error');
+      }
+    }
+
+    function subscribeToFirestoreProducts() {
+      if (!firestoreDb || !currentUser) return;
+
+      if (unsubscribeFirestore) {
+        unsubscribeFirestore();
+      }
+
+      const colRef = collection(firestoreDb, 'productos');
+      unsubscribeFirestore = onSnapshot(
+        colRef,
+        (snapshot) => {
+          const cloudItems = [];
+          snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            cloudItems.push({
+              id: docSnap.id,
+              name: data.name || 'Sin nombre',
+              date: data.date || '',
+              note: data.note || '',
+              updatedBy: data.updatedBy || ''
+            });
+          });
+
+          products = cloudItems;
+          renderProducts();
+
+          if (!initialNotifChecked) {
+            initialNotifChecked = true;
+            checkUrgentNotificationsOnLoad();
+          }
+        },
+        (error) => {
+          showToast('Error de Firestore (revisa tus reglas): ' + error.message, 'error');
+        }
+      );
+    }
+
+    function updateSyncUIState() {
+      const badge = document.getElementById('syncStatusBadge');
+      const loginBtn = document.getElementById('googleLoginBtn');
+      const profileBox = document.getElementById('userProfileBox');
+      const avatarImg = document.getElementById('userAvatarImg');
+      const avatarInitial = document.getElementById('userAvatarInitial');
+      const hintBar = document.getElementById('localModeHint');
+      const hintText = document.getElementById('localModeHintText');
+      const hintBtn = document.getElementById('localModeHintBtn');
+
+      const hasFirebaseConfigured = Boolean(firebaseAuth && firestoreDb);
+
+      if (hasFirebaseConfigured && currentUser) {
+        badge.className = 'sync-badge cloud';
+        badge.textContent = '☁️ Nube';
+
+        loginBtn.classList.add('hidden');
+        profileBox.classList.remove('hidden');
+        hintBar.classList.add('hidden');
+
+        const displayName = currentUser.displayName || currentUser.email || 'Usuario';
+        if (currentUser.photoURL) {
+          avatarImg.src = currentUser.photoURL;
+          avatarImg.classList.remove('hidden');
+          avatarInitial.classList.add('hidden');
+        } else {
+          avatarImg.classList.add('hidden');
+          avatarInitial.textContent = displayName.charAt(0).toUpperCase();
+          avatarInitial.classList.remove('hidden');
+        }
+        profileBox.title = `Conectado como ${displayName}`;
+      } else {
+        badge.className = 'sync-badge local';
+        badge.textContent = '📱 Local';
+        profileBox.classList.add('hidden');
+        hintBar.classList.remove('hidden');
+
+        if (hasFirebaseConfigured) {
+          loginBtn.classList.remove('hidden');
+          hintText.textContent = 'Firebase listo. Inicia sesión con Google para compartir la lista en la nube.';
+          hintBtn.textContent = 'G Entrar';
+        } else {
+          loginBtn.classList.add('hidden');
+          hintText.textContent = 'Modo local activo. Configura Firebase en ⚙️ para sincronizar entre dispositivos.';
+          hintBtn.textContent = 'Configurar';
+        }
+      }
+    }
+
+    function handleHintAction() {
+      if (firebaseAuth && firestoreDb) {
+        signInWithGoogle();
+      } else {
+        document.getElementById('settingsPanel').classList.remove('hidden');
+        document.getElementById('firebaseConfigInput').focus();
+      }
+    }
+
+    async function signInWithGoogle() {
+      if (!firebaseAuth) {
+        showToast('Configura primero firebaseConfig en Ajustes (⚙️).', 'warn');
+        document.getElementById('settingsPanel').classList.remove('hidden');
+        return;
+      }
+
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(firebaseAuth, provider);
+        showToast('Sesión iniciada con Google.', 'info');
+      } catch (err) {
+        if (
+          err.code === 'auth/popup-blocked' ||
+          err.code === 'auth/popup-closed-by-user' ||
+          err.code === 'auth/cancelled-popup-request'
+        ) {
+          try {
+            showToast('Redirigiendo a Google...', 'info');
+            await signInWithRedirect(firebaseAuth, provider);
+          } catch (redirErr) {
+            showToast('Error al iniciar sesión: ' + redirErr.message, 'error');
+          }
+        } else {
+          showToast('Error de autenticación Google: ' + err.message, 'error');
+        }
+      }
+    }
+
+    async function signOutGoogle() {
+      if (!firebaseAuth) return;
+      try {
+        await signOut(firebaseAuth);
+        closeProductForm();
+        showToast('Sesión cerrada. Usando modo local.', 'info');
+      } catch (err) {
+        showToast('Error al cerrar sesión: ' + err.message, 'error');
+      }
+    }
+
+    async function saveAndConnectFirebase() {
+      const rawText = document.getElementById('firebaseConfigInput').value.trim();
+      const parsed = parseFirebaseConfigText(rawText);
+
+      if (!parsed) {
+        showToast('firebaseConfig no válido (faltan apiKey o projectId).', 'error');
+        return;
+      }
+
+      localStorage.setItem(FIREBASE_CONFIG_STORAGE, rawText);
+      await initFirebaseServices(parsed, false);
+    }
+
+    async function disconnectFirebase() {
+      if (unsubscribeFirestore) {
+        unsubscribeFirestore();
+        unsubscribeFirestore = null;
+      }
+      if (unsubscribeAuth) {
+        unsubscribeAuth();
+        unsubscribeAuth = null;
+      }
+      try {
+        if (firebaseAuth && currentUser) {
+          await signOut(firebaseAuth);
+        }
+        for (const appInstance of getApps()) {
+          await deleteApp(appInstance);
+        }
+      } catch (e) {}
+
+      firebaseApp = null;
+      firebaseAuth = null;
+      firestoreDb = null;
+      currentUser = null;
+
+      localStorage.removeItem(FIREBASE_CONFIG_STORAGE);
+      document.getElementById('firebaseConfigInput').value = '';
+      document.getElementById('disconnectFirebaseBtn').classList.add('hidden');
+
+      closeProductForm();
+      loadLocalProducts();
+      updateSyncUIState();
+      renderProducts();
+      showToast('Firebase desconectado.', 'info');
+    }
+
+    function isCloudModeActive() {
+      return Boolean(firestoreDb && currentUser);
+    }
+
+    // =========================================================================
+    // Panel de Configuración ('⚙️') y Modelos Gemini
+    // =========================================================================
+    function toggleSettingsPanel() {
+      document.getElementById('settingsPanel').classList.toggle('hidden');
+    }
+
+    function sortModelsPriority(modelsList) {
+      return [...modelsList].sort((a, b) => {
+        const score = (name) => {
+          const lower = name.toLowerCase();
+          if (lower === 'gemini-3.8-flash-lite') return 0;
+          if (lower === 'gemini-3.8-flash') return 1;
+          if (lower === 'gemini-flash-latest') return 2;
+          if (lower.includes('lite')) return 3;
+          if (lower.includes('flash')) return 4;
+          return 10;
+        };
+        const diff = score(a) - score(b);
+        return diff !== 0 ? diff : a.localeCompare(b);
+      });
+    }
+
+    function renderModelSelect(models, preferred = '') {
+      const select = document.getElementById('modelSelect');
+      select.innerHTML = '';
+
+      models.forEach((modelId) => {
+        const opt = document.createElement('option');
+        opt.value = modelId;
+        opt.textContent = modelId;
+        select.appendChild(opt);
+      });
+
+      if (preferred && models.includes(preferred)) {
+        select.value = preferred;
+      } else if (models.length > 0) {
+        select.value = models[0];
+      }
+    }
+
+    function saveApiKeyOnly() {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      if (!apiKey) {
+        showToast('Introduce una API Key válida.', 'error');
+        return;
+      }
+      localStorage.setItem(API_KEY_STORAGE, apiKey);
+      showToast('API Key guardada.', 'info');
+    }
+
+    async function syncModelsFromAPI(silent = false) {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      if (!apiKey) {
+        if (!silent) showToast('Introduce primero tu Google AI Studio API Key.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('syncModelsBtn');
+      const originalText = btn.textContent;
+      btn.textContent = '⏳...';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`
+        );
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+          throw new Error(data.error?.message || `Error HTTP ${response.status}`);
+        }
+
+        const filtered = (data.models || [])
+          .filter((m) =>
+            Array.isArray(m.supportedGenerationMethods) &&
+            m.supportedGenerationMethods.includes('generateContent')
+          )
+          .map((m) => m.name.replace(/^models\//, ''))
+          .filter((name) => name.toLowerCase().includes('gemini'));
+
+        if (filtered.length === 0) {
+          throw new Error('No se encontraron modelos Gemini compatibles.');
+        }
+
+        availableModels = sortModelsPriority(filtered);
+        localStorage.setItem(MODELS_CACHE_STORAGE, JSON.stringify(availableModels));
+
+        const currentSelection = document.getElementById('modelSelect').value;
+        renderModelSelect(availableModels, currentSelection);
+
+        if (!silent) {
+          showToast(`Modelos actualizados (${availableModels.length} disponibles).`, 'info');
+        }
+      } catch (err) {
+        if (!silent) {
+          showToast('Error al actualizar modelos: ' + err.message, 'error');
+        }
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    async function saveGeneralSettings() {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      if (apiKey) {
+        localStorage.setItem(API_KEY_STORAGE, apiKey);
+        if (!localStorage.getItem(MODELS_CACHE_STORAGE)) {
+          await syncModelsFromAPI(true);
+        }
+      } else {
+        localStorage.removeItem(API_KEY_STORAGE);
+      }
+
+      const selectedModel = document.getElementById('modelSelect').value;
+      if (selectedModel) {
+        localStorage.setItem(SELECTED_MODEL_STORAGE, selectedModel);
+      }
+
+      const rawDays = parseInt(document.getElementById('warningDaysInput').value, 10);
+      if (isNaN(rawDays) || rawDays < 0) {
+        showToast('Indica un número válido de días de preaviso.', 'error');
+        return;
+      }
+
+      warningDays = rawDays;
+      localStorage.setItem(WARNING_DAYS_STORAGE, String(warningDays));
+      updateWarningSummaryLabel();
+
+      document.getElementById('settingsPanel').classList.add('hidden');
+      renderProducts();
+      showToast(`Ajustes guardados (Preaviso: ${warningDays} ${warningDays === 1 ? 'día' : 'días'}).`, 'info');
+    }
+
+    // =========================================================================
+    // Captura de imagen, Formulario debajo de imagen, Modo A y Modo B
+    // =========================================================================
+    function handleImageSelected(event, sourceLabel) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      hideToast();
+      editingProductId = null;
+      currentImageFile = file;
+
+      if (currentPreviewUrl) {
+        URL.revokeObjectURL(currentPreviewUrl);
+      }
+      currentPreviewUrl = URL.createObjectURL(file);
+
+      const sizeKB = Math.max(1, Math.round(file.size / 1024));
+      document.getElementById('previewThumb').src = currentPreviewUrl;
+      document.getElementById('previewFileName').textContent = file.name || 'Imagen capturada';
+      document.getElementById('previewFileStats').textContent = `Origen: ${sourceLabel} • Original: ${sizeKB} KB`;
+
+      document.getElementById('previewHub').classList.remove('hidden');
+      document.getElementById('modesHub').classList.remove('hidden');
+      document.getElementById('progressPanel').classList.add('hidden');
+      document.getElementById('pasteFallbackBox').classList.add('hidden');
+      document.getElementById('productFormSection').classList.add('hidden');
+
+      event.target.value = '';
+    }
+
+    function clearSelectedImage() {
+      cancelApiAnalysis(true);
+      currentImageFile = null;
+      if (currentPreviewUrl) {
+        URL.revokeObjectURL(currentPreviewUrl);
+        currentPreviewUrl = null;
+      }
+      document.getElementById('previewHub').classList.add('hidden');
+      document.getElementById('modesHub').classList.add('hidden');
+    }
+
+    // MODO A: Compresión a escala de grises (máx 512px, ~25KB) + timeout 25s
+    function compressToGrayscaleBase64(file, maxDimension = 512, quality = 0.72) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onerror = () => reject(new Error('Archivo de imagen inválido.'));
+          img.onload = () => {
+            const scale = Math.min(1, maxDimension / Math.max(img.width, img.height));
+            const targetW = Math.max(1, Math.round(img.width * scale));
+            const targetH = Math.max(1, Math.round(img.height * scale));
+
+            const canvas = document.createElement('canvas');
+            canvas.width = targetW;
+            canvas.height = targetH;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, targetW, targetH);
+
+            const imgData = ctx.getImageData(0, 0, targetW, targetH);
+            const pixels = imgData.data;
+            for (let i = 0; i < pixels.length; i += 4) {
+              const gray = Math.round(0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2]);
+              pixels[i] = gray;
+              pixels[i + 1] = gray;
+              pixels[i + 2] = gray;
+            }
+            ctx.putImageData(imgData, 0, 0);
+
+            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+            const base64 = dataUrl.split(',')[1];
+            const approxKB = Math.max(1, Math.round((base64.length * 3) / 4 / 1024));
+            resolve({ base64, approxKB, width: targetW, height: targetH });
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function startLiveTimer() {
+      analysisStartTime = performance.now();
+      const timerEl = document.getElementById('liveTimer');
+      timerEl.textContent = '0.0s';
+
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        const elapsed = (performance.now() - analysisStartTime) / 1000;
+        timerEl.textContent = `${elapsed.toFixed(1)}s`;
+      }, 100);
+    }
+
+    function stopLiveTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function resetProgressUI() {
+      document.getElementById('progressFill').style.width = '8%';
+      setStep(1, 'active', 'Paso 1: Convirtiendo a escala de grises (máx. 512px)...');
+      setStep(2, 'pending', 'Paso 2: Enviando imagen a la API...');
+      setStep(3, 'pending', 'Paso 3: Control de timeout (25s) y fallback...');
+      setStep(4, 'pending', 'Paso 4: Extrayendo producto y fecha...');
+    }
+
+    function setStep(num, state, text = null) {
+      const li = document.getElementById(`step${num}`);
+      const icon = document.getElementById(`step${num}Icon`);
+      const span = document.getElementById(`step${num}Text`);
+
+      li.className = 'step-item';
+      if (state === 'active') {
+        li.classList.add('active');
+        icon.textContent = '⏳';
+      } else if (state === 'done') {
+        li.classList.add('done');
+        icon.textContent = '✅';
+      } else if (state === 'error') {
+        li.classList.add('error');
+        icon.textContent = '❌';
+      } else {
+        icon.textContent = '⏳';
+      }
+
+      if (text) span.textContent = text;
+    }
+
+    function cancelApiAnalysis(silent = false) {
+      userCancelled = true;
+      if (activeAbortController) {
+        activeAbortController.abort();
+        activeAbortController = null;
+      }
+      stopLiveTimer();
+      document.getElementById('progressPanel').classList.add('hidden');
+      document.getElementById('runApiBtn').disabled = false;
+      if (!silent) {
+        showToast('Análisis cancelado. Puedes usar el Modo B o rellenar manualmente.', 'warn');
+      }
+    }
+
+    function isRetryableApiError(status, message, isTimeout) {
+      if (isTimeout) return true;
+      const lower = (message || '').toLowerCase();
+      return (
+        status === 503 ||
+        status === 429 ||
+        status === 404 ||
+        lower.includes('high demand') ||
+        lower.includes('overloaded') ||
+        lower.includes('not found') ||
+        lower.includes('is not supported') ||
+        lower.includes('resource exhausted') ||
+        lower.includes('too many requests')
+      );
+    }
+
+    async function callModelWith25sTimeout(modelName, apiKey, base64Data, todayStr) {
+      const controller = new AbortController();
+      activeAbortController = controller;
+      let timedOut = false;
+
+      const timeoutId = setTimeout(() => {
+        timedOut = true;
+        controller.abort();
+      }, 25000);
+
+      const prompt = `Analiza esta imagen en escala de grises de un producto o envase. Hoy es ${todayStr}.
+1. Identifica qué producto es (nombre corto y claro en español, ej. "Yogur natural", "Leche entera"). Si solo se ve la etiqueta de fecha y no el envase, devuelve "Producto sin identificar".
+2. Lee la fecha de caducidad o consumo preferente en formato YYYY-MM-DD. Si solo pone mes y año (ej. 12/2026), usa el último día de ese mes (2026-12-31). Si no hay fecha visible, devuelve "".
+Responde ÚNICAMENTE con un objeto JSON válido:
+{"producto": "string", "fecha": "YYYY-MM-DD"}`;
+
+      try {
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({
+              contents: [{
+                parts: [
+                  { text: prompt },
+                  { inline_data: { mime_type: 'image/jpeg', data: base64Data } }
+                ]
+              }],
+              generationConfig: {
+                responseMimeType: 'application/json'
+              }
+            })
+          }
+        );
+
+        clearTimeout(timeoutId);
+
+        const data = await res.json();
+        if (!res.ok || data.error) {
+          const err = new Error(data.error?.message || `Error HTTP ${res.status}`);
+          err.status = res.status;
+          err.isTimeout = false;
+          throw err;
+        }
+
+        return data;
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (timedOut) {
+          const tErr = new Error(`Timeout de 25s agotado en ${modelName}`);
+          tErr.isTimeout = true;
+          throw tErr;
+        }
+        throw err;
+      } finally {
+        activeAbortController = null;
+      }
+    }
+
+    async function runOptimizedApiAnalysis() {
+      if (!currentImageFile) {
+        showToast('Selecciona primero una foto con Cámara o Galería.', 'warn');
+        return;
+      }
+
+      const apiKey = localStorage.getItem(API_KEY_STORAGE);
+      if (!apiKey) {
+        showToast('Para el Modo A configura tu API Key de Gemini en ⚙️ (o usa el Modo B).', 'warn');
+        document.getElementById('settingsPanel').classList.remove('hidden');
+        return;
+      }
+
+      hideToast();
+      userCancelled = false;
+
+      const progressPanel = document.getElementById('progressPanel');
+      const runApiBtn = document.getElementById('runApiBtn');
+
+      progressPanel.classList.remove('hidden');
+      document.getElementById('cancelAnalysisBtn').classList.remove('hidden');
+      runApiBtn.disabled = true;
+
+      resetProgressUI();
+      startLiveTimer();
+
+      try {
+        const compressed = await compressToGrayscaleBase64(currentImageFile, 512, 0.72);
+        if (userCancelled) return;
+
+        setStep(1, 'done', `Paso 1: Imagen optimizada (${compressed.width}x${compressed.height}px gris, ~${compressed.approxKB} KB).`);
+        document.getElementById('progressFill').style.width = '28%';
+
+        const primaryModel = document.getElementById('modelSelect').value || localStorage.getItem(SELECTED_MODEL_STORAGE) || availableModels[0];
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        const fallbackPool = availableModels.filter((m) =>
+          m !== primaryModel && (m.toLowerCase().includes('flash') || m.toLowerCase().includes('lite'))
+        );
+        const modelsQueue = [primaryModel, ...fallbackPool];
+
+        let apiResponse = null;
+        let usedModel = primaryModel;
+        let lastError = null;
+
+        for (let i = 0; i < modelsQueue.length; i++) {
+          if (userCancelled) return;
+
+          const modelName = modelsQueue[i];
+          usedModel = modelName;
+
+          if (i === 0) {
+            setStep(2, 'active', `Paso 2: Consultando ${modelName} (~${compressed.approxKB} KB)...`);
+            setStep(3, 'pending', 'Paso 3: Límite de espera 25s por intento...');
+            document.getElementById('progressFill').style.width = '50%';
+          } else {
+            setStep(2, 'error', 'Paso 2: Modelo anterior saturado o sin respuesta.');
+            setStep(3, 'active', `Paso 3: Fallback automático a ${modelName} (${i + 1}/${modelsQueue.length})...`);
+            document.getElementById('progressFill').style.width = `${Math.min(82, 50 + i * 10)}%`;
+          }
+
+          try {
+            apiResponse = await callModelWith25sTimeout(modelName, apiKey, compressed.base64, todayStr);
+            setStep(2, 'done', `Paso 2: Respuesta recibida de ${modelName}.`);
+            setStep(3, 'done', i === 0
+              ? 'Paso 3: Completado en el primer intento (<25s).'
+              : `Paso 3: Recuperado con éxito mediante ${modelName}.`
+            );
+            break;
+          } catch (err) {
+            if (userCancelled) return;
+            lastError = err;
+            if (isRetryableApiError(err.status, err.message, err.isTimeout) && i < modelsQueue.length - 1) {
+              continue;
+            }
+            setStep(3, 'error', `Paso 3: ${err.message}`);
+            throw err;
+          }
+        }
+
+        if (!apiResponse) {
+          throw lastError || new Error('No se obtuvo respuesta de la API.');
+        }
+
+        setStep(4, 'active', 'Paso 4: Extrayendo producto y fecha en JSON...');
+        document.getElementById('progressFill').style.width = '92%';
+
+        const rawText = apiResponse.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+        const parsed = JSON.parse(rawText);
+
+        setStep(4, 'done', 'Paso 4: Datos listos para guardar.');
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('cancelAnalysisBtn').classList.add('hidden');
+        stopLiveTimer();
+
+        // Mostrar formulario justo debajo de la imagen y encima de los mensajes de análisis
+        openNewProductForm(false);
+        document.getElementById('prodName').value = parsed.producto || '';
+        document.getElementById('prodDate').value = normalizeExtractedDate(parsed.fecha || '') || parsed.fecha || '';
+        document.getElementById('productFormSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        showToast(
+          usedModel === primaryModel
+            ? `Análisis completado con ${usedModel}.`
+            : `Completado mediante fallback con ${usedModel}.`,
+          'info'
+        );
+      } catch (err) {
+        if (userCancelled) return;
+        stopLiveTimer();
+        setStep(4, 'error', 'Paso 4: No se pudo completar vía API.');
+        showToast(`API saturada o sin respuesta (${err.message}). Prueba el Modo B debajo.`, 'error');
+      } finally {
+        runApiBtn.disabled = false;
+      }
+    }
+
+    // MODO B: App Gemini local + Portapapeles
+    function copyToClipboardFallback(text) {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.left = '-9999px';
+      document.body.appendChild(area);
+      area.select();
+      try {
+        document.execCommand('copy');
+      } catch (e) {}
+      document.body.removeChild(area);
+    }
+
+    async function sendToLocalGeminiApp() {
+      if (!currentImageFile) {
+        showToast('Selecciona primero una foto con Cámara o Galería.', 'warn');
+        return;
+      }
+
+      let copied = false;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(LOCAL_GEMINI_PROMPT);
+          copied = true;
+        } catch (e) {}
+      }
+      if (!copied) {
+        copyToClipboardFallback(LOCAL_GEMINI_PROMPT);
+      }
+
+      const formSec = document.getElementById('productFormSection');
+      if (formSec.classList.contains('hidden')) {
+        openNewProductForm(false);
+      }
+
+      const shareData = {
+        files: [currentImageFile],
+        title: 'Analizar caducidad',
+        text: LOCAL_GEMINI_PROMPT
+      };
+
+      if (navigator.canShare && navigator.canShare({ files: [currentImageFile] })) {
+        try {
+          showToast('Prompt copiado. Elige "Gemini" en el menú para enviar la imagen.', 'info');
+          await navigator.share(shareData);
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            showToast('No se pudo compartir directamente: ' + err.message, 'warn');
+          }
+        }
+      } else {
+        showToast('Prompt copiado. Abre Gemini manualmente, adjunta la foto y pega el texto.', 'warn');
+      }
+    }
+
+    async function pasteFromGeminiClipboard() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        try {
+          const clipText = await navigator.clipboard.readText();
+          if (clipText && clipText.trim()) {
+            parseAndFillGeminiResponse(clipText);
+            return;
+          }
+        } catch (e) {}
+      }
+
+      const fallbackBox = document.getElementById('pasteFallbackBox');
+      const area = document.getElementById('manualPasteArea');
+      area.value = '';
+      fallbackBox.classList.remove('hidden');
+      area.focus();
+      showToast('Pega la respuesta de Gemini en el cuadro inferior y pulsa "Aplicar texto".', 'info');
+    }
+
+    function applyManualPasteText() {
+      const raw = document.getElementById('manualPasteArea').value.trim();
+      if (!raw) {
+        showToast('El cuadro de texto está vacío.', 'warn');
+        return;
+      }
+      document.getElementById('pasteFallbackBox').classList.add('hidden');
+      parseAndFillGeminiResponse(raw);
+    }
+
+    function normalizeExtractedDate(rawDateStr) {
+      if (!rawDateStr) return '';
+      const clean = rawDateStr.trim();
+
+      let m = clean.match(/\b(20\d{2})[-\/.](\d{1,2})[-\/.](\d{1,2})\b/);
+      if (m) {
+        return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+      }
+
+      m = clean.match(/\b(\d{1,2})[-\/.](\d{1,2})[-\/.](20\d{2})\b/);
+      if (m) {
+        return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+      }
+
+      m = clean.match(/\b(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2})\b/);
+      if (m) {
+        return `20${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+      }
+
+      m = clean.match(/\b(\d{1,2})[-\/.](20\d{2})\b/);
+      if (m) {
+        const year = parseInt(m[2], 10);
+        const month = parseInt(m[1], 10);
+        if (month >= 1 && month <= 12) {
+          const lastDay = new Date(year, month, 0).getDate();
+          return `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+        }
+      }
+
+      return '';
+    }
+
+    function parseAndFillGeminiResponse(rawText) {
+      const text = rawText.replace(/```json|```/gi, '').trim();
+      let detectedProduct = '';
+      let detectedDate = '';
+
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          const obj = JSON.parse(jsonMatch[0]);
+          detectedProduct = (obj.producto || obj.product || obj.nombre || '').trim();
+          detectedDate = normalizeExtractedDate(obj.fecha || obj.date || obj.caducidad || '');
+        } catch (e) {}
+      }
+
+      if (!detectedProduct && text.includes('|')) {
+        const parts = text.split('|').map((s) => s.trim()).filter(Boolean);
+        if (parts.length >= 2) {
+          if (parts[0].toUpperCase() !== 'PRODUCTO') {
+            detectedProduct = parts[0];
+          }
+          detectedDate = normalizeExtractedDate(parts[1]);
+        }
+      }
+
+      if (!detectedDate) {
+        detectedDate = normalizeExtractedDate(text);
+      }
+
+      if (!detectedProduct) {
+        const stripped = text
+          .replace(/\b20\d{2}[-\/.]\d{1,2}[-\/.]\d{1,2}\b/g, '')
+          .replace(/\b\d{1,2}[-\/.]\d{1,2}[-\/.](?:20)?\d{2}\b/g, '')
+          .replace(/\b\d{1,2}[-\/.]20\d{2}\b/g, '')
+          .replace(/\|/g, ' ')
+          .replace(/^(producto|caducidad|fecha)\s*:\s*/i, '')
+          .trim();
+
+        if (stripped && stripped.toUpperCase() !== 'PRODUCTO') {
+          detectedProduct = stripped.split('\n')[0].trim();
+        }
+      }
+
+      document.getElementById('productFormSection').classList.remove('hidden');
+      if (detectedProduct) document.getElementById('prodName').value = detectedProduct;
+      if (detectedDate) document.getElementById('prodDate').value = detectedDate;
+
+      if (detectedProduct || detectedDate) {
+        showToast(
+          `Extraído: ${detectedProduct || '(sin nombre)'}${detectedDate ? ' • ' + formatDisplayDate(detectedDate) : ''}`,
+          'info'
+        );
+      } else {
+        showToast('No se detectó un formato válido. Complétalo manualmente.', 'warn');
+      }
+    }
+
+    // =========================================================================
+    // CRUD de Productos (Firestore o localStorage) + Deslizar para borrar y Deshacer
+    // =========================================================================
+    function loadLocalProducts() {
+      try {
+        const raw = localStorage.getItem(LOCAL_DB_STORAGE);
+        products = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(products)) products = [];
+      } catch (e) {
+        products = [];
+      }
+    }
+
+    function persistLocalProducts() {
+      localStorage.setItem(LOCAL_DB_STORAGE, JSON.stringify(products));
+    }
+
+    function openNewProductForm(clearFields = true) {
+      editingProductId = null;
+
+      const section = document.getElementById('productFormSection');
+      const heading = document.getElementById('formHeading');
+
+      section.classList.remove('hidden', 'editing-active');
+      heading.textContent = 'Nuevo producto';
+      heading.classList.remove('is-editing');
+
+      if (clearFields) {
+        document.getElementById('prodName').value = '';
+        document.getElementById('prodDate').value = '';
+        document.getElementById('prodNote').value = '';
+      }
+
+      renderProducts();
+    }
+
+    function editProduct(id) {
+      const target = products.find((p) => String(p.id) === String(id));
+      if (!target) return;
+
+      editingProductId = target.id;
+
+      const section = document.getElementById('productFormSection');
+      const heading = document.getElementById('formHeading');
+
+      section.classList.remove('hidden');
+      section.classList.add('editing-active');
+      heading.textContent = '✏️ Editando producto';
+      heading.classList.add('is-editing');
+
+      document.getElementById('prodName').value = target.name;
+      document.getElementById('prodDate').value = target.date;
+      document.getElementById('prodNote').value = target.note || '';
+
+      renderProducts();
+      document.getElementById('mainCaptureCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function closeProductForm() {
+      editingProductId = null;
+      const section = document.getElementById('productFormSection');
+      section.classList.add('hidden');
+      section.classList.remove('editing-active');
+      renderProducts();
+    }
+
+    function addDaysToDate(days) {
+      const target = new Date();
+      target.setDate(target.getDate() + days);
+      const yyyy = target.getFullYear();
+      const mm = String(target.getMonth() + 1).padStart(2, '0');
+      const dd = String(target.getDate()).padStart(2, '0');
+      document.getElementById('prodDate').value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    function setNote(locationText) {
+      document.getElementById('prodNote').value = locationText;
+    }
+
+    async function saveProduct() {
+      const name = document.getElementById('prodName').value.trim();
+      const date = document.getElementById('prodDate').value;
+      const note = document.getElementById('prodNote').value.trim();
+
+      if (!name || !date) {
+        showToast('Indica el nombre del producto y la fecha de caducidad.', 'error');
+        return;
+      }
+
+      const saveBtn = document.getElementById('saveProductBtn');
+      saveBtn.disabled = true;
+
+      try {
+        if (isCloudModeActive()) {
+          const author = currentUser.displayName || currentUser.email || 'Usuario Google';
+          if (editingProductId !== null) {
+            const docRef = doc(firestoreDb, 'productos', String(editingProductId));
+            await updateDoc(docRef, {
+              name,
+              date,
+              note,
+              updatedBy: author,
+              updatedAt: serverTimestamp()
+            });
+            showToast(`"${name}" actualizado en la nube.`, 'info');
+          } else {
+            await addDoc(collection(firestoreDb, 'productos'), {
+              name,
+              date,
+              note,
+              updatedBy: author,
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp()
+            });
+            showToast(`"${name}" guardado en la nube.`, 'info');
+          }
+        } else {
+          if (editingProductId !== null) {
+            const idx = products.findIndex((p) => String(p.id) === String(editingProductId));
+            if (idx !== -1) {
+              products[idx] = {
+                ...products[idx],
+                name,
+                date,
+                note
+              };
+              showToast(`"${name}" actualizado localmente.`, 'info');
+            }
+          } else {
+            products.push({
+              id: String(Date.now()),
+              name,
+              date,
+              note
+            });
+            showToast(`"${name}" guardado localmente.`, 'info');
+          }
+          persistLocalProducts();
+          renderProducts();
+        }
+
+        closeProductForm();
+        clearSelectedImage();
+      } catch (err) {
+        showToast('Error al guardar: ' + err.message, 'error');
+      } finally {
+        saveBtn.disabled = false;
+      }
+    }
+
+    async function deleteProduct(id) {
+      const targetItem = products.find((p) => String(p.id) === String(id));
+      if (!targetItem) return;
+
+      if (String(editingProductId) === String(id)) {
+        closeProductForm();
+      }
+
+      lastDeletedBackup = {
+        item: { ...targetItem },
+        wasCloud: isCloudModeActive()
+      };
+
+      try {
+        if (isCloudModeActive()) {
+          await deleteDoc(doc(firestoreDb, 'productos', String(id)));
+        } else {
+          products = products.filter((p) => String(p.id) !== String(id));
+          persistLocalProducts();
+          renderProducts();
+        }
+        showUndoSnackbar(targetItem.name);
+      } catch (err) {
+        lastDeletedBackup = null;
+        showToast('Error al eliminar: ' + err.message, 'error');
+      }
+    }
+
+    function showUndoSnackbar(productName) {
+      const snackbar = document.getElementById('undoSnackbar');
+      const msg = document.getElementById('undoMessage');
+      msg.textContent = `Eliminado: "${productName}"`;
+      snackbar.classList.remove('hidden');
+
+      if (undoSnackbarTimer) {
+        clearTimeout(undoSnackbarTimer);
+      }
+      undoSnackbarTimer = setTimeout(() => {
+        snackbar.classList.add('hidden');
+        lastDeletedBackup = null;
+      }, 6000);
+    }
+
+    async function undoLastDelete() {
+      if (!lastDeletedBackup) return;
+
+      const { item, wasCloud } = lastDeletedBackup;
+      lastDeletedBackup = null;
+
+      if (undoSnackbarTimer) {
+        clearTimeout(undoSnackbarTimer);
+        undoSnackbarTimer = null;
+      }
+      document.getElementById('undoSnackbar').classList.add('hidden');
+
+      try {
+        if (wasCloud && isCloudModeActive()) {
+          const author = currentUser.displayName || currentUser.email || 'Usuario Google';
+          await addDoc(collection(firestoreDb, 'productos'), {
+            name: item.name,
+            date: item.date,
+            note: item.note || '',
+            updatedBy: author,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+          showToast(`"${item.name}" restaurado en la nube.`, 'info');
+        } else {
+          products.push({
+            id: item.id || String(Date.now()),
+            name: item.name,
+            date: item.date,
+            note: item.note || ''
+          });
+          persistLocalProducts();
+          renderProducts();
+          showToast(`"${item.name}" restaurado.`, 'info');
+        }
+      } catch (err) {
+        showToast('Error al restaurar: ' + err.message, 'error');
+      }
+    }
+
+    // =========================================================================
+    // Renderizado Ultra-Compacto de Productos (dd-mm-aaaa + ubicación derecha)
+    // =========================================================================
+    function formatDisplayDate(isoDateStr) {
+      if (!isoDateStr || typeof isoDateStr !== 'string') return '';
+      const parts = isoDateStr.split('-');
+      if (parts.length === 3) {
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+      }
+      return isoDateStr;
+    }
+
+    function getDaysRemaining(dateStr) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const target = new Date(dateStr + 'T00:00:00');
+      return Math.round((target - today) / (1000 * 60 * 60 * 24));
+    }
+
+    function renderProducts() {
+      const container = document.getElementById('itemsList');
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      const sorted = [...products]
+        .filter((item) =>
+          item.name.toLowerCase().includes(query) ||
+          (item.note && item.note.toLowerCase().includes(query))
+        )
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      document.getElementById('totalCounterLabel').textContent =
+        `${sorted.length} ${sorted.length === 1 ? 'producto' : 'productos'}`;
+
+      if (sorted.length === 0) {
+        container.innerHTML = `<div class="empty-state">No hay productos registrados${query ? ' que coincidan con tu búsqueda' : ''}.</div>`;
+        return;
+      }
+
+      const urgentThreshold = warningDays;
+      const warnThreshold = warningDays + 4;
+
+      container.innerHTML = sorted.map((item) => {
+        const days = getDaysRemaining(item.date);
+        let cardClass = '';
+        let pillClass = 'ok';
+        let statusLabel = `Quedan ${days} días`;
+
+        if (days < 0) {
+          cardClass = 'danger';
+          pillClass = 'danger';
+          statusLabel = `Caducado hace ${Math.abs(days)} d.`;
+        } else if (days === 0) {
+          cardClass = 'danger';
+          pillClass = 'danger';
+          statusLabel = '¡Caduca HOY!';
+        } else if (days <= urgentThreshold) {
+          cardClass = 'danger';
+          pillClass = 'danger';
+          statusLabel = `Caduca en ${days} d.`;
+        } else if (days <= warnThreshold) {
+          cardClass = 'warn';
+          pillClass = 'warn';
+          statusLabel = `Quedan ${days} días`;
+        }
+
+        const editingHighlight = String(editingProductId) === String(item.id) ? ' being-edited' : '';
+        const safeName = escapeHtml(item.name);
+        const formattedDate = escapeHtml(formatDisplayDate(item.date));
+        const safeNote = item.note ? escapeHtml(item.note) : '';
+        const safeId = escapeHtml(String(item.id));
+        const jsId = String(item.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        const jsTitle = item.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        const authorHint = item.updatedBy ? ` title="Añadido/editado por: ${escapeHtml(item.updatedBy)}"` : '';
+
+        return `
+          <div class="swipe-wrapper" data-id="${safeId}">
+            <div class="swipe-delete-bg">
+              <span>🗑️ Eliminar</span>
+            </div>
+            <article class="product-card ${cardClass}${editingHighlight}" data-id="${safeId}"${authorHint}>
+              <div class="product-left-col">
+                <h3 class="product-name">${safeName}</h3>
+                <div class="product-date-row">
+                  <span class="meta-date">${formattedDate}</span>
+                  <span class="status-pill ${pillClass}">${statusLabel}</span>
+                </div>
+              </div>
+              <div class="product-right-col">
+                <div class="card-actions">
+                  <button type="button" class="action-mini-btn" onclick="editProduct('${jsId}')" title="Editar producto">✏️</button>
+                  <button type="button" class="action-mini-btn" onclick="downloadICS('${jsTitle}', '${escapeHtml(item.date)}')" title="Descargar recordatorio .ics (${warningDays} días antes a las 09:00)">📅</button>
+                </div>
+                ${safeNote ? `<div class="meta-location-right">📍 ${safeNote}</div>` : ''}
+              </div>
+            </article>
+          </div>
+        `;
+      }).join('');
+
+      attachSwipeListeners();
+    }
+
+    function attachSwipeListeners() {
+      const cards = document.querySelectorAll('.product-card');
+      cards.forEach((card) => {
+        let startX = 0;
+        let startY = 0;
+        let currentDeltaX = 0;
+        let isHorizontalSwipe = null;
+
+        card.addEventListener('touchstart', (e) => {
+          if (e.target.closest('button')) return;
+          const touch = e.touches[0];
+          startX = touch.clientX;
+          startY = touch.clientY;
+          currentDeltaX = 0;
+          isHorizontalSwipe = null;
+          card.classList.add('dragging');
+        }, { passive: true });
+
+        card.addEventListener('touchmove', (e) => {
+          if (!startX) return;
+          const touch = e.touches[0];
+          const diffX = touch.clientX - startX;
+          const diffY = touch.clientY - startY;
+
+          if (isHorizontalSwipe === null) {
+            if (Math.abs(diffX) > 8 || Math.abs(diffY) > 8) {
+              isHorizontalSwipe = Math.abs(diffX) > Math.abs(diffY);
+            }
+          }
+
+          if (isHorizontalSwipe) {
+            if (e.cancelable) e.preventDefault();
+            currentDeltaX = Math.min(0, diffX);
+            card.style.transform = `translateX(${currentDeltaX}px)`;
+          }
+        }, { passive: false });
+
+        const finishSwipe = () => {
+          card.classList.remove('dragging');
+          const threshold = Math.min(115, card.offsetWidth * 0.32);
+
+          if (isHorizontalSwipe && currentDeltaX < -threshold) {
+            const productId = card.getAttribute('data-id');
+            card.style.transform = 'translateX(-110%)';
+            setTimeout(() => {
+              deleteProduct(productId);
+            }, 170);
+          } else {
+            card.style.transform = 'translateX(0)';
+          }
+
+          startX = 0;
+          startY = 0;
+          currentDeltaX = 0;
+          isHorizontalSwipe = null;
+        };
+
+        card.addEventListener('touchend', finishSwipe);
+        card.addEventListener('touchcancel', finishSwipe);
+      });
+    }
+
+    // Descargar evento .ics con alarma programada a las 09:00 AM con warningDays de antelación
+    function downloadICS(title, dateStr) {
+      const alarmDate = new Date(dateStr + 'T09:00:00');
+      alarmDate.setDate(alarmDate.getDate() - warningDays);
+
+      const pad = (n) => String(n).padStart(2, '0');
+      const yyyy = alarmDate.getFullYear();
+      const mm = pad(alarmDate.getMonth() + 1);
+      const dd = pad(alarmDate.getDate());
+      const dtStart = `${yyyy}${mm}${dd}T090000`;
+      const dtEnd = `${yyyy}${mm}${dd}T093000`;
+      const displayDate = formatDisplayDate(dateStr);
+
+      const icsContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Caduca2//ES',
+        'BEGIN:VEVENT',
+        `UID:caduca2-${Date.now()}@local`,
+        `DTSTART:${dtStart}`,
+        `DTEND:${dtEnd}`,
+        `SUMMARY:⚠️ Caduca pronto: ${title} (${displayDate})`,
+        `DESCRIPTION:Recordatorio (${warningDays} días de preaviso): "${title}" caduca el ${displayDate}.`,
+        'BEGIN:VALARM',
+        'TRIGGER:-PT0M',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Recordatorio de caducidad Caduca2',
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `caduca2_${title.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(`Recordatorio .ics descargado (alarma ${warningDays} ${warningDays === 1 ? 'día' : 'días'} antes a las 09:00).`, 'info');
+    }
+
+    // =========================================================================
+    // Notificaciones y Copia de Seguridad JSON
+    // =========================================================================
+    function requestNotifPermission() {
+      if (!('Notification' in window)) {
+        showToast('Este navegador no soporta notificaciones nativas.', 'error');
+        return;
+      }
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          new Notification('Caduca2 · Avisos activados', {
+            body: `Te avisaremos al abrir la app si algún producto caduca en ${warningDays} días o menos.`
+          });
+          showToast('Notificaciones activadas.', 'info');
+        } else {
+          showToast('Permiso de notificaciones denegado.', 'warn');
+        }
+      });
+    }
+
+    function checkUrgentNotificationsOnLoad() {
+      const urgent = products.filter((p) => getDaysRemaining(p.date) <= warningDays);
+      if (urgent.length > 0 && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification(`⚠️ Caduca2: ${urgent.length} producto(s) por caducar`, {
+          body: urgent.map((u) => `${u.name} (${formatDisplayDate(u.date)})`).join(', ')
+        });
+      }
+    }
+
+    function exportJSON() {
+      const cleanExport = products.map(({ name, date, note }) => ({
+        name,
+        date,
+        note: note || ''
+      }));
+      const blob = new Blob([JSON.stringify(cleanExport, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `caduca2_backup_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Copia de seguridad JSON exportada.', 'info');
+    }
+
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!Array.isArray(imported)) throw new Error('Formato inválido');
+
+          const validEntries = imported.filter((item) => item && item.name && item.date);
+          if (validEntries.length === 0) {
+            showToast('El archivo JSON no contiene productos válidos.', 'warn');
+            return;
+          }
+
+          if (isCloudModeActive()) {
+            const author = currentUser.displayName || currentUser.email || 'Importación JSON';
+            const colRef = collection(firestoreDb, 'productos');
+            for (const entry of validEntries) {
+              await addDoc(colRef, {
+                name: String(entry.name).trim(),
+                date: String(entry.date).trim(),
+                note: entry.note ? String(entry.note).trim() : '',
+                updatedBy: author,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+              });
+            }
+            showToast(`Se subieron ${validEntries.length} productos a Firestore.`, 'info');
+          } else {
+            products = validEntries.map((entry, idx) => ({
+              id: String(Date.now() + idx),
+              name: String(entry.name).trim(),
+              date: String(entry.date).trim(),
+              note: entry.note ? String(entry.note).trim() : ''
+            }));
+            persistLocalProducts();
+            renderProducts();
+            showToast(`Se importaron ${products.length} productos localmente.`, 'info');
+          }
+
+          closeProductForm();
+        } catch (err) {
+          showToast('Error al importar JSON: ' + err.message, 'error');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[m]));
+    }
+
+    // Exponer funciones al ámbito global window
+    Object.assign(window, {
+      toggleSettingsPanel,
+      toggleManualGuide,
+      saveAndConnectFirebase,
+      disconnectFirebase,
+      saveApiKeyOnly,
+      syncModelsFromAPI,
+      saveGeneralSettings,
+      signInWithGoogle,
+      signOutGoogle,
+      handleHintAction,
+      requestNotifPermission,
+      hideToast,
+      handleImageSelected,
+      clearSelectedImage,
+      runOptimizedApiAnalysis,
+      cancelApiAnalysis,
+      sendToLocalGeminiApp,
+      pasteFromGeminiClipboard,
+      applyManualPasteText,
+      openNewProductForm,
+      editProduct,
+      closeProductForm,
+      addDaysToDate,
+      setNote,
+      saveProduct,
+      deleteProduct,
+      undoLastDelete,
+      renderProducts,
+      downloadICS,
+      exportJSON,
+      importJSON
+    });
+  </script>
+</body>
+</html>
