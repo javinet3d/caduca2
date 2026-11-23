@@ -3,10 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Caduca2 · Control de Caducidades</title>
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Caduca2">
+  <title>Caduca2</title>
   <!-- Favicon y Apple Touch Icon embebido (Lata de tomate) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥫</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><text x='50' y='78' font-size='72' text-anchor='middle'>🥫</text></svg>">
+  <link id="dynamicManifestLink" rel="manifest">
   <style>
     /* Variables de diseño oscuro */
     :root {
@@ -57,32 +63,32 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       margin-bottom: 12px;
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       min-width: 0;
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       white-space: nowrap;
     }
 
     .sync-badge {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 3px 7px;
       border-radius: 999px;
       white-space: nowrap;
       border: 1px solid var(--border);
@@ -105,23 +111,44 @@
     .header-buttons {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
+    }
+
+    .install-pwa-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      color: #ffffff;
+      height: 36px;
+      padding: 0 9px;
+      border-radius: 10px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+    }
+
+    .install-pwa-btn:active {
+      transform: scale(0.95);
     }
 
     .auth-btn {
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text);
-      height: 38px;
-      padding: 0 10px;
+      height: 36px;
+      padding: 0 9px;
       border-radius: 10px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       white-space: nowrap;
       transition: background-color 0.15s ease, transform 0.1s ease;
     }
@@ -138,34 +165,34 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       border-radius: 50%;
       background: #ffffff;
       color: #2563eb;
       font-weight: 900;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
     }
 
     .user-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: var(--surface);
       border: 1px solid var(--border);
-      height: 38px;
-      padding: 0 8px 0 4px;
+      height: 36px;
+      padding: 0 7px 0 4px;
       border-radius: 10px;
     }
 
     .user-avatar {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       object-fit: cover;
       background: var(--primary);
       color: #fff;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 800;
       display: inline-flex;
       align-items: center;
@@ -178,8 +205,8 @@
       border: 1px solid rgba(239, 68, 68, 0.4);
       color: #fca5a5;
       border-radius: 7px;
-      padding: 3px 7px;
-      font-size: 0.72rem;
+      padding: 3px 6px;
+      font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
     }
@@ -188,10 +215,10 @@
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text);
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 10px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -598,7 +625,7 @@
       font-size: 0.8rem;
     }
 
-    /* Galería de vista previa multi-foto (hasta 3 fotos) */
+    /* Galería de vista previa multi-foto (hasta 3 fotos en color) */
     .preview-hub {
       margin-top: 12px;
       padding-top: 12px;
@@ -704,7 +731,7 @@
       border-radius: 9px;
     }
 
-    /* Formulario de creación / edición (Debajo de la imagen y encima de mensajes / Modo B) */
+    /* Formulario de creación / edición */
     .form-section {
       margin-top: 12px;
       margin-bottom: 12px;
@@ -735,6 +762,20 @@
 
     .form-title.is-editing {
       color: #fbbf24;
+    }
+
+    .saved-photos-hint {
+      font-size: 0.74rem;
+      color: #93c5fd;
+      background: rgba(59, 130, 246, 0.14);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 8px;
+      padding: 6px 9px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
 
     .quick-date-grid {
@@ -999,7 +1040,7 @@
       display: flex;
       align-items: stretch;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s ease;
       will-change: transform;
     }
@@ -1094,24 +1135,24 @@
       justify-content: space-between;
       gap: 4px;
       flex-shrink: 0;
-      max-width: 44%;
+      max-width: 48%;
     }
 
     .card-actions {
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
 
     .action-mini-btn {
       background: var(--input-bg);
       border: 1px solid var(--border);
       color: var(--text);
-      width: 30px;
-      height: 28px;
+      width: 28px;
+      height: 27px;
       border-radius: 7px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -1126,6 +1167,11 @@
 
     .action-mini-btn:active {
       transform: scale(0.92);
+    }
+
+    .action-mini-btn.photos-btn {
+      border-color: rgba(59, 130, 246, 0.45);
+      background: rgba(59, 130, 246, 0.14);
     }
 
     .action-mini-btn.delete-btn:hover {
@@ -1153,6 +1199,127 @@
       color: var(--text-muted);
       font-size: 0.85rem;
     }
+
+    /* 6. Modal visor de fotos por producto */
+    .photo-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(2, 6, 23, 0.84);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeInModal 0.18s ease-out;
+    }
+
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .photo-modal-card {
+      width: 100%;
+      max-width: 500px;
+      max-height: 88vh;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.65);
+    }
+
+    .photo-modal-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .photo-modal-title-group {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .photo-modal-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .photo-modal-sub {
+      margin: 2px 0 0 0;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .photo-modal-close {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .photo-modal-body {
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-photo-frame {
+      position: relative;
+      background: #020617;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    .modal-photo-frame.zoomed {
+      cursor: zoom-out;
+    }
+
+    .modal-photo-frame img {
+      width: 100%;
+      max-height: 290px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+      transition: max-height 0.2s ease;
+    }
+
+    .modal-photo-frame.zoomed img {
+      max-height: 72vh;
+    }
+
+    .modal-photo-caption {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #f8fafc;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
@@ -1165,6 +1332,11 @@
       </div>
 
       <div class="header-buttons">
+        <button type="button" id="installPwaBtn" class="install-pwa-btn hidden" onclick="triggerPwaInstall()" title="Instalar app a pantalla completa">
+          <span>📲</span>
+          <span>Instalar</span>
+        </button>
+
         <button type="button" id="googleLoginBtn" class="auth-btn hidden" onclick="signInWithGoogle()" title="Iniciar sesión con Google">
           <span class="g-letter">G</span>
           <span>Entrar</span>
@@ -1218,6 +1390,7 @@
           <label for="modelSelect">Modelo Gemini (generateContent)</label>
           <div class="model-sync-row">
             <select id="modelSelect">
+              <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite</option>
               <option value="gemini-3.8-flash-lite">gemini-3.8-flash-lite</option>
               <option value="gemini-3.8-flash">gemini-3.8-flash</option>
               <option value="gemini-flash-latest">gemini-flash-latest</option>
@@ -1231,7 +1404,7 @@
 
       <!-- 3) Notificaciones y Preaviso -->
       <details class="settings-accordion">
-        <summary><span>🔔 Notificaciones y Preaviso</span></summary>
+        <summary><span>🔔 Notificaciones y Días de Preaviso</span></summary>
         <div class="accordion-body">
           <label for="warningDaysInput">Días de preaviso</label>
           <input type="number" id="warningDaysInput" min="0" max="365" value="3" placeholder="3">
@@ -1250,7 +1423,7 @@
         <summary><span>💾 Copia de seguridad JSON</span></summary>
         <div class="accordion-body">
           <p class="helper-text" style="margin-top: 0;">
-            Exporta o importa tus productos. Si estás conectado a la nube, los productos importados se subirán a Firestore.
+            Exporta o importa tus productos (incluidas sus fotos guardadas). Si estás conectado a la nube, los productos importados se subirán a Firestore.
           </p>
           <div class="flex-row">
             <button type="button" class="btn btn-secondary flex-1" onclick="exportJSON()">⬇️ Exportar JSON</button>
@@ -1268,9 +1441,9 @@
           <ol>
             <li><strong>API Key gratuita de Gemini:</strong> Entra en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a> con tu cuenta Google, pulsa <em>"Create API key"</em> y copia la clave (<code>AIzaSy...</code>).</li>
             <li><strong>Configurar IA:</strong> Abre el apartado <em>🤖 API Key y Modelo de Gemini</em>, pega la clave, pulsa <strong>Guardar clave</strong> y luego <strong>🔄 Actualizar modelos</strong>.</li>
-            <li><strong>Varias fotos a la vez:</strong> Si el envase y la fecha están en lados distintos, añade hasta 3 fotos con <strong>+ 📸 Otra foto (Cámara)</strong> o <strong>+ 🖼️ Otra foto (Galería)</strong>; la IA las analizará todas juntas.</li>
-            <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente desde la API. Si hay saturación o no tienes clave, usa <strong>Modo B</strong> para enviar las fotos a tu app oficial de Gemini y pegar su respuesta.</li>
-            <li><strong>Sincronización en la nube:</strong> Pulsa <strong>G Entrar</strong> en la cabecera con tu cuenta Google para ver y compartir la lista en tiempo real.</li>
+            <li><strong>Fotos guardadas en cada producto:</strong> Puedes adjuntar hasta 3 fotos por producto. Se guardan comprimidas en color (~20 KB) y luego puedes verlas pulsando el botón <code>🖼️</code> de su tarjeta.</li>
+            <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente con <code>gemini-3.1-flash-lite</code>. Si hay saturación o no tienes clave, usa <strong>Modo B</strong> para enviar las fotos a tu app oficial de Gemini y pegar su respuesta.</li>
+            <li><strong>Instalar a pantalla completa:</strong> En Chrome Android pulsa <strong>📲 Instalar</strong> arriba (o menú <code>⋮</code> &gt; <em>Instalar aplicación</em>) para usar Caduca2 sin barra de navegador.</li>
           </ol>
           <div class="manual-tip">
             💡 Consejo: Puedes borrar cualquier producto pulsando <code>🗑️</code> o deslizándolo hacia la izquierda; aparecerá abajo el botón <strong>↩️ Deshacer</strong> durante 6 segundos.
@@ -1283,11 +1456,11 @@
     <section id="mainCaptureCard" class="card">
       <h2 class="capture-section-header">➕ Añadir producto</h2>
 
-      <!-- Inputs principales (reemplazan las fotos actuales) -->
+      <!-- Inputs principales -->
       <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handlePrimaryImageSelected(event, 'Cámara')">
       <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="handlePrimaryImageSelected(event, 'Galería')">
 
-      <!-- Inputs adicionales (añaden hasta 3 fotos al conjunto) -->
+      <!-- Inputs adicionales (hasta 3 fotos por producto) -->
       <input type="file" id="extraCameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleExtraImageSelected(event, 'Cámara')">
       <input type="file" id="extraGalleryInput" accept="image/*" class="hidden" onchange="handleExtraImageSelected(event, 'Galería')">
 
@@ -1306,7 +1479,7 @@
         </button>
       </div>
 
-      <!-- Galería de miniaturas (hasta 3 fotos) + botones para añadir más fotos -->
+      <!-- Galería de miniaturas en color (hasta 3 fotos) + botones para añadir más -->
       <div id="previewHub" class="preview-hub hidden">
         <div class="preview-header-row">
           <span id="previewCounter" class="preview-counter">1 / 3 fotos adjuntas</span>
@@ -1325,10 +1498,15 @@
         </div>
       </div>
 
-      <!-- Formulario editable (Debajo de la vista previa de fotos y encima de los mensajes de análisis / Modo B) -->
+      <!-- Formulario editable (Debajo de las imágenes y encima de los mensajes de estado / Modo B) -->
       <div id="productFormSection" class="form-section hidden">
         <div class="form-title-bar">
           <h2 id="formHeading" class="form-title">Nuevo producto</h2>
+        </div>
+
+        <div id="existingPhotosNotice" class="saved-photos-hint hidden">
+          <span id="existingPhotosText">🖼️ Este producto conserva 1 foto guardada.</span>
+          <button type="button" class="clear-all-photos-btn" onclick="clearExistingEditingPhotos()">Borrar fotos</button>
         </div>
 
         <label for="prodName">Producto detectado</label>
@@ -1365,7 +1543,7 @@
             <span class="mode-tag api">Modo A · Análisis con IA (API Gemini)</span>
           </div>
           <p class="mode-desc">
-            Comprime todas las fotos adjuntas a escala de grises (máx. 512px, ~25 KB c/u) y las envía juntas a la API con timeout de 25s y salto automático entre modelos.
+            Analiza todas las fotos juntas con <code>gemini-3.1-flash-lite</code> (timeout 25s + fallback automático) y guarda las fotos en color comprimidas (~20 KB c/u) con el producto.
           </p>
           <button type="button" id="runApiBtn" class="btn btn-primary" style="width: 100%;" onclick="runOptimizedApiAnalysis()">
             <span>⚡</span>
@@ -1386,7 +1564,7 @@
             <ul class="steps-list">
               <li id="step1" class="step-item">
                 <span class="step-icon" id="step1Icon">⏳</span>
-                <span id="step1Text">Paso 1: Convirtiendo fotos a escala de grises (máx. 512px)...</span>
+                <span id="step1Text">Paso 1: Preparando imágenes para análisis y almacenamiento...</span>
               </li>
               <li id="step2" class="step-item">
                 <span class="step-icon" id="step2Icon">⏳</span>
@@ -1451,7 +1629,21 @@
     <main id="itemsList" class="items-container"></main>
   </div>
 
-  <!-- Contenedor persistente fuera del listado para Toast y Barra flotante de Deshacer -->
+  <!-- Modal Visor de Fotos del Producto -->
+  <div id="photoViewerModal" class="photo-modal-backdrop hidden" onclick="handlePhotoModalBackdropClick(event)">
+    <div class="photo-modal-card" role="dialog" aria-modal="true" aria-labelledby="photoModalTitle">
+      <div class="photo-modal-header">
+        <div class="photo-modal-title-group">
+          <h3 id="photoModalTitle" class="photo-modal-title">Producto</h3>
+          <p id="photoModalSub" class="photo-modal-sub">Caducidad: 00-00-0000</p>
+        </div>
+        <button type="button" class="photo-modal-close" onclick="closePhotoViewer()" title="Cerrar ventana">✕</button>
+      </div>
+      <div id="photoModalBody" class="photo-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Contenedor persistente para Toast y Barra flotante de Deshacer -->
   <div id="toastBanner" class="toast-banner hidden">
     <span id="toastMessage"></span>
   </div>
@@ -1490,8 +1682,8 @@
     const WARNING_DAYS_STORAGE = 'caduca2_warning_days';
     const LEGACY_WARNING_DAYS_STORAGE = 'warning_days_v5';
     const API_KEY_STORAGE = 'caduca2_gemini_api_key_v1';
-    const SELECTED_MODEL_STORAGE = 'caduca2_selected_model_v1';
-    const MODELS_CACHE_STORAGE = 'caduca2_models_list_v1';
+    const SELECTED_MODEL_STORAGE = 'caduca2_selected_model_v2';
+    const MODELS_CACHE_STORAGE = 'caduca2_models_list_v2';
 
     const MAX_ATTACHED_IMAGES = 3;
 
@@ -1507,6 +1699,7 @@
     };
 
     const DEFAULT_MODELS = [
+      'gemini-3.1-flash-lite',
       'gemini-3.8-flash-lite',
       'gemini-3.8-flash',
       'gemini-flash-latest'
@@ -1524,12 +1717,15 @@
 
     let products = [];
     let editingId = null;
+    let editingExistingPhotos = [];
     let warningDays = 3;
     let availableModels = [...DEFAULT_MODELS];
 
-    // Lista de imágenes adjuntas: [{ file: File, url: string, source: string }]
+    // Lista de imágenes adjuntas en memoria:
+    // [{ file: File, url: string, source: string, colorDataUrl: string, grayBase64: string }]
     let attachedImages = [];
 
+    let deferredInstallPrompt = null;
     let activeAbortController = null;
     let userCancelled = false;
     let timerInterval = null;
@@ -1540,9 +1736,112 @@
     let undoSnackbarTimer = null;
 
     // =========================================================================
+    // 1. PWA Instalable a Pantalla Completa en Chrome
+    // =========================================================================
+    function setupDynamicPwaManifest() {
+      try {
+        const generateIconPng = (size) => {
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+
+          // Fondo oscuro redondeado Slate 900
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(0, 0, size, size);
+
+          // Borde sutil
+          ctx.strokeStyle = '#334155';
+          ctx.lineWidth = Math.max(2, Math.round(size * 0.03));
+          ctx.strokeRect(ctx.lineWidth / 2, ctx.lineWidth / 2, size - ctx.lineWidth, size - ctx.lineWidth);
+
+          // Emoji lata de tomate centrado
+          ctx.font = `${Math.round(size * 0.66)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('🥫', size / 2, size / 2 + Math.round(size * 0.04));
+
+          return canvas.toDataURL('image/png');
+        };
+
+        const icon192 = generateIconPng(192);
+        const icon512 = generateIconPng(512);
+
+        const startUrl = window.location.href.split('#')[0];
+        const manifestObj = {
+          name: 'Caduca2 · Control de Caducidades',
+          short_name: 'Caduca2',
+          description: 'Control inteligente de fechas de caducidad con IA y sincronización en la nube.',
+          start_url: startUrl,
+          scope: './',
+          display: 'standalone',
+          orientation: 'portrait',
+          background_color: '#0f172a',
+          theme_color: '#0f172a',
+          icons: [
+            {
+              src: icon192,
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any maskable'
+            },
+            {
+              src: icon512,
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable'
+            }
+          ]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+        const manifestUrl = URL.createObjectURL(manifestBlob);
+        const linkEl = document.getElementById('dynamicManifestLink');
+        if (linkEl) {
+          linkEl.setAttribute('href', manifestUrl);
+        }
+      } catch (e) {
+        // Ignorar si el entorno restringe Blob URLs
+      }
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const installBtn = document.getElementById('installPwaBtn');
+      if (installBtn) {
+        installBtn.classList.remove('hidden');
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      const installBtn = document.getElementById('installPwaBtn');
+      if (installBtn) {
+        installBtn.classList.add('hidden');
+      }
+      showToast('Caduca2 instalada a pantalla completa.', 'info');
+    });
+
+    async function triggerPwaInstall() {
+      if (!deferredInstallPrompt) {
+        showToast('Abre el menú de Chrome (⋮) y pulsa "Instalar aplicación" o "Añadir a pantalla de inicio".', 'info', 4500);
+        return;
+      }
+
+      deferredInstallPrompt.prompt();
+      const choiceResult = await deferredInstallPrompt.userChoice;
+      if (choiceResult.outcome === 'accepted') {
+        deferredInstallPrompt = null;
+        document.getElementById('installPwaBtn').classList.add('hidden');
+      }
+    }
+
+    // =========================================================================
     // Arranque de la aplicación
     // =========================================================================
     window.addEventListener('DOMContentLoaded', async () => {
+      setupDynamicPwaManifest();
       loadSettingsFromStorage();
       loadLocalProducts();
       renderProducts();
@@ -1563,7 +1862,7 @@
 
     function loadSettingsFromStorage() {
       const savedKey = localStorage.getItem(API_KEY_STORAGE) || '';
-      const savedModel = localStorage.getItem(SELECTED_MODEL_STORAGE) || '';
+      const savedModel = localStorage.getItem(SELECTED_MODEL_STORAGE) || 'gemini-3.1-flash-lite';
 
       const storedWarn = localStorage.getItem(WARNING_DAYS_STORAGE) ?? localStorage.getItem(LEGACY_WARNING_DAYS_STORAGE);
       if (storedWarn !== null && !isNaN(parseInt(storedWarn, 10))) {
@@ -1576,7 +1875,7 @@
       try {
         const cachedModels = JSON.parse(localStorage.getItem(MODELS_CACHE_STORAGE) || 'null');
         if (Array.isArray(cachedModels) && cachedModels.length > 0) {
-          availableModels = cachedModels;
+          availableModels = sortModelsPriority(cachedModels);
         }
       } catch (e) {}
 
@@ -1619,7 +1918,7 @@
     }
 
     // =========================================================================
-    // Firebase Authentication & Cloud Firestore
+    // 2. Firebase Authentication & Cloud Firestore
     // =========================================================================
     function parseFirebaseConfigText(rawInput) {
       if (!rawInput || !rawInput.trim()) return null;
@@ -1739,6 +2038,7 @@
               name: data.name || 'Sin nombre',
               date: data.date || '',
               note: data.note || '',
+              photos: Array.isArray(data.photos) ? data.photos : [],
               updatedBy: data.updatedBy || ''
             });
           });
@@ -1891,14 +2191,16 @@
     }
 
     function sortModelsPriority(modelsList) {
-      return [...modelsList].sort((a, b) => {
+      const unique = Array.from(new Set(['gemini-3.1-flash-lite', ...modelsList]));
+      return unique.sort((a, b) => {
         const score = (name) => {
           const lower = name.toLowerCase();
-          if (lower === 'gemini-3.8-flash-lite') return 0;
-          if (lower === 'gemini-3.8-flash') return 1;
-          if (lower === 'gemini-flash-latest') return 2;
-          if (lower.includes('lite')) return 3;
-          if (lower.includes('flash')) return 4;
+          if (lower === 'gemini-3.1-flash-lite') return 0;
+          if (lower === 'gemini-3.8-flash-lite') return 1;
+          if (lower === 'gemini-3.8-flash') return 2;
+          if (lower === 'gemini-flash-latest') return 3;
+          if (lower.includes('lite')) return 4;
+          if (lower.includes('flash')) return 5;
           return 10;
         };
         const diff = score(a) - score(b);
@@ -1906,7 +2208,7 @@
       });
     }
 
-    function renderModelSelect(models, preferred = '') {
+    function renderModelSelect(models, preferred = 'gemini-3.1-flash-lite') {
       const select = document.getElementById('modelSelect');
       select.innerHTML = '';
 
@@ -1971,7 +2273,7 @@
         availableModels = sortModelsPriority(filtered);
         localStorage.setItem(MODELS_CACHE_STORAGE, JSON.stringify(availableModels));
 
-        const currentSelection = document.getElementById('modelSelect').value;
+        const currentSelection = document.getElementById('modelSelect').value || 'gemini-3.1-flash-lite';
         renderModelSelect(availableModels, currentSelection);
 
         if (!silent) {
@@ -2019,9 +2321,68 @@
     }
 
     // =========================================================================
-    // Captura Multi-Foto (Cámara / Galería) y Apertura Directa de IA
+    // 3. Captura Multi-Foto (Color comprimida ~20KB + Escala de grises IA)
     // =========================================================================
-    function handlePrimaryImageSelected(event, sourceLabel) {
+    function processImagePairFromFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onerror = () => reject(new Error('Formato de imagen no válido.'));
+          img.onload = () => {
+            // a) Versión en COLOR comprimida (máx 360px, JPEG 0.62, ~20KB) para Firestore y localStorage
+            const colorMaxDim = 360;
+            const colorScale = Math.min(1, colorMaxDim / Math.max(img.width, img.height));
+            const colorW = Math.max(1, Math.round(img.width * colorScale));
+            const colorH = Math.max(1, Math.round(img.height * colorScale));
+
+            const colorCanvas = document.createElement('canvas');
+            colorCanvas.width = colorW;
+            colorCanvas.height = colorH;
+            const colorCtx = colorCanvas.getContext('2d');
+            colorCtx.drawImage(img, 0, 0, colorW, colorH);
+            const colorDataUrl = colorCanvas.toDataURL('image/jpeg', 0.62);
+
+            // b) Versión en ESCALA DE GRISES optimizada (máx 512px, JPEG 0.72) para análisis IA
+            const grayMaxDim = 512;
+            const grayScale = Math.min(1, grayMaxDim / Math.max(img.width, img.height));
+            const grayW = Math.max(1, Math.round(img.width * grayScale));
+            const grayH = Math.max(1, Math.round(img.height * grayScale));
+
+            const grayCanvas = document.createElement('canvas');
+            grayCanvas.width = grayW;
+            grayCanvas.height = grayH;
+            const grayCtx = grayCanvas.getContext('2d');
+            grayCtx.drawImage(img, 0, 0, grayW, grayH);
+
+            const imgData = grayCtx.getImageData(0, 0, grayW, grayH);
+            const pixels = imgData.data;
+            for (let i = 0; i < pixels.length; i += 4) {
+              const lum = Math.round(0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2]);
+              pixels[i] = lum;
+              pixels[i + 1] = lum;
+              pixels[i + 2] = lum;
+            }
+            grayCtx.putImageData(imgData, 0, 0);
+
+            const grayDataUrl = grayCanvas.toDataURL('image/jpeg', 0.72);
+            const grayBase64 = grayDataUrl.split(',')[1];
+            const approxGrayKB = Math.max(1, Math.round((grayBase64.length * 3) / 4 / 1024));
+
+            resolve({
+              colorDataUrl,
+              grayBase64,
+              approxGrayKB
+            });
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handlePrimaryImageSelected(event, sourceLabel) {
       const files = Array.from(event.target.files || []);
       event.target.value = '';
       if (files.length === 0) return;
@@ -2029,45 +2390,67 @@
       hideToast();
       cancelApiAnalysis(true);
 
-      // Limpiar estado previo del formulario para iniciar detección limpia
+      // Resetear formulario previo
       editingId = null;
+      editingExistingPhotos = [];
+      document.getElementById('existingPhotosNotice').classList.add('hidden');
       document.getElementById('prodName').value = '';
       document.getElementById('prodDate').value = '';
       document.getElementById('prodNote').value = '';
       document.getElementById('productFormSection').classList.add('hidden');
       document.getElementById('productFormSection').classList.remove('editing-active');
 
-      // Revocar URLs anteriores y cargar nueva selección (hasta 3 fotos)
       revokeAttachedUrls();
-      attachedImages = files.slice(0, MAX_ATTACHED_IMAGES).map((file) => ({
-        file,
-        url: URL.createObjectURL(file),
-        source: sourceLabel
-      }));
 
-      refreshPreviewGalleryAndModes();
+      try {
+        const selectedFiles = files.slice(0, MAX_ATTACHED_IMAGES);
+        const processed = await Promise.all(selectedFiles.map((f) => processImagePairFromFile(f)));
+
+        attachedImages = selectedFiles.map((file, i) => ({
+          file,
+          url: URL.createObjectURL(file),
+          source: sourceLabel,
+          colorDataUrl: processed[i].colorDataUrl,
+          grayBase64: processed[i].grayBase64,
+          approxGrayKB: processed[i].approxGrayKB
+        }));
+
+        refreshPreviewGalleryAndModes();
+      } catch (err) {
+        showToast('Error al procesar la imagen: ' + err.message, 'error');
+      }
     }
 
-    function handleExtraImageSelected(event, sourceLabel) {
+    async function handleExtraImageSelected(event, sourceLabel) {
       const files = Array.from(event.target.files || []);
       event.target.value = '';
       if (files.length === 0) return;
 
       const remainingSlots = MAX_ATTACHED_IMAGES - attachedImages.length;
       if (remainingSlots <= 0) {
-        showToast(`Máximo ${MAX_ATTACHED_IMAGES} fotos por análisis.`, 'warn');
+        showToast(`Máximo ${MAX_ATTACHED_IMAGES} fotos por producto.`, 'warn');
         return;
       }
 
-      const toAdd = files.slice(0, remainingSlots).map((file) => ({
-        file,
-        url: URL.createObjectURL(file),
-        source: sourceLabel
-      }));
+      try {
+        const filesToAdd = files.slice(0, remainingSlots);
+        const processed = await Promise.all(filesToAdd.map((f) => processImagePairFromFile(f)));
 
-      attachedImages.push(...toAdd);
-      refreshPreviewGalleryAndModes();
-      showToast(`Foto añadida (${attachedImages.length}/${MAX_ATTACHED_IMAGES}). Pulsa "Analizar con IA (API)".`, 'info');
+        const newEntries = filesToAdd.map((file, i) => ({
+          file,
+          url: URL.createObjectURL(file),
+          source: sourceLabel,
+          colorDataUrl: processed[i].colorDataUrl,
+          grayBase64: processed[i].grayBase64,
+          approxGrayKB: processed[i].approxGrayKB
+        }));
+
+        attachedImages.push(...newEntries);
+        refreshPreviewGalleryAndModes();
+        showToast(`Foto añadida (${attachedImages.length}/${MAX_ATTACHED_IMAGES}).`, 'info');
+      } catch (err) {
+        showToast('Error al añadir foto adicional: ' + err.message, 'error');
+      }
     }
 
     function removeAttachedImage(index) {
@@ -2112,11 +2495,11 @@
         return;
       }
 
-      counter.textContent = `${attachedImages.length} / ${MAX_ATTACHED_IMAGES} ${attachedImages.length === 1 ? 'foto adjunta' : 'fotos adjuntas'}`;
+      counter.textContent = `${attachedImages.length} / ${MAX_ATTACHED_IMAGES} ${attachedImages.length === 1 ? 'foto adjunta' : 'fotos adjuntas'} (color)`;
 
       strip.innerHTML = attachedImages.map((imgObj, idx) => `
         <div class="thumb-item">
-          <img src="${imgObj.url}" alt="Foto ${idx + 1}">
+          <img src="${imgObj.colorDataUrl || imgObj.url}" alt="Foto ${idx + 1}">
           <span class="thumb-badge">#${idx + 1}</span>
           <button type="button" class="thumb-remove-btn" onclick="removeAttachedImage(${idx})" title="Quitar esta foto">×</button>
         </div>
@@ -2128,54 +2511,13 @@
         addMoreRow.classList.remove('hidden');
       }
 
-      // Mostrar inmediatamente la galería y las opciones de análisis IA (Modo A y Modo B)
       previewHub.classList.remove('hidden');
       modesHub.classList.remove('hidden');
       document.getElementById('progressPanel').classList.add('hidden');
       document.getElementById('pasteFallbackBox').classList.add('hidden');
     }
 
-    // MODO A: Compresión a escala de grises (máx 512px, ~25KB) + envío conjunto de todas las fotos
-    function compressToGrayscaleBase64(file, maxDimension = 512, quality = 0.72) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = () => reject(new Error('No se pudo leer una de las imágenes.'));
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onerror = () => reject(new Error('Archivo de imagen inválido.'));
-          img.onload = () => {
-            const scale = Math.min(1, maxDimension / Math.max(img.width, img.height));
-            const targetW = Math.max(1, Math.round(img.width * scale));
-            const targetH = Math.max(1, Math.round(img.height * scale));
-
-            const canvas = document.createElement('canvas');
-            canvas.width = targetW;
-            canvas.height = targetH;
-
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, targetW, targetH);
-
-            const imgData = ctx.getImageData(0, 0, targetW, targetH);
-            const pixels = imgData.data;
-            for (let i = 0; i < pixels.length; i += 4) {
-              const gray = Math.round(0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2]);
-              pixels[i] = gray;
-              pixels[i + 1] = gray;
-              pixels[i + 2] = gray;
-            }
-            ctx.putImageData(imgData, 0, 0);
-
-            const dataUrl = canvas.toDataURL('image/jpeg', quality);
-            const base64 = dataUrl.split(',')[1];
-            const approxKB = Math.max(1, Math.round((base64.length * 3) / 4 / 1024));
-            resolve({ base64, approxKB, width: targetW, height: targetH });
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
+    // MODO A: Análisis directo con API Gemini (gemini-3.1-flash-lite por defecto)
     function startLiveTimer() {
       analysisStartTime = performance.now();
       const timerEl = document.getElementById('liveTimer');
@@ -2196,8 +2538,8 @@
     }
 
     function resetProgressUI(photoCount) {
-      document.getElementById('progressFill').style.width = '8%';
-      setStep(1, 'active', `Paso 1: Comprimiendo ${photoCount} ${photoCount === 1 ? 'foto' : 'fotos'} en escala de grises (512px)...`);
+      document.getElementById('progressFill').style.width = '10%';
+      setStep(1, 'active', `Paso 1: Preparando ${photoCount} ${photoCount === 1 ? 'foto' : 'fotos'} (color + gris IA)...`);
       setStep(2, 'pending', 'Paso 2: Enviando imágenes a la API...');
       setStep(3, 'pending', 'Paso 3: Control de timeout (25s) y fallback...');
       setStep(4, 'pending', 'Paso 4: Extrayendo producto y fecha...');
@@ -2257,7 +2599,7 @@
       );
     }
 
-    async function callModelWith25sTimeout(modelName, apiKey, compressedList, todayStr) {
+    async function callModelWith25sTimeout(modelName, apiKey, imagesList, todayStr) {
       const controller = new AbortController();
       activeAbortController = controller;
       let timedOut = false;
@@ -2267,15 +2609,15 @@
         controller.abort();
       }, 25000);
 
-      const count = compressedList.length;
+      const count = imagesList.length;
       const prompt = `Analiza ${count > 1 ? `estas ${count} imágenes del mismo producto/envase` : 'esta imagen de un producto o envase'}. Hoy es ${todayStr}.
 1. Identifica qué producto es combinando la información visual de todas las fotos (nombre corto y claro en español, ej. "Yogur natural", "Leche entera"). Si en ninguna foto se identifica el envase, devuelve "Producto sin identificar".
 2. Lee la fecha de caducidad o consumo preferente en formato YYYY-MM-DD (puede estar en cualquiera de las fotos). Si solo pone mes y año (ej. 12/2026), usa el último día de ese mes (2026-12-31). Si no hay fecha visible, devuelve "".
 Responde ÚNICAMENTE con un objeto JSON válido:
 {"producto": "string", "fecha": "YYYY-MM-DD"}`;
 
-      const imageParts = compressedList.map((item) => ({
-        inline_data: { mime_type: 'image/jpeg', data: item.base64 }
+      const imageParts = imagesList.map((item) => ({
+        inline_data: { mime_type: 'image/jpeg', data: item.grayBase64 }
       }));
 
       try {
@@ -2353,16 +2695,11 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       startLiveTimer();
 
       try {
-        const compressedList = await Promise.all(
-          attachedImages.map((imgObj) => compressToGrayscaleBase64(imgObj.file, 512, 0.72))
-        );
-        if (userCancelled) return;
-
-        const totalKB = compressedList.reduce((acc, c) => acc + c.approxKB, 0);
-        setStep(1, 'done', `Paso 1: ${compressedList.length} ${compressedList.length === 1 ? 'foto optimizada' : 'fotos optimizadas'} (~${totalKB} KB total).`);
+        const totalKB = attachedImages.reduce((acc, c) => acc + (c.approxGrayKB || 20), 0);
+        setStep(1, 'done', `Paso 1: ${attachedImages.length} ${attachedImages.length === 1 ? 'foto lista' : 'fotos listas'} (~${totalKB} KB IA + color en caché).`);
         document.getElementById('progressFill').style.width = '28%';
 
-        const primaryModel = document.getElementById('modelSelect').value || localStorage.getItem(SELECTED_MODEL_STORAGE) || availableModels[0];
+        const primaryModel = document.getElementById('modelSelect').value || localStorage.getItem(SELECTED_MODEL_STORAGE) || 'gemini-3.1-flash-lite';
         const todayStr = new Date().toISOString().split('T')[0];
 
         const fallbackPool = availableModels.filter((m) =>
@@ -2391,7 +2728,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
           }
 
           try {
-            apiResponse = await callModelWith25sTimeout(modelName, apiKey, compressedList, todayStr);
+            apiResponse = await callModelWith25sTimeout(modelName, apiKey, attachedImages, todayStr);
             setStep(2, 'done', `Paso 2: Respuesta recibida de ${modelName}.`);
             setStep(3, 'done', i === 0
               ? 'Paso 3: Completado en el primer intento (<25s).'
@@ -2424,7 +2761,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         document.getElementById('cancelAnalysisBtn').classList.add('hidden');
         stopLiveTimer();
 
-        // Mostrar formulario inmediatamente debajo de la vista previa y encima de los mensajes de análisis
+        // Mostrar formulario inmediatamente debajo de las imágenes y encima de los mensajes de estado
         openNewProductForm(false);
         document.getElementById('prodName').value = parsed.producto || '';
         document.getElementById('prodDate').value = normalizeExtractedDate(parsed.fecha || '') || parsed.fecha || '';
@@ -2446,7 +2783,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       }
     }
 
-    // MODO B: App Gemini local + Portapapeles (comparte todas las fotos adjuntas)
+    // MODO B: App Gemini local + Portapapeles
     function copyToClipboardFallback(text) {
       const area = document.createElement('textarea');
       area.value = text;
@@ -2621,7 +2958,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     // =========================================================================
-    // CRUD de Productos (Firestore o localStorage) + Deslizar y Deshacer
+    // 4. CRUD de Productos con Fotos en Color + Visor Modal + Deshacer
     // =========================================================================
     function loadLocalProducts() {
       try {
@@ -2634,11 +2971,17 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     function persistLocalProducts() {
-      localStorage.setItem(LOCAL_DB_STORAGE, JSON.stringify(products));
+      try {
+        localStorage.setItem(LOCAL_DB_STORAGE, JSON.stringify(products));
+      } catch (err) {
+        showToast('Almacenamiento local lleno. Borra productos antiguos o sincroniza con la nube.', 'warn');
+      }
     }
 
     function openNewProductForm(clearFields = true) {
       editingId = null;
+      editingExistingPhotos = [];
+      document.getElementById('existingPhotosNotice').classList.add('hidden');
 
       const section = document.getElementById('productFormSection');
       const heading = document.getElementById('formHeading');
@@ -2660,18 +3003,27 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       const target = products.find((p) => String(p.id) === String(id));
       if (!target) return;
 
-      // Si había fotos de una captura previa, limpiarlas al abrir edición de un registro existente
       clearAllSelectedImages();
 
       editingId = target.id;
+      editingExistingPhotos = Array.isArray(target.photos) ? [...target.photos] : [];
 
       const section = document.getElementById('productFormSection');
       const heading = document.getElementById('formHeading');
+      const photosNotice = document.getElementById('existingPhotosNotice');
+      const photosText = document.getElementById('existingPhotosText');
 
       section.classList.remove('hidden');
       section.classList.add('editing-active');
       heading.textContent = '✏️ Editando producto';
       heading.classList.add('is-editing');
+
+      if (editingExistingPhotos.length > 0) {
+        photosText.textContent = `🖼️ Este producto conserva ${editingExistingPhotos.length} ${editingExistingPhotos.length === 1 ? 'foto guardada' : 'fotos guardadas'}.`;
+        photosNotice.classList.remove('hidden');
+      } else {
+        photosNotice.classList.add('hidden');
+      }
 
       document.getElementById('prodName').value = target.name;
       document.getElementById('prodDate').value = target.date;
@@ -2681,11 +3033,19 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       document.getElementById('mainCaptureCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    function clearExistingEditingPhotos() {
+      editingExistingPhotos = [];
+      document.getElementById('existingPhotosNotice').classList.add('hidden');
+      showToast('Fotos marcadas para quitar al guardar.', 'info');
+    }
+
     function closeProductForm() {
       editingId = null;
+      editingExistingPhotos = [];
       const section = document.getElementById('productFormSection');
       section.classList.add('hidden');
       section.classList.remove('editing-active');
+      document.getElementById('existingPhotosNotice').classList.add('hidden');
       document.getElementById('prodName').value = '';
       document.getElementById('prodDate').value = '';
       document.getElementById('prodNote').value = '';
@@ -2720,6 +3080,14 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       const wasEditing = editingId !== null;
       const targetEditId = editingId;
 
+      // Recopilar fotos en color comprimidas: las nuevas adjuntas o las que ya tenía al editar
+      const newColorPhotos = attachedImages
+        .map((item) => item.colorDataUrl)
+        .filter(Boolean);
+      const finalPhotos = newColorPhotos.length > 0
+        ? newColorPhotos
+        : (wasEditing ? editingExistingPhotos : []);
+
       try {
         if (isCloudModeActive()) {
           const author = currentUser.displayName || currentUser.email || 'Usuario Google';
@@ -2729,6 +3097,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
               name,
               date,
               note,
+              photos: finalPhotos,
               updatedBy: author,
               updatedAt: serverTimestamp()
             });
@@ -2738,11 +3107,12 @@ Responde ÚNICAMENTE con un objeto JSON válido:
               name,
               date,
               note,
+              photos: finalPhotos,
               updatedBy: author,
               createdAt: serverTimestamp(),
               updatedAt: serverTimestamp()
             });
-            showToast(`"${name}" guardado en la nube.`, 'info');
+            showToast(`"${name}" guardado en la nube${finalPhotos.length ? ` (${finalPhotos.length} foto/s)` : ''}.`, 'info');
           }
         } else {
           if (wasEditing) {
@@ -2752,7 +3122,8 @@ Responde ÚNICAMENTE con un objeto JSON válido:
                 ...products[idx],
                 name,
                 date,
-                note
+                note,
+                photos: finalPhotos
               };
               showToast(`Producto actualizado: "${name}"`, 'info');
             }
@@ -2761,7 +3132,8 @@ Responde ÚNICAMENTE con un objeto JSON válido:
               id: String(Date.now()),
               name,
               date,
-              note
+              note,
+              photos: finalPhotos
             });
             showToast(`"${name}" guardado localmente.`, 'info');
           }
@@ -2769,7 +3141,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
           renderProducts();
         }
 
-        // Cerrar y limpiar siempre el formulario de edición/creación y las fotos adjuntas
+        // Cerrar y limpiar formulario y galería de fotos adjuntas
         closeProductForm();
         clearAllSelectedImages();
       } catch (err) {
@@ -2788,7 +3160,10 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       }
 
       lastDeletedBackup = {
-        item: { ...targetItem },
+        item: {
+          ...targetItem,
+          photos: Array.isArray(targetItem.photos) ? [...targetItem.photos] : []
+        },
         wasCloud: isCloudModeActive()
       };
 
@@ -2844,6 +3219,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
             name: item.name,
             date: item.date,
             note: item.note || '',
+            photos: Array.isArray(item.photos) ? item.photos : [],
             updatedBy: author,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
@@ -2854,7 +3230,8 @@ Responde ÚNICAMENTE con un objeto JSON válido:
             id: item.id || String(Date.now()),
             name: item.name,
             date: item.date,
-            note: item.note || ''
+            note: item.note || '',
+            photos: Array.isArray(item.photos) ? item.photos : []
           });
           persistLocalProducts();
           renderProducts();
@@ -2862,6 +3239,42 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         }
       } catch (err) {
         showToast('Error al restaurar: ' + err.message, 'error');
+      }
+    }
+
+    // =========================================================================
+    // Modal Visor de Fotos por Producto ('🖼️')
+    // =========================================================================
+    function openProductPhotos(id) {
+      const target = products.find((p) => String(p.id) === String(id));
+      if (!target || !Array.isArray(target.photos) || target.photos.length === 0) {
+        showToast('Este producto no tiene fotos guardadas.', 'warn');
+        return;
+      }
+
+      document.getElementById('photoModalTitle').textContent = target.name;
+      const locStr = target.note ? ` • 📍 ${target.note}` : '';
+      document.getElementById('photoModalSub').textContent = `Caducidad: ${formatDisplayDate(target.date)}${locStr}`;
+
+      const body = document.getElementById('photoModalBody');
+      body.innerHTML = target.photos.map((src, idx) => `
+        <div class="modal-photo-frame" onclick="this.classList.toggle('zoomed')" title="Pulsa para ampliar o reducir">
+          <img src="${src}" alt="${escapeHtml(target.name)} - Foto ${idx + 1}">
+          <span class="modal-photo-caption">Foto ${idx + 1} de ${target.photos.length} (toca para ampliar)</span>
+        </div>
+      `).join('');
+
+      document.getElementById('photoViewerModal').classList.remove('hidden');
+    }
+
+    function closePhotoViewer() {
+      document.getElementById('photoViewerModal').classList.add('hidden');
+      document.getElementById('photoModalBody').innerHTML = '';
+    }
+
+    function handlePhotoModalBackdropClick(event) {
+      if (event.target === event.currentTarget) {
+        closePhotoViewer();
       }
     }
 
@@ -2930,6 +3343,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
           statusLabel = `Quedan ${days} d.`;
         }
 
+        const hasPhotos = Array.isArray(item.photos) && item.photos.length > 0;
         const editingHighlight = String(editingId) === String(item.id) ? ' being-edited' : '';
         const safeName = escapeHtml(item.name);
         const formattedDate = escapeHtml(formatDisplayDate(item.date));
@@ -2954,6 +3368,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
               </div>
               <div class="product-right-col">
                 <div class="card-actions">
+                  ${hasPhotos ? `<button type="button" class="action-mini-btn photos-btn" onclick="openProductPhotos('${jsId}')" title="Ver ${item.photos.length} foto(s) del producto">🖼️</button>` : ''}
                   <button type="button" class="action-mini-btn" onclick="editProduct('${jsId}')" title="Editar producto">✏️</button>
                   <button type="button" class="action-mini-btn" onclick="downloadICS('${jsTitle}', '${escapeHtml(item.date)}')" title="Descargar recordatorio .ics (${warningDays} días antes a las 09:00)">📅</button>
                   <button type="button" class="action-mini-btn delete-btn" onclick="deleteProduct('${jsId}')" title="Eliminar producto">🗑️</button>
@@ -3104,10 +3519,11 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     function exportJSON() {
-      const cleanExport = products.map(({ name, date, note }) => ({
+      const cleanExport = products.map(({ name, date, note, photos }) => ({
         name,
         date,
-        note: note || ''
+        note: note || '',
+        photos: Array.isArray(photos) ? photos : []
       }));
       const blob = new Blob([JSON.stringify(cleanExport, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -3145,6 +3561,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
                 name: String(entry.name).trim(),
                 date: String(entry.date).trim(),
                 note: entry.note ? String(entry.note).trim() : '',
+                photos: Array.isArray(entry.photos) ? entry.photos : [],
                 updatedBy: author,
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp()
@@ -3156,7 +3573,8 @@ Responde ÚNICAMENTE con un objeto JSON válido:
               id: String(Date.now() + idx),
               name: String(entry.name).trim(),
               date: String(entry.date).trim(),
-              note: entry.note ? String(entry.note).trim() : ''
+              note: entry.note ? String(entry.note).trim() : '',
+              photos: Array.isArray(entry.photos) ? entry.photos : []
             }));
             persistLocalProducts();
             renderProducts();
@@ -3184,6 +3602,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
 
     // Exponer funciones al ámbito global window
     Object.assign(window, {
+      triggerPwaInstall,
       toggleSettingsPanel,
       saveAndConnectFirebase,
       resetDefaultFirebase,
@@ -3206,12 +3625,16 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       applyManualPasteText,
       openNewProductForm,
       editProduct,
+      clearExistingEditingPhotos,
       closeProductForm,
       addDaysToDate,
       setNote,
       saveProduct,
       deleteProduct,
       undoLastDelete,
+      openProductPhotos,
+      closePhotoViewer,
+      handlePhotoModalBackdropClick,
       renderProducts,
       downloadICS,
       exportJSON,
