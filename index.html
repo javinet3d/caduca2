@@ -115,27 +115,6 @@
       flex-shrink: 0;
     }
 
-    .install-pwa-btn {
-      background: linear-gradient(135deg, #10b981, #059669);
-      border: none;
-      color: #ffffff;
-      height: 36px;
-      padding: 0 9px;
-      border-radius: 10px;
-      font-size: 0.76rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
-    }
-
-    .install-pwa-btn:active {
-      transform: scale(0.95);
-    }
-
     .auth-btn {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -1332,11 +1311,6 @@
       </div>
 
       <div class="header-buttons">
-        <button type="button" id="installPwaBtn" class="install-pwa-btn hidden" onclick="triggerPwaInstall()" title="Instalar app a pantalla completa">
-          <span>📲</span>
-          <span>Instalar</span>
-        </button>
-
         <button type="button" id="googleLoginBtn" class="auth-btn hidden" onclick="signInWithGoogle()" title="Iniciar sesión con Google">
           <span class="g-letter">G</span>
           <span>Entrar</span>
@@ -1433,7 +1407,21 @@
         </div>
       </details>
 
-      <!-- 5) Manual de ayuda -->
+      <!-- 5) Instalar App (Pantalla completa) -->
+      <details id="installSettingsSection" class="settings-accordion">
+        <summary><span>📲 Instalar App (Pantalla completa)</span></summary>
+        <div class="accordion-body">
+          <p id="installStatusDesc" class="helper-text" style="margin-top: 0;">
+            Instala Caduca2 en tu dispositivo para abrirla a pantalla completa sin barra de navegación.
+          </p>
+          <button type="button" id="installPwaBtn" class="btn btn-success" style="width: 100%;" onclick="triggerPwaInstall()">
+            <span>📲</span>
+            <span>Instalar App (Pantalla completa)</span>
+          </button>
+        </div>
+      </details>
+
+      <!-- 6) Manual de ayuda -->
       <details class="settings-accordion">
         <summary><span>📖 Manual de ayuda: Configurar Gemini y App</span></summary>
         <div class="accordion-body manual-guide-box">
@@ -1443,7 +1431,7 @@
             <li><strong>Configurar IA:</strong> Abre el apartado <em>🤖 API Key y Modelo de Gemini</em>, pega la clave, pulsa <strong>Guardar clave</strong> y luego <strong>🔄 Actualizar modelos</strong>.</li>
             <li><strong>Fotos guardadas en cada producto:</strong> Puedes adjuntar hasta 3 fotos por producto. Se guardan comprimidas en color (~20 KB) y luego puedes verlas pulsando el botón <code>🖼️</code> de su tarjeta.</li>
             <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente con <code>gemini-3.1-flash-lite</code>. Si hay saturación o no tienes clave, usa <strong>Modo B</strong> para enviar las fotos a tu app oficial de Gemini y pegar su respuesta.</li>
-            <li><strong>Instalar a pantalla completa:</strong> En Chrome Android pulsa <strong>📲 Instalar</strong> arriba (o menú <code>⋮</code> &gt; <em>Instalar aplicación</em>) para usar Caduca2 sin barra de navegador.</li>
+            <li><strong>Instalar a pantalla completa:</strong> En Chrome Android abre el apartado <em>📲 Instalar App</em> aquí arriba (o menú <code>⋮</code> &gt; <em>Instalar aplicación</em>) para usar Caduca2 sin barra de navegador.</li>
           </ol>
           <div class="manual-tip">
             💡 Consejo: Puedes borrar cualquier producto pulsando <code>🗑️</code> o deslizándolo hacia la izquierda; aparecerá abajo el botón <strong>↩️ Deshacer</strong> durante 6 segundos.
@@ -1803,29 +1791,38 @@
       } catch (e) {
         // Ignorar si el entorno restringe Blob URLs
       }
+
+      // Ocultar sección de instalación si ya se ejecuta en modo standalone (pantalla completa)
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      if (isStandalone) {
+        const installSection = document.getElementById('installSettingsSection');
+        if (installSection) installSection.classList.add('hidden');
+      }
     }
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredInstallPrompt = e;
-      const installBtn = document.getElementById('installPwaBtn');
-      if (installBtn) {
-        installBtn.classList.remove('hidden');
+      const installSection = document.getElementById('installSettingsSection');
+      const installDesc = document.getElementById('installStatusDesc');
+      if (installSection) installSection.classList.remove('hidden');
+      if (installDesc) {
+        installDesc.textContent = 'Tu navegador permite instalar Caduca2 como aplicación nativa a pantalla completa.';
       }
     });
 
     window.addEventListener('appinstalled', () => {
       deferredInstallPrompt = null;
-      const installBtn = document.getElementById('installPwaBtn');
-      if (installBtn) {
-        installBtn.classList.add('hidden');
+      const installSection = document.getElementById('installSettingsSection');
+      if (installSection) {
+        installSection.classList.add('hidden');
       }
       showToast('Caduca2 instalada a pantalla completa.', 'info');
     });
 
     async function triggerPwaInstall() {
       if (!deferredInstallPrompt) {
-        showToast('Abre el menú de Chrome (⋮) y pulsa "Instalar aplicación" o "Añadir a pantalla de inicio".', 'info', 4500);
+        showToast('Abre el menú de tu navegador (⋮ o Compartir) y pulsa "Instalar aplicación" o "Añadir a pantalla de inicio".', 'info', 4500);
         return;
       }
 
@@ -1833,7 +1830,8 @@
       const choiceResult = await deferredInstallPrompt.userChoice;
       if (choiceResult.outcome === 'accepted') {
         deferredInstallPrompt = null;
-        document.getElementById('installPwaBtn').classList.add('hidden');
+        const installSection = document.getElementById('installSettingsSection');
+        if (installSection) installSection.classList.add('hidden');
       }
     }
 
