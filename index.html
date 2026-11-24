@@ -3,41 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#ffffff">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Caduca2">
   <title>Caduca2</title>
-  <!-- Favicon y Apple Touch Icon embebido (Lata de tomate) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥫</text></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><text x='50' y='78' font-size='72' text-anchor='middle'>🥫</text></svg>">
+  <!-- Favicon y Apple Touch Icon minimalista gris y blanco (Material Design 3) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='16' fill='%23ffffff' stroke='%23d2d9e2' stroke-width='3'/%3E%3Crect x='14' y='18' width='36' height='32' rx='8' fill='%23f1f3f4' stroke='%235f6368' stroke-width='3'/%3E%3Cpath d='M22 13v8M42 13v8M14 27h36' stroke='%235f6368' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='38' r='5' fill='%235f6368'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23f8fafd'/%3E%3Crect x='14' y='18' width='36' height='32' rx='8' fill='%23ffffff' stroke='%235f6368' stroke-width='3'/%3E%3Cpath d='M22 13v8M42 13v8M14 27h36' stroke='%235f6368' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='38' r='5' fill='%235f6368'/%3E%3C/svg%3E">
   <link id="dynamicManifestLink" rel="manifest">
+  <!-- Tipografía Inter / Google Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Variables de diseño oscuro */
+    /* Paleta clara minimalista estilo Google Gemini / Material Design 3 */
     :root {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --surface-elevated: #273549;
-      --input-bg: #0b1120;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #334155;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --purple: #8b5cf6;
-      --purple-hover: #7c3aed;
-      --success: #10b981;
-      --success-hover: #059669;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.14);
-      --warning-bg: rgba(245, 158, 11, 0.12);
+      --bg: #ffffff;
+      --surface: #f8fafd;
+      --surface-container: #f0f4f9;
+      --surface-hover: #e8eef6;
+      --input-bg: #ffffff;
+      --text: #1f1f1f;
+      --text-muted: #5f6368;
+      --icon-gray: #5f6368;
+      --border: #e3e8ee;
+      --border-strong: #d2d9e2;
+
+      /* Acentos Google / Gemini */
+      --primary: #1a73e8;
+      --primary-dark: #0b57d0;
+      --primary-soft: #e8f0fe;
+      --gemini-gradient: linear-gradient(135deg, #1a73e8 0%, #4285f4 55%, #669df6 100%);
+      --gemini-subtle-bg: linear-gradient(135deg, #f3f7fe 0%, #eef3fc 100%);
+
+      /* Estados semánticos pastel */
+      --success: #137333;
+      --success-bg: #e6f4ea;
+      --success-border: #ceead6;
+
+      --warning: #b06000;
+      --warning-bg: #fef7e0;
+      --warning-border: #feefc3;
+
+      --danger: #c5221f;
+      --danger-solid: #d93025;
+      --danger-bg: #fce8e6;
+      --danger-border: #fad2cf;
+
+      --purple: #673ab7;
+      --purple-bg: #f3e8fd;
+      --purple-border: #e4cffa;
+
+      --shadow-xs: 0 1px 2px rgba(60, 64, 67, 0.06);
+      --shadow-sm: 0 2px 8px rgba(60, 64, 67, 0.08);
+      --shadow-md: 0 6px 20px rgba(60, 64, 67, 0.12);
+      --shadow-lg: 0 12px 32px rgba(60, 64, 67, 0.18);
     }
 
     * {
       box-sizing: border-box;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Google Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -45,8 +72,9 @@
       margin: 0;
       background-color: var(--bg);
       color: var(--text);
-      padding: 12px 12px 92px 12px;
-      line-height: 1.4;
+      padding: 0 14px 96px 14px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
     }
 
     .app-container {
@@ -58,225 +86,170 @@
       display: none !important;
     }
 
-    /* 1. Cabecera */
+    /* Iconos SVG inline estandarizados */
+    .m-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      flex-shrink: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .m-icon-sm {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+      flex-shrink: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* 1. Barra superior ultra limpia (Material Design 3) */
     header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
-      margin-bottom: 12px;
+      gap: 8px;
+      padding: 12px 2px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(227, 232, 238, 0.75);
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
       min-width: 0;
+    }
+
+    .brand-logo-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      background: var(--surface-container);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-xs);
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.2rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-
-    .sync-badge {
-      font-size: 0.7rem;
+      font-size: 1.22rem;
       font-weight: 700;
-      padding: 3px 7px;
-      border-radius: 999px;
-      white-space: nowrap;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-muted);
-    }
-
-    .sync-badge.cloud {
-      background: rgba(16, 185, 129, 0.16);
-      border-color: rgba(16, 185, 129, 0.45);
-      color: #34d399;
-    }
-
-    .sync-badge.local {
-      background: rgba(148, 163, 184, 0.14);
-      border-color: rgba(148, 163, 184, 0.35);
-      color: #cbd5e1;
-    }
-
-    .header-buttons {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      flex-shrink: 0;
-    }
-
-    .auth-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      letter-spacing: -0.025em;
       color: var(--text);
-      height: 36px;
-      padding: 0 9px;
-      border-radius: 10px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
       white-space: nowrap;
-      transition: background-color 0.15s ease, transform 0.1s ease;
     }
 
-    .auth-btn:hover {
-      background: var(--surface-elevated);
-    }
-
-    .auth-btn:active {
-      transform: scale(0.95);
-    }
-
-    .g-letter {
-      display: inline-flex;
+    .header-actions {
+      display: flex;
       align-items: center;
-      justify-content: center;
-      width: 17px;
-      height: 17px;
-      border-radius: 50%;
-      background: #ffffff;
-      color: #2563eb;
-      font-weight: 900;
-      font-size: 0.72rem;
-    }
-
-    .user-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      height: 36px;
-      padding: 0 7px 0 4px;
-      border-radius: 10px;
-    }
-
-    .user-avatar {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: var(--primary);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      gap: 6px;
       flex-shrink: 0;
     }
 
-    .logout-link {
-      background: rgba(239, 68, 68, 0.18);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #fca5a5;
-      border-radius: 7px;
-      padding: 3px 6px;
-      font-size: 0.7rem;
-      font-weight: 700;
+    /* Indicador único de nube en cabecera */
+    .cloud-status-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--icon-gray);
+      background: transparent;
+      border: 1px solid transparent;
       cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .cloud-status-icon:hover {
+      background: var(--surface-container);
+    }
+
+    .cloud-status-icon.connected {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .cloud-status-icon.offline {
+      color: #80868b;
     }
 
     .icon-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      font-size: 1rem;
+      background: var(--surface-container);
+      border: 1px solid transparent;
+      color: var(--icon-gray);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.1s ease, background-color 0.15s ease;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface-hover);
+      color: var(--text);
     }
 
     .icon-btn:active {
       transform: scale(0.94);
     }
 
-    /* Aviso discreto de estado nube */
-    .cloud-hint-bar {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      color: #93c5fd;
-      border-radius: 10px;
-      padding: 7px 10px;
-      margin-bottom: 10px;
-      font-size: 0.78rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .cloud-hint-action {
-      background: rgba(59, 130, 246, 0.22);
-      border: 1px solid rgba(59, 130, 246, 0.45);
-      color: #dbeafe;
-      padding: 3px 8px;
-      border-radius: 7px;
-      font-size: 0.74rem;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
     /* Notificación Toast flotante auto-ocultable (3s) */
     .toast-banner {
       position: fixed;
-      top: 14px;
+      top: 16px;
       left: 50%;
       transform: translateX(-50%);
-      width: calc(100% - 24px);
-      max-width: 576px;
+      width: calc(100% - 28px);
+      max-width: 572px;
       z-index: 9500;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 11px 14px;
+      background: #ffffff;
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 18px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 0.85rem;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.84rem;
       font-weight: 600;
-      word-break: break-word;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.48);
-      animation: toastSlideDown 0.2s ease-out;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      animation: toastSlideDown 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .toast-banner.info {
-      background: #064e3b;
-      border-color: rgba(16, 185, 129, 0.75);
-      color: #ecfdf5;
+      background: #f0f7ff;
+      border-color: #a8c7fa;
+      color: var(--primary-dark);
     }
 
     .toast-banner.warn {
-      background: #78350f;
-      border-color: rgba(245, 158, 11, 0.75);
-      color: #fffbeb;
+      background: var(--warning-bg);
+      border-color: #fdd663;
+      color: var(--warning);
     }
 
     .toast-banner.error {
-      background: #7f1d1d;
-      border-color: rgba(239, 68, 68, 0.75);
-      color: #fef2f2;
+      background: var(--danger-bg);
+      border-color: #f6aea9;
+      color: var(--danger);
     }
 
     @keyframes toastSlideDown {
@@ -284,42 +257,45 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
-    /* Barra flotante inferior con botón Deshacer tras borrar o deslizar */
+    /* Barra flotante inferior con botón Deshacer */
     .undo-snackbar {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      width: calc(100% - 24px);
-      max-width: 576px;
+      width: calc(100% - 28px);
+      max-width: 572px;
       z-index: 9999;
-      background: #1e293b;
-      border: 1.5px solid #ef4444;
-      color: #f8fafc;
-      border-radius: 14px;
-      padding: 12px 14px;
+      background: #202124;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 10px 12px 10px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      font-size: 0.86rem;
-      font-weight: 700;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
-      animation: undoSlideUp 0.2s ease-out;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      animation: undoSlideUp 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .undo-btn {
-      background: var(--primary);
+      background: #8ab4f8;
       border: none;
-      color: #ffffff;
-      padding: 8px 13px;
-      border-radius: 9px;
-      font-size: 0.82rem;
-      font-weight: 800;
+      color: #062e6f;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+      transition: background-color 0.15s ease;
+    }
+
+    .undo-btn:hover {
+      background: #aecbfa;
     }
 
     .undo-btn:active {
@@ -331,23 +307,37 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
-    /* Tarjetas estructurales */
+    /* Tarjetas estructurales Material Design 3 */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 13px;
-      margin-bottom: 12px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .settings-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 0 12px 2px;
+    }
+
+    .settings-panel-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+      margin: 0;
     }
 
     .capture-section-header {
-      font-size: 0.86rem;
-      font-weight: 800;
-      color: var(--text);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin: 0 0 9px 0;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+      margin: 0 0 11px 2px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -355,12 +345,12 @@
 
     /* Acordeones plegables de Configuración (<details>/<summary>) */
     .settings-accordion {
-      background: var(--input-bg);
+      background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 9px;
+      border-radius: 16px;
+      margin-bottom: 8px;
       overflow: hidden;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     .settings-accordion:last-child {
@@ -368,96 +358,199 @@
     }
 
     .settings-accordion[open] {
-      border-color: rgba(59, 130, 246, 0.45);
+      border-color: #a8c7fa;
+      box-shadow: var(--shadow-xs);
     }
 
     .settings-accordion summary {
       list-style: none;
       cursor: pointer;
-      padding: 12px 13px;
+      padding: 12px 14px;
       font-size: 0.86rem;
-      font-weight: 800;
+      font-weight: 600;
       color: var(--text);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       user-select: none;
-      background: rgba(30, 41, 59, 0.45);
+      background: #ffffff;
       transition: background-color 0.15s ease;
     }
 
     .settings-accordion summary:hover {
-      background: var(--surface-elevated);
+      background: var(--surface);
     }
 
     .settings-accordion summary::-webkit-details-marker {
       display: none;
     }
 
+    .summary-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .summary-left .m-icon {
+      color: var(--icon-gray);
+    }
+
+    .settings-accordion[open] .summary-left .m-icon {
+      color: var(--primary);
+    }
+
     .settings-accordion summary::after {
       content: '▸';
-      font-size: 0.9rem;
-      color: var(--text-muted);
+      font-size: 0.88rem;
+      color: var(--icon-gray);
       transition: transform 0.18s ease;
       flex-shrink: 0;
     }
 
     .settings-accordion[open] summary::after {
       transform: rotate(90deg);
-      color: #60a5fa;
+      color: var(--primary);
     }
 
     .accordion-body {
-      padding: 12px 13px 13px 13px;
+      padding: 14px;
       border-top: 1px solid var(--border);
+      background: var(--surface);
     }
 
-    /* Panel manual de ayuda en Configuración */
+    /* Tarjeta de perfil de usuario Google dentro del menú */
+    .account-status-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .account-info-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .account-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--surface-container);
+      border: 1px solid var(--border);
+      color: var(--icon-gray);
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .account-text-group {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .account-name {
+      margin: 0;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .account-sub {
+      margin: 1px 0 0 0;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sub-config-details {
+      margin-top: 6px;
+      border-top: 1px dashed var(--border-strong);
+      padding-top: 10px;
+    }
+
+    .sub-config-details summary {
+      padding: 4px 2px !important;
+      background: transparent !important;
+      font-size: 0.78rem !important;
+      color: var(--text-muted) !important;
+    }
+
+    /* Manual de ayuda */
     .manual-guide-box {
-      font-size: 0.8rem;
-      color: #cbd5e1;
-      line-height: 1.45;
+      font-size: 0.81rem;
+      color: var(--text);
+      line-height: 1.5;
     }
 
     .manual-guide-box h3 {
       margin: 0 0 8px 0;
-      font-size: 0.86rem;
-      color: #93c5fd;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary-dark);
     }
 
     .manual-guide-box ol {
       margin: 0 0 8px 0;
       padding-left: 18px;
+      color: #3c4043;
     }
 
     .manual-guide-box li {
       margin-bottom: 6px;
     }
 
+    .manual-guide-box code {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--primary-dark);
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-size: 0.77rem;
+      font-weight: 600;
+    }
+
     .manual-guide-box a {
-      color: #60a5fa;
-      font-weight: 700;
+      color: var(--primary);
+      font-weight: 600;
       text-decoration: underline;
     }
 
     .manual-tip {
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      color: #a7f3d0;
-      padding: 8px 10px;
-      border-radius: 8px;
-      margin-top: 8px;
-      font-size: 0.76rem;
+      background: var(--primary-soft);
+      border: 1px solid #d2e3fc;
+      color: var(--primary-dark);
+      padding: 9px 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-size: 0.77rem;
+      font-weight: 500;
     }
 
     label {
       display: block;
       font-size: 0.73rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
       margin-bottom: 5px;
     }
 
@@ -469,14 +562,14 @@
     textarea {
       width: 100%;
       background: var(--input-bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-strong);
       color: var(--text);
-      padding: 10px 11px;
-      border-radius: 10px;
+      padding: 10px 13px;
+      border-radius: 12px;
       font-size: 0.92rem;
-      margin-bottom: 11px;
+      margin-bottom: 12px;
       outline: none;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     textarea.code-area {
@@ -484,90 +577,118 @@
       font-size: 0.78rem;
       line-height: 1.35;
       resize: vertical;
+      background: #ffffff;
     }
 
     input:focus,
     select:focus,
     textarea:focus {
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.14);
     }
 
     .helper-text {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       color: var(--text-muted);
-      margin: -6px 0 11px 0;
-      line-height: 1.35;
+      margin: -4px 0 11px 0;
+      line-height: 1.4;
     }
 
-    /* Botones */
+    /* Botones estilo Material Design 3 */
     .btn {
       border: none;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.88rem;
-      font-weight: 700;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 0.86rem;
+      font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      transition: background-color 0.15s ease, transform 0.1s ease;
+      gap: 7px;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
     }
 
     .btn:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     .btn:disabled {
-      opacity: 0.55;
+      opacity: 0.52;
       cursor: not-allowed;
     }
 
     .btn-primary {
       background: var(--primary);
       color: #ffffff;
+      box-shadow: var(--shadow-xs);
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: var(--primary-hover);
+      background: var(--primary-dark);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-gemini {
+      background: var(--gemini-gradient);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(26, 115, 232, 0.25);
+    }
+
+    .btn-gemini:hover:not(:disabled) {
+      filter: brightness(0.96);
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.32);
     }
 
     .btn-purple {
-      background: var(--purple);
-      color: #ffffff;
+      background: var(--purple-bg);
+      border: 1px solid var(--purple-border);
+      color: var(--purple);
     }
 
     .btn-purple:hover:not(:disabled) {
-      background: var(--purple-hover);
+      background: #ead7fc;
     }
 
     .btn-success {
       background: var(--success);
       color: #ffffff;
+      box-shadow: var(--shadow-xs);
     }
 
     .btn-success:hover:not(:disabled) {
-      background: var(--success-hover);
+      background: #0d652d;
+      box-shadow: var(--shadow-sm);
     }
 
     .btn-danger {
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid rgba(239, 68, 68, 0.5);
-      color: #fecaca;
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger);
     }
 
     .btn-danger:hover {
-      background: rgba(239, 68, 68, 0.32);
+      background: #f9d7d4;
     }
 
     .btn-secondary {
-      background: var(--input-bg);
-      border: 1px solid var(--border);
+      background: #ffffff;
+      border: 1px solid var(--border-strong);
       color: var(--text);
     }
 
     .btn-secondary:hover:not(:disabled) {
-      background: var(--surface-elevated);
+      background: var(--surface-container);
+    }
+
+    .btn-tonal {
+      background: var(--surface-container);
+      border: 1px solid transparent;
+      color: var(--text);
+    }
+
+    .btn-tonal:hover:not(:disabled) {
+      background: var(--surface-hover);
     }
 
     /* Botones superiores de captura: Cámara | Galería | Manual */
@@ -600,14 +721,14 @@
 
     .model-sync-row button {
       white-space: nowrap;
-      padding: 0 11px;
+      padding: 0 13px;
       font-size: 0.8rem;
     }
 
-    /* Galería de vista previa multi-foto (hasta 3 fotos en color) */
+    /* Galería de miniaturas en color (hasta 3 fotos) */
     .preview-hub {
-      margin-top: 12px;
-      padding-top: 12px;
+      margin-top: 14px;
+      padding-top: 14px;
       border-top: 1px solid var(--border);
     }
 
@@ -615,48 +736,51 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 8px;
+      margin-bottom: 9px;
     }
 
     .preview-counter {
       font-size: 0.76rem;
-      font-weight: 700;
-      color: #93c5fd;
+      font-weight: 600;
+      color: var(--primary-dark);
     }
 
     .clear-all-photos-btn {
-      background: transparent;
+      background: #ffffff;
       border: 1px solid var(--border);
       color: var(--text-muted);
-      border-radius: 7px;
-      padding: 3px 8px;
+      border-radius: 999px;
+      padding: 3px 10px;
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
 
     .clear-all-photos-btn:hover {
-      color: #fca5a5;
-      border-color: rgba(239, 68, 68, 0.5);
+      color: var(--danger);
+      border-color: var(--danger-border);
+      background: var(--danger-bg);
     }
 
     .thumbs-strip {
       display: flex;
-      gap: 9px;
+      gap: 10px;
       overflow-x: auto;
       padding-bottom: 4px;
-      margin-bottom: 9px;
+      margin-bottom: 10px;
     }
 
     .thumb-item {
       position: relative;
       width: 78px;
       height: 78px;
-      border-radius: 10px;
+      border-radius: 14px;
       border: 1px solid var(--border);
-      background: #000;
+      background: var(--surface-container);
       flex-shrink: 0;
       overflow: hidden;
+      box-shadow: var(--shadow-xs);
     }
 
     .thumb-item img {
@@ -670,12 +794,13 @@
       position: absolute;
       bottom: 4px;
       left: 4px;
-      background: rgba(15, 23, 42, 0.82);
-      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--text);
       font-size: 0.65rem;
-      font-weight: 800;
-      padding: 1px 5px;
-      border-radius: 5px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+      box-shadow: var(--shadow-xs);
     }
 
     .thumb-remove-btn {
@@ -685,17 +810,17 @@
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: rgba(239, 68, 68, 0.92);
-      color: #ffffff;
-      border: none;
-      font-size: 0.78rem;
-      font-weight: 900;
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--danger);
+      border: 1px solid var(--danger-border);
+      font-size: 0.82rem;
+      font-weight: 800;
       line-height: 1;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow-xs);
     }
 
     .add-more-photos-row {
@@ -707,50 +832,50 @@
     .add-more-btn {
       padding: 8px 10px;
       font-size: 0.78rem;
-      border-radius: 9px;
     }
 
     /* Formulario de creación / edición */
     .form-section {
-      margin-top: 12px;
-      margin-bottom: 12px;
-      padding: 12px;
-      border-radius: 12px;
-      background: rgba(15, 23, 42, 0.78);
-      border: 1.5px solid rgba(16, 185, 129, 0.55);
+      margin-top: 14px;
+      margin-bottom: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1.5px solid #a8c7fa;
+      box-shadow: var(--shadow-sm);
     }
 
     .form-section.editing-active {
-      border: 1.5px solid var(--warning);
-      background: rgba(245, 158, 11, 0.08);
+      border: 1.5px solid #fdd663;
+      background: #fffdf7;
     }
 
     .form-title-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 9px;
+      margin-bottom: 10px;
     }
 
     .form-title {
       margin: 0;
-      font-size: 0.92rem;
-      font-weight: 800;
-      color: #6ee7b7;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--primary-dark);
     }
 
     .form-title.is-editing {
-      color: #fbbf24;
+      color: var(--warning);
     }
 
     .saved-photos-hint {
-      font-size: 0.74rem;
-      color: #93c5fd;
-      background: rgba(59, 130, 246, 0.14);
-      border: 1px solid rgba(59, 130, 246, 0.35);
-      border-radius: 8px;
-      padding: 6px 9px;
-      margin-bottom: 10px;
+      font-size: 0.75rem;
+      color: var(--primary-dark);
+      background: var(--primary-soft);
+      border: 1px solid #d2e3fc;
+      border-radius: 12px;
+      padding: 7px 10px;
+      margin-bottom: 11px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -765,168 +890,180 @@
     }
 
     .quick-date-btn {
-      background: var(--input-bg);
+      background: var(--surface-container);
       border: 1px solid var(--border);
       color: var(--text);
       padding: 7px 4px;
-      border-radius: 8px;
+      border-radius: 999px;
       font-size: 0.78rem;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
 
     .quick-date-btn:hover {
       border-color: var(--primary);
-      background: rgba(59, 130, 246, 0.15);
+      background: var(--primary-soft);
+      color: var(--primary-dark);
     }
 
     .location-chips {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
     }
 
     .chip-btn {
-      background: var(--input-bg);
+      background: var(--surface-container);
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 4px 9px;
+      padding: 5px 11px;
       border-radius: 999px;
-      font-size: 0.74rem;
+      font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
 
     .chip-btn:hover {
-      color: var(--text);
-      border-color: var(--primary);
+      color: var(--primary-dark);
+      border-color: #a8c7fa;
+      background: var(--primary-soft);
     }
 
     /* Modos (Modo A arriba, Modo B debajo) */
     .modes-stack {
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 12px;
     }
 
     .mode-box {
-      background: var(--input-bg);
+      background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 10px;
+      border-radius: 16px;
+      padding: 12px;
     }
 
     .mode-box.highlight-api {
-      border-color: rgba(59, 130, 246, 0.45);
-      background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, var(--input-bg) 100%);
+      border-color: #d2e3fc;
+      background: var(--gemini-subtle-bg);
     }
 
     .mode-box.highlight-purple {
-      border-color: rgba(139, 92, 246, 0.4);
-      background: linear-gradient(180deg, rgba(139, 92, 246, 0.07) 0%, var(--input-bg) 100%);
+      border-color: var(--border);
+      background: #ffffff;
     }
 
     .mode-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     .mode-tag {
-      font-size: 0.69rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 2px 7px;
-      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 3px 9px;
+      border-radius: 999px;
     }
 
     .mode-tag.api {
-      background: rgba(59, 130, 246, 0.2);
-      color: #93c5fd;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
     }
 
     .mode-tag.local-app {
-      background: rgba(139, 92, 246, 0.22);
-      color: #c4b5fd;
+      background: var(--purple-bg);
+      color: var(--purple);
     }
 
     .mode-desc {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       color: var(--text-muted);
-      margin: 0 0 8px 0;
-      line-height: 1.3;
+      margin: 0 0 9px 0;
+      line-height: 1.35;
+    }
+
+    .mode-desc code {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 5px;
+      font-size: 0.73rem;
+      color: var(--text);
     }
 
     /* Monitor de progreso en vivo (Modo A) */
     .progress-panel {
-      margin-top: 9px;
-      padding: 10px;
-      border-radius: 10px;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #d2e3fc;
+      box-shadow: var(--shadow-xs);
     }
 
     .progress-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 7px;
     }
 
     .progress-title {
-      font-size: 0.78rem;
+      font-size: 0.79rem;
       font-weight: 700;
-      color: #93c5fd;
+      color: var(--primary-dark);
     }
 
     .timer-badge {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      background: rgba(59, 130, 246, 0.18);
-      color: #60a5fa;
-      padding: 2px 7px;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      padding: 2px 9px;
       border-radius: 999px;
-      border: 1px solid rgba(59, 130, 246, 0.35);
     }
 
     .progress-track {
       width: 100%;
       height: 6px;
-      background: var(--input-bg);
+      background: var(--surface-container);
       border-radius: 999px;
       overflow: hidden;
-      margin-bottom: 9px;
+      margin-bottom: 10px;
     }
 
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #3b82f6, #10b981);
+      background: var(--gemini-gradient);
       border-radius: 999px;
       transition: width 0.3s ease;
     }
 
     .steps-list {
       list-style: none;
-      margin: 0 0 9px 0;
+      margin: 0 0 10px 0;
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
 
     .step-item {
       display: flex;
       align-items: flex-start;
       gap: 7px;
-      font-size: 0.76rem;
+      font-size: 0.77rem;
       color: var(--text-muted);
-      line-height: 1.3;
+      line-height: 1.35;
     }
 
     .step-item.active {
@@ -935,11 +1072,13 @@
     }
 
     .step-item.done {
-      color: #6ee7b7;
+      color: var(--success);
+      font-weight: 500;
     }
 
     .step-item.error {
-      color: #fca5a5;
+      color: var(--danger);
+      font-weight: 500;
     }
 
     .step-icon {
@@ -950,8 +1089,8 @@
 
     /* Cuadro alternativo de pegado manual (Modo B) */
     .paste-fallback-box {
-      margin-top: 8px;
-      padding-top: 8px;
+      margin-top: 9px;
+      padding-top: 9px;
       border-top: 1px dashed var(--border);
     }
 
@@ -961,10 +1100,20 @@
       resize: vertical;
     }
 
-    /* Buscador y resumen */
+    /* Buscador estilo píldora y resumen */
     .search-input {
-      background: var(--surface) !important;
+      background: var(--surface-container) !important;
+      border: 1px solid transparent !important;
+      border-radius: 999px !important;
+      padding: 11px 16px !important;
       margin-bottom: 8px !important;
+      font-size: 0.9rem !important;
+    }
+
+    .search-input:focus {
+      background: #ffffff !important;
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.14) !important;
     }
 
     .warning-summary-bar {
@@ -972,23 +1121,24 @@
       justify-content: space-between;
       align-items: center;
       font-size: 0.75rem;
+      font-weight: 500;
       color: var(--text-muted);
-      margin-bottom: 9px;
-      padding-inline: 2px;
+      margin-bottom: 10px;
+      padding-inline: 6px;
     }
 
     /* 5. Lista Ultra-Compacta de Productos con Swipe hacia la izquierda */
     .items-container {
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 8px;
     }
 
     .swipe-wrapper {
       position: relative;
-      border-radius: 11px;
+      border-radius: 16px;
       overflow: hidden;
-      background: var(--danger);
+      background: var(--danger-solid);
       touch-action: pan-y;
       user-select: none;
     }
@@ -1003,7 +1153,7 @@
       gap: 6px;
       color: #ffffff;
       font-size: 0.82rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.02em;
       pointer-events: none;
     }
@@ -1011,17 +1161,22 @@
     .product-card {
       position: relative;
       z-index: 2;
-      background: var(--surface);
+      background: #ffffff;
       border: 1px solid var(--border);
-      border-left: 4px solid var(--success);
-      border-radius: 11px;
-      padding: 8px 10px;
+      border-left: 4px solid #34a853;
+      border-radius: 16px;
+      padding: 10px 12px;
       display: flex;
       align-items: stretch;
       justify-content: space-between;
       gap: 8px;
-      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s ease;
+      box-shadow: var(--shadow-xs);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s ease, box-shadow 0.15s ease;
       will-change: transform;
+    }
+
+    .product-card:hover {
+      box-shadow: var(--shadow-sm);
     }
 
     .product-card.dragging {
@@ -1029,18 +1184,18 @@
     }
 
     .product-card.warn {
-      border-left-color: var(--warning);
-      background: linear-gradient(90deg, #2d2618 0%, var(--surface) 45%);
+      border-left-color: #f9ab00;
+      background: linear-gradient(90deg, #fffdf5 0%, #ffffff 42%);
     }
 
     .product-card.danger {
-      border-left-color: var(--danger);
-      background: linear-gradient(90deg, #311c24 0%, var(--surface) 45%);
+      border-left-color: #ea4335;
+      background: linear-gradient(90deg, #fff8f7 0%, #ffffff 42%);
     }
 
     .product-card.being-edited {
-      border-color: var(--warning);
-      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+      border-color: #f9ab00;
+      box-shadow: 0 0 0 3px rgba(249, 171, 0, 0.2);
     }
 
     .product-left-col {
@@ -1054,8 +1209,8 @@
 
     .product-name {
       margin: 0;
-      font-size: 0.94rem;
-      font-weight: 700;
+      font-size: 0.95rem;
+      font-weight: 600;
       color: var(--text);
       white-space: nowrap;
       overflow: hidden;
@@ -1076,34 +1231,34 @@
     .meta-date {
       white-space: nowrap;
       flex-shrink: 0;
-      font-weight: 600;
+      font-weight: 500;
       font-variant-numeric: tabular-nums;
-      color: #cbd5e1;
+      color: var(--text-muted);
     }
 
     .status-pill {
       display: inline-block;
-      padding: 2px 7px;
+      padding: 2px 8px;
       border-radius: 999px;
       font-size: 0.69rem;
-      font-weight: 700;
+      font-weight: 600;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .status-pill.ok {
-      background: rgba(16, 185, 129, 0.18);
-      color: #34d399;
+      background: var(--success-bg);
+      color: var(--success);
     }
 
     .status-pill.warn {
-      background: rgba(245, 158, 11, 0.22);
-      color: #fbbf24;
+      background: var(--warning-bg);
+      color: var(--warning);
     }
 
     .status-pill.danger {
-      background: rgba(239, 68, 68, 0.22);
-      color: #fca5a5;
+      background: var(--danger-bg);
+      color: var(--danger);
     }
 
     /* Columna derecha: Iconos arriba alineados horizontalmente, ubicación justo debajo */
@@ -1112,7 +1267,7 @@
       flex-direction: column;
       align-items: flex-end;
       justify-content: space-between;
-      gap: 4px;
+      gap: 5px;
       flex-shrink: 0;
       max-width: 48%;
     }
@@ -1125,23 +1280,23 @@
     }
 
     .action-mini-btn {
-      background: var(--input-bg);
+      background: var(--surface);
       border: 1px solid var(--border);
-      color: var(--text);
-      width: 28px;
-      height: 27px;
-      border-radius: 7px;
-      font-size: 0.8rem;
+      color: var(--icon-gray);
+      width: 29px;
+      height: 28px;
+      border-radius: 9px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       padding: 0;
-      transition: background-color 0.15s ease, transform 0.1s ease;
+      transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
     }
 
     .action-mini-btn:hover {
-      background: var(--surface-elevated);
+      background: var(--surface-container);
+      color: var(--text);
     }
 
     .action-mini-btn:active {
@@ -1149,18 +1304,20 @@
     }
 
     .action-mini-btn.photos-btn {
-      border-color: rgba(59, 130, 246, 0.45);
-      background: rgba(59, 130, 246, 0.14);
+      border-color: #d2e3fc;
+      background: var(--primary-soft);
+      color: var(--primary);
     }
 
     .action-mini-btn.delete-btn:hover {
-      background: rgba(239, 68, 68, 0.22);
-      border-color: rgba(239, 68, 68, 0.5);
+      background: var(--danger-bg);
+      border-color: var(--danger-border);
+      color: var(--danger);
     }
 
     .meta-location-right {
       font-size: 0.72rem;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--text-muted);
       white-space: nowrap;
       overflow: hidden;
@@ -1168,15 +1325,19 @@
       max-width: 100%;
       text-align: right;
       line-height: 1.2;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
     }
 
     .empty-state {
-      border: 1px dashed var(--border);
-      border-radius: 12px;
-      padding: 20px 14px;
+      border: 1.5px dashed var(--border-strong);
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 26px 16px;
       text-align: center;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.86rem;
     }
 
     /* 6. Modal visor de fotos por producto */
@@ -1184,8 +1345,9 @@
       position: fixed;
       inset: 0;
       z-index: 10000;
-      background: rgba(2, 6, 23, 0.84);
+      background: rgba(32, 33, 36, 0.55);
       backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1202,22 +1364,23 @@
       width: 100%;
       max-width: 500px;
       max-height: 88vh;
-      background: var(--surface);
+      background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 24px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.65);
+      box-shadow: var(--shadow-lg);
     }
 
     .photo-modal-header {
-      padding: 12px 14px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
+      background: var(--surface);
     }
 
     .photo-modal-title-group {
@@ -1228,7 +1391,7 @@
     .photo-modal-title {
       margin: 0;
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--text);
       white-space: nowrap;
       overflow: hidden;
@@ -1242,16 +1405,22 @@
     }
 
     .photo-modal-close {
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      color: var(--text);
+      background: var(--surface-container);
+      border: none;
+      color: var(--icon-gray);
       width: 34px;
       height: 34px;
-      border-radius: 9px;
+      border-radius: 50%;
       font-size: 0.95rem;
-      font-weight: 800;
+      font-weight: 700;
       cursor: pointer;
       flex-shrink: 0;
+      transition: background-color 0.15s ease;
+    }
+
+    .photo-modal-close:hover {
+      background: var(--surface-hover);
+      color: var(--text);
     }
 
     .photo-modal-body {
@@ -1260,13 +1429,14 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      background: #ffffff;
     }
 
     .modal-photo-frame {
       position: relative;
-      background: #020617;
+      background: var(--surface-container);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
       cursor: zoom-in;
     }
@@ -1292,68 +1462,157 @@
       position: absolute;
       bottom: 8px;
       left: 8px;
-      background: rgba(15, 23, 42, 0.85);
-      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--text);
+      border: 1px solid var(--border);
       font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 6px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      box-shadow: var(--shadow-xs);
     }
   </style>
 </head>
 <body>
   <div class="app-container">
-    <!-- 1. Cabecera -->
+    <!-- 1. Barra superior ultra limpia Material Design 3 -->
     <header>
       <div class="brand-group">
-        <h1>🥫 Caduca2</h1>
-        <span id="syncStatusBadge" class="sync-badge local">📱 Local</span>
+        <!-- Logo minimalista gris y blanco -->
+        <span class="brand-logo-box" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="5" width="18" height="16" rx="4" fill="#ffffff" stroke="#5f6368" stroke-width="1.8"/>
+            <path d="M8 3v3.5M16 3v3.5M3 9.5h18" stroke="#5f6368" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="12" cy="15" r="2.3" fill="#5f6368"/>
+          </svg>
+        </span>
+        <h1>Caduca2</h1>
       </div>
 
-      <div class="header-buttons">
-        <button type="button" id="googleLoginBtn" class="auth-btn hidden" onclick="signInWithGoogle()" title="Iniciar sesión con Google">
-          <span class="g-letter">G</span>
-          <span>Entrar</span>
+      <div class="header-actions">
+        <!-- Único icono de estado de nube en cabecera -->
+        <button type="button" id="cloudStatusBtn" class="cloud-status-icon offline" onclick="handleCloudStatusClick()" title="Modo local (sin sesión en la nube). Pulsa para abrir ajustes de cuenta.">
+          <svg id="cloudIconSvg" class="m-icon" viewBox="0 0 24 24">
+            <!-- Nube tachada (estado inicial local) -->
+            <path d="M19.35 10.04A7.49 7.49 0 0 0 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46A5.48 5.48 0 0 1 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19a3 3 0 0 1 2.29 4.93l1.42 1.42A4.99 4.99 0 0 0 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.75 2.74A6.002 6.002 0 0 0 0 14c0 3.31 2.69 6 6 6h11.73l2 2L21 20.73 4.27 4 3 5.27zM7.73 10l8 8H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h1.73z"/>
+          </svg>
         </button>
 
-        <div id="userProfileBox" class="user-pill hidden">
-          <img id="userAvatarImg" class="user-avatar hidden" alt="Perfil">
-          <span id="userAvatarInitial" class="user-avatar">U</span>
-          <button type="button" class="logout-link" onclick="signOutGoogle()" title="Cerrar sesión">Salir</button>
-        </div>
-
-        <button type="button" class="icon-btn" onclick="requestNotifPermission()" title="Activar notificaciones">🔔</button>
-        <button type="button" class="icon-btn" onclick="toggleSettingsPanel()" title="Configuración">⚙️</button>
+        <!-- Botón minimalista de menú/ajustes en gris -->
+        <button type="button" class="icon-btn" onclick="toggleSettingsPanel()" title="Menú y Configuración">
+          <svg class="m-icon" viewBox="0 0 24 24">
+            <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/>
+          </svg>
+        </button>
       </div>
     </header>
 
-    <!-- Barra discreta de estado nube -->
-    <div id="localModeHint" class="cloud-hint-bar">
-      <span id="localModeHintText">Firebase listo. Inicia sesión con Google para sincronizar en la nube.</span>
-      <button type="button" id="localModeHintBtn" class="cloud-hint-action" onclick="handleHintAction()">G Entrar</button>
-    </div>
-
-    <!-- 2. Panel de Configuración ('⚙️') con apartados plegables (<details>) -->
+    <!-- 2. Menú de Configuración Material Design 3 con iconos SVG monocromos grises -->
     <section id="settingsPanel" class="card hidden">
-      <!-- 1) Conexión Firebase -->
-      <details class="settings-accordion">
-        <summary><span>🔥 Conexión Firebase</span></summary>
+      <div class="settings-panel-header">
+        <h2 class="settings-panel-title">Configuración y Cuenta</h2>
+        <button type="button" class="clear-all-photos-btn" onclick="toggleSettingsPanel()">Cerrar</button>
+      </div>
+
+      <!-- Apartado 1: Cuenta Google y Sincronización Firebase -->
+      <details id="accountAccordion" class="settings-accordion">
+        <summary>
+          <span class="summary-left">
+            <svg class="m-icon" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span>Cuenta y Sincronización</span>
+          </span>
+        </summary>
         <div class="accordion-body">
-          <p class="helper-text" style="margin-top: 0;">
-            Proyecto <strong>caduca2-app</strong> precargado por defecto. Solo necesitas editar este bloque si deseas usar otro proyecto de Firebase distinto.
-          </p>
-          <label for="firebaseConfigInput">Configuración firebaseConfig (Opcional / Avanzado)</label>
-          <textarea id="firebaseConfigInput" class="code-area" rows="5" placeholder="Usando configuración por defecto de caduca2-app..."></textarea>
-          <div class="flex-row">
-            <button type="button" class="btn btn-primary flex-1" onclick="saveAndConnectFirebase()">Guardar y conectar</button>
-            <button type="button" class="btn btn-secondary" onclick="resetDefaultFirebase()">Restaurar por defecto</button>
+          <!-- Tarjeta de sesión Google -->
+          <div class="account-status-card">
+            <div class="account-info-left">
+              <img id="accountAvatarImg" class="account-avatar hidden" alt="Avatar">
+              <div id="accountAvatarFallback" class="account-avatar">
+                <svg class="m-icon" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88a9.947 9.947 0 0 1 12.28 0C16.43 19.18 14.03 20 12 20z"/>
+                </svg>
+              </div>
+              <div class="account-text-group">
+                <p id="accountNameLabel" class="account-name">Modo local (sin sesión)</p>
+                <p id="accountSubLabel" class="account-sub">Inicia sesión con Google para sincronizar en la nube</p>
+              </div>
+            </div>
+
+            <button type="button" id="googleLoginBtn" class="btn btn-primary" onclick="signInWithGoogle()" style="padding: 8px 14px; font-size: 0.8rem;">
+              Iniciar sesión
+            </button>
+            <button type="button" id="googleLogoutBtn" class="btn btn-danger hidden" onclick="signOutGoogle()" style="padding: 8px 14px; font-size: 0.8rem;">
+              Cerrar sesión
+            </button>
           </div>
+
+          <!-- Configuración avanzada opcional de Firebase -->
+          <details class="sub-config-details">
+            <summary>Configuración avanzada de Firebase (caduca2-app)</summary>
+            <div style="padding-top: 10px;">
+              <label for="firebaseConfigInput">Objeto firebaseConfig</label>
+              <textarea id="firebaseConfigInput" class="code-area" rows="4" placeholder="Proyecto caduca2-app precargado por defecto..."></textarea>
+              <div class="flex-row">
+                <button type="button" class="btn btn-secondary flex-1" onclick="saveAndConnectFirebase()">Guardar y conectar</button>
+                <button type="button" class="btn btn-tonal" onclick="resetDefaultFirebase()">Por defecto</button>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <!-- 2) API Key y Modelo de Gemini -->
+      <!-- Apartado 2: Notificaciones (Campana) y Preaviso -->
       <details class="settings-accordion">
-        <summary><span>🤖 API Key y Modelo de Gemini</span></summary>
+        <summary>
+          <span class="summary-left">
+            <svg class="m-icon" viewBox="0 0 24 24">
+              <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            <span>Notificaciones y Preaviso</span>
+          </span>
+        </summary>
+        <div class="accordion-body">
+          <div class="account-status-card">
+            <div class="account-info-left">
+              <div class="account-avatar" style="background: var(--surface-container);">
+                <svg class="m-icon" viewBox="0 0 24 24">
+                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                </svg>
+              </div>
+              <div class="account-text-group">
+                <p class="account-name">Avisos del navegador</p>
+                <p id="notifPermissionStatus" class="account-sub">Pulsa activar para recibir alertas al abrir</p>
+              </div>
+            </div>
+            <button type="button" class="btn btn-tonal" onclick="requestNotifPermission()" style="padding: 8px 13px; font-size: 0.8rem;">
+              <svg class="m-icon-sm" viewBox="0 0 24 24">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+              </svg>
+              <span>Activar</span>
+            </button>
+          </div>
+
+          <label for="warningDaysInput">Días de preaviso</label>
+          <input type="number" id="warningDaysInput" min="0" max="365" value="3" placeholder="3">
+          <p class="helper-text">
+            Define cuándo una tarjeta pasa a rojo urgente, las notificaciones al abrir y la antelación de la alarma en los archivos .ics.
+          </p>
+          <button type="button" class="btn btn-primary" style="width: 100%;" onclick="saveGeneralSettings()">Guardar preaviso</button>
+        </div>
+      </details>
+
+      <!-- Apartado 3: Inteligencia Artificial (Gemini) -->
+      <details class="settings-accordion">
+        <summary>
+          <span class="summary-left">
+            <svg class="m-icon" viewBox="0 0 24 24">
+              <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+            </svg>
+            <span>Inteligencia Artificial (Gemini)</span>
+          </span>
+        </summary>
         <div class="accordion-body">
           <label for="apiKeyInput">Google AI Studio API Key</label>
           <div class="flex-row" style="margin-bottom: 11px;">
@@ -1369,72 +1628,76 @@
               <option value="gemini-3.8-flash">gemini-3.8-flash</option>
               <option value="gemini-flash-latest">gemini-flash-latest</option>
             </select>
-            <button type="button" id="syncModelsBtn" class="btn btn-secondary" onclick="syncModelsFromAPI()">🔄 Actualizar modelos</button>
+            <button type="button" id="syncModelsBtn" class="btn btn-secondary" onclick="syncModelsFromAPI()">Actualizar</button>
           </div>
 
-          <button type="button" class="btn btn-primary" style="width: 100%;" onclick="saveGeneralSettings()">💾 Guardar modelo y clave</button>
+          <button type="button" class="btn btn-primary" style="width: 100%;" onclick="saveGeneralSettings()">Guardar configuración IA</button>
         </div>
       </details>
 
-      <!-- 3) Notificaciones y Preaviso -->
+      <!-- Apartado 4: Copia de seguridad JSON -->
       <details class="settings-accordion">
-        <summary><span>🔔 Notificaciones y Días de Preaviso</span></summary>
-        <div class="accordion-body">
-          <label for="warningDaysInput">Días de preaviso</label>
-          <input type="number" id="warningDaysInput" min="0" max="365" value="3" placeholder="3">
-          <p class="helper-text">
-            Controla el umbral rojo de las tarjetas, los avisos al abrir la app y los días de antelación de la alarma en los archivos .ics.
-          </p>
-          <div class="flex-row">
-            <button type="button" class="btn btn-success flex-1" onclick="saveGeneralSettings()">💾 Guardar preaviso</button>
-            <button type="button" class="btn btn-secondary" onclick="requestNotifPermission()">🔔 Permiso avisos</button>
-          </div>
-        </div>
-      </details>
-
-      <!-- 4) Copia de seguridad JSON -->
-      <details class="settings-accordion">
-        <summary><span>💾 Copia de seguridad JSON</span></summary>
+        <summary>
+          <span class="summary-left">
+            <svg class="m-icon" viewBox="0 0 24 24">
+              <path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+            </svg>
+            <span>Copia de seguridad (JSON)</span>
+          </span>
+        </summary>
         <div class="accordion-body">
           <p class="helper-text" style="margin-top: 0;">
-            Exporta o importa tus productos (incluidas sus fotos guardadas). Si estás conectado a la nube, los productos importados se subirán a Firestore.
+            Exporta o importa tus productos (incluidas sus fotos guardadas). Si estás conectado en la nube, los datos importados se subirán a Firestore.
           </p>
           <div class="flex-row">
-            <button type="button" class="btn btn-secondary flex-1" onclick="exportJSON()">⬇️ Exportar JSON</button>
-            <button type="button" class="btn btn-secondary flex-1" onclick="document.getElementById('importFile').click()">⬆️ Importar JSON</button>
+            <button type="button" class="btn btn-secondary flex-1" onclick="exportJSON()">Exportar JSON</button>
+            <button type="button" class="btn btn-secondary flex-1" onclick="document.getElementById('importFile').click()">Importar JSON</button>
             <input type="file" id="importFile" accept=".json" class="hidden" onchange="importJSON(event)">
           </div>
         </div>
       </details>
 
-      <!-- 5) Instalar App (Pantalla completa) -->
+      <!-- Apartado 5: Instalar App (Pantalla completa) -->
       <details id="installSettingsSection" class="settings-accordion">
-        <summary><span>📲 Instalar App (Pantalla completa)</span></summary>
+        <summary>
+          <span class="summary-left">
+            <svg class="m-icon" viewBox="0 0 24 24">
+              <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14zm-1-6h-3V8h-2v5H8l4 4 4-4z"/>
+            </svg>
+            <span>Instalar App (Pantalla completa)</span>
+          </span>
+        </summary>
         <div class="accordion-body">
           <p id="installStatusDesc" class="helper-text" style="margin-top: 0;">
             Instala Caduca2 en tu dispositivo para abrirla a pantalla completa sin barra de navegación.
           </p>
-          <button type="button" id="installPwaBtn" class="btn btn-success" style="width: 100%;" onclick="triggerPwaInstall()">
-            <span>📲</span>
-            <span>Instalar App (Pantalla completa)</span>
+          <button type="button" id="installPwaBtn" class="btn btn-primary" style="width: 100%;" onclick="triggerPwaInstall()">
+            Instalar aplicación
           </button>
         </div>
       </details>
 
-      <!-- 6) Manual de ayuda -->
+      <!-- Apartado 6: Manual de ayuda -->
       <details class="settings-accordion">
-        <summary><span>📖 Manual de ayuda: Configurar Gemini y App</span></summary>
+        <summary>
+          <span class="summary-left">
+            <svg class="m-icon" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+            <span>Manual de ayuda</span>
+          </span>
+        </summary>
         <div class="accordion-body manual-guide-box">
-          <h3>🚀 Guía rápida: Gemini y Sincronización</h3>
+          <h3>Guía rápida: Gemini y Sincronización</h3>
           <ol>
             <li><strong>API Key gratuita de Gemini:</strong> Entra en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a> con tu cuenta Google, pulsa <em>"Create API key"</em> y copia la clave (<code>AIzaSy...</code>).</li>
-            <li><strong>Configurar IA:</strong> Abre el apartado <em>🤖 API Key y Modelo de Gemini</em>, pega la clave, pulsa <strong>Guardar clave</strong> y luego <strong>🔄 Actualizar modelos</strong>.</li>
-            <li><strong>Fotos guardadas en cada producto:</strong> Puedes adjuntar hasta 3 fotos por producto. Se guardan comprimidas en color (~20 KB) y luego puedes verlas pulsando el botón <code>🖼️</code> de su tarjeta.</li>
-            <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente con <code>gemini-3.1-flash-lite</code>. Si hay saturación o no tienes clave, usa <strong>Modo B</strong> para enviar las fotos a tu app oficial de Gemini y pegar su respuesta.</li>
-            <li><strong>Instalar a pantalla completa:</strong> En Chrome Android abre el apartado <em>📲 Instalar App</em> aquí arriba (o menú <code>⋮</code> &gt; <em>Instalar aplicación</em>) para usar Caduca2 sin barra de navegador.</li>
+            <li><strong>Configurar IA:</strong> Abre el apartado <em>Inteligencia Artificial (Gemini)</em>, pega la clave, pulsa <strong>Guardar clave</strong> y luego <strong>Actualizar</strong>.</li>
+            <li><strong>Fotos guardadas en cada producto:</strong> Puedes adjuntar hasta 3 fotos por producto (por ejemplo, envase frontal + detalle de la fecha). Se guardan comprimidas en color y puedes verlas pulsando el icono de imagen en su tarjeta.</li>
+            <li><strong>Modo A y Modo B:</strong> Con <strong>Modo A</strong> la app detecta producto y fecha automáticamente con <code>gemini-3.1-flash-lite</code>. Si no tienes clave o hay saturación, usa <strong>Modo B</strong> para enviar las fotos a tu app oficial de Gemini y pegar su respuesta.</li>
+            <li><strong>Sincronización en la nube:</strong> Abre <em>Cuenta y Sincronización</em> e inicia sesión con Google para compartir los productos en tiempo real entre dispositivos.</li>
           </ol>
           <div class="manual-tip">
-            💡 Consejo: Puedes borrar cualquier producto pulsando <code>🗑️</code> o deslizándolo hacia la izquierda; aparecerá abajo el botón <strong>↩️ Deshacer</strong> durante 6 segundos.
+            Puedes borrar cualquier producto deslizándolo hacia la izquierda o pulsando el icono de papelera; aparecerá abajo el botón <strong>Deshacer</strong> durante 6 segundos.
           </div>
         </div>
       </details>
@@ -1442,7 +1705,7 @@
 
     <!-- 3. Panel de Captura, Galería Multi-Foto, Formulario y Modos -->
     <section id="mainCaptureCard" class="card">
-      <h2 class="capture-section-header">➕ Añadir producto</h2>
+      <h2 class="capture-section-header">Añadir producto</h2>
 
       <!-- Inputs principales -->
       <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handlePrimaryImageSelected(event, 'Cámara')">
@@ -1454,15 +1717,21 @@
 
       <div class="capture-grid">
         <button type="button" class="btn btn-primary" onclick="document.getElementById('cameraInput').click()">
-          <span>📸</span>
+          <svg class="m-icon-sm" viewBox="0 0 24 24">
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/>
+          </svg>
           <span>Cámara</span>
         </button>
         <button type="button" class="btn btn-secondary" onclick="document.getElementById('galleryInput').click()">
-          <span>🖼️</span>
+          <svg class="m-icon-sm" viewBox="0 0 24 24" style="color: var(--icon-gray);">
+            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+          </svg>
           <span>Galería</span>
         </button>
         <button type="button" class="btn btn-secondary" onclick="openNewProductForm()">
-          <span>✍️</span>
+          <svg class="m-icon-sm" viewBox="0 0 24 24" style="color: var(--icon-gray);">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
           <span>Manual</span>
         </button>
       </div>
@@ -1471,17 +1740,17 @@
       <div id="previewHub" class="preview-hub hidden">
         <div class="preview-header-row">
           <span id="previewCounter" class="preview-counter">1 / 3 fotos adjuntas</span>
-          <button type="button" class="clear-all-photos-btn" onclick="clearAllSelectedImages()">✕ Quitar fotos</button>
+          <button type="button" class="clear-all-photos-btn" onclick="clearAllSelectedImages()">Quitar fotos</button>
         </div>
 
         <div id="thumbsStrip" class="thumbs-strip"></div>
 
         <div id="addMorePhotosRow" class="add-more-photos-row">
           <button type="button" class="btn btn-secondary add-more-btn" onclick="document.getElementById('extraCameraInput').click()">
-            + 📸 Otra foto (Cámara)
+            + Otra foto (Cámara)
           </button>
           <button type="button" class="btn btn-secondary add-more-btn" onclick="document.getElementById('extraGalleryInput').click()">
-            + 🖼️ Otra foto (Galería)
+            + Otra foto (Galería)
           </button>
         </div>
       </div>
@@ -1493,7 +1762,7 @@
         </div>
 
         <div id="existingPhotosNotice" class="saved-photos-hint hidden">
-          <span id="existingPhotosText">🖼️ Este producto conserva 1 foto guardada.</span>
+          <span id="existingPhotosText">Este producto conserva 1 foto guardada.</span>
           <button type="button" class="clear-all-photos-btn" onclick="clearExistingEditingPhotos()">Borrar fotos</button>
         </div>
 
@@ -1511,14 +1780,14 @@
 
         <label for="prodNote">Ubicación / Notas</label>
         <div class="location-chips">
-          <button type="button" class="chip-btn" onclick="setNote('Nevera')">❄️ Nevera</button>
-          <button type="button" class="chip-btn" onclick="setNote('Congelador')">🧊 Congelador</button>
-          <button type="button" class="chip-btn" onclick="setNote('Despensa')">🗄️ Despensa</button>
+          <button type="button" class="chip-btn" onclick="setNote('Nevera')">Nevera</button>
+          <button type="button" class="chip-btn" onclick="setNote('Congelador')">Congelador</button>
+          <button type="button" class="chip-btn" onclick="setNote('Despensa')">Despensa</button>
         </div>
         <input type="text" id="prodNote" placeholder="Nevera, Congelador, Despensa...">
 
         <div class="flex-row">
-          <button type="button" id="saveProductBtn" class="btn btn-success flex-1" onclick="saveProduct()">💾 Guardar producto</button>
+          <button type="button" id="saveProductBtn" class="btn btn-success flex-1" onclick="saveProduct()">Guardar producto</button>
           <button type="button" class="btn btn-secondary" onclick="closeProductForm()">Cancelar</button>
         </div>
       </div>
@@ -1531,10 +1800,12 @@
             <span class="mode-tag api">Modo A · Análisis con IA (API Gemini)</span>
           </div>
           <p class="mode-desc">
-            Analiza todas las fotos juntas con <code>gemini-3.1-flash-lite</code> (timeout 25s + fallback automático) y guarda las fotos en color comprimidas (~20 KB c/u) con el producto.
+            Analiza todas las fotos juntas con <code>gemini-3.1-flash-lite</code> (timeout 25s + fallback automático) y guarda las fotos en color comprimidas con el producto.
           </p>
-          <button type="button" id="runApiBtn" class="btn btn-primary" style="width: 100%;" onclick="runOptimizedApiAnalysis()">
-            <span>⚡</span>
+          <button type="button" id="runApiBtn" class="btn btn-gemini" style="width: 100%;" onclick="runOptimizedApiAnalysis()">
+            <svg class="m-icon-sm" viewBox="0 0 24 24">
+              <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5z"/>
+            </svg>
             <span>Analizar con IA (API)</span>
           </button>
 
@@ -1551,26 +1822,25 @@
 
             <ul class="steps-list">
               <li id="step1" class="step-item">
-                <span class="step-icon" id="step1Icon">⏳</span>
+                <span class="step-icon" id="step1Icon">•</span>
                 <span id="step1Text">Paso 1: Preparando imágenes para análisis y almacenamiento...</span>
               </li>
               <li id="step2" class="step-item">
-                <span class="step-icon" id="step2Icon">⏳</span>
+                <span class="step-icon" id="step2Icon">•</span>
                 <span id="step2Text">Paso 2: Enviando imágenes a la API...</span>
               </li>
               <li id="step3" class="step-item">
-                <span class="step-icon" id="step3Icon">⏳</span>
+                <span class="step-icon" id="step3Icon">•</span>
                 <span id="step3Text">Paso 3: Control de timeout (25s) y fallback...</span>
               </li>
               <li id="step4" class="step-item">
-                <span class="step-icon" id="step4Icon">⏳</span>
+                <span class="step-icon" id="step4Icon">•</span>
                 <span id="step4Text">Paso 4: Extrayendo producto y fecha...</span>
               </li>
             </ul>
 
             <button type="button" id="cancelAnalysisBtn" class="btn btn-danger" style="width: 100%; padding: 9px;" onclick="cancelApiAnalysis()">
-              <span>🛑</span>
-              <span>Cancelar</span>
+              Cancelar
             </button>
           </div>
         </div>
@@ -1585,12 +1855,10 @@
           </p>
           <div class="flex-row" style="flex-wrap: wrap;">
             <button type="button" class="btn btn-purple flex-1" onclick="sendToLocalGeminiApp()">
-              <span>🤖</span>
-              <span>Enviar a mi app Gemini</span>
+              Enviar a mi app Gemini
             </button>
-            <button type="button" class="btn btn-success flex-1" onclick="pasteFromGeminiClipboard()">
-              <span>📋</span>
-              <span>Pegar respuesta de Gemini</span>
+            <button type="button" class="btn btn-secondary flex-1" onclick="pasteFromGeminiClipboard()">
+              Pegar respuesta
             </button>
           </div>
 
@@ -1607,7 +1875,7 @@
     </section>
 
     <!-- 5. Buscador y Lista Ultra-Compacta de Productos -->
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Filtrar productos o ubicación..." oninput="renderProducts()">
+    <input type="text" id="searchInput" class="search-input" placeholder="Filtrar productos o ubicación..." oninput="renderProducts()">
 
     <div class="warning-summary-bar">
       <span id="totalCounterLabel">0 productos</span>
@@ -1631,14 +1899,15 @@
     </div>
   </div>
 
-  <!-- Contenedor persistente para Toast y Barra flotante de Deshacer -->
+  <!-- Toast auto-ocultable (3 segundos) -->
   <div id="toastBanner" class="toast-banner hidden">
     <span id="toastMessage"></span>
   </div>
 
+  <!-- Barra flotante inferior con botón Deshacer -->
   <div id="undoSnackbar" class="undo-snackbar hidden" role="status" aria-live="polite">
-    <span id="undoMessage">🗑️ Eliminado</span>
-    <button type="button" class="undo-btn" onclick="undoLastDelete()">↩️ Deshacer</button>
+    <span id="undoMessage">Eliminado</span>
+    <button type="button" class="undo-btn" onclick="undoLastDelete()">Deshacer</button>
   </div>
 
   <script type="module">
@@ -1675,7 +1944,7 @@
 
     const MAX_ATTACHED_IMAGES = 3;
 
-    // Configuración de Firebase precargada por defecto para acceso directo en GitHub Pages
+    // Configuración de Firebase precargada por defecto (caduca2-app)
     const DEFAULT_FIREBASE_CONFIG = {
       apiKey: "AIzaSyAjEqkm3sQK6rKUMYTf5SVTsKCwCEOhvqY",
       authDomain: "caduca2-app.firebaseapp.com",
@@ -1695,6 +1964,10 @@
 
     const LOCAL_GEMINI_PROMPT = 'Identifica el producto y su fecha de caducidad combinando todas las fotos adjuntas. Responde únicamente en una línea con este formato exacto: PRODUCTO | YYYY-MM-DD';
 
+    // SVGs minimalistas reutilizables
+    const CLOUD_ON_SVG = `<path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>`;
+    const CLOUD_OFF_SVG = `<path d="M19.35 10.04A7.49 7.49 0 0 0 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46A5.48 5.48 0 0 1 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19a3 3 0 0 1 2.29 4.93l1.42 1.42A4.99 4.99 0 0 0 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.75 2.74A6.002 6.002 0 0 0 0 14c0 3.31 2.69 6 6 6h11.73l2 2L21 20.73 4.27 4 3 5.27zM7.73 10l8 8H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h1.73z"/>`;
+
     // Estado de la aplicación
     let firebaseApp = null;
     let firebaseAuth = null;
@@ -1709,8 +1982,6 @@
     let warningDays = 3;
     let availableModels = [...DEFAULT_MODELS];
 
-    // Lista de imágenes adjuntas en memoria:
-    // [{ file: File, url: string, source: string, colorDataUrl: string, grayBase64: string }]
     let attachedImages = [];
 
     let deferredInstallPrompt = null;
@@ -1724,48 +1995,70 @@
     let undoSnackbarTimer = null;
 
     // =========================================================================
-    // 1. PWA Instalable a Pantalla Completa en Chrome
+    // 1. PWA Instalable a Pantalla Completa en Chrome (Icono minimalista gris/blanco)
     // =========================================================================
     function setupDynamicPwaManifest() {
       try {
-        const generateIconPng = (size) => {
+        const generateMinimalIconPng = (size) => {
           const canvas = document.createElement('canvas');
           canvas.width = size;
           canvas.height = size;
           const ctx = canvas.getContext('2d');
 
-          // Fondo oscuro redondeado Slate 900
-          ctx.fillStyle = '#0f172a';
+          // Fondo blanco limpio
+          ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, size, size);
 
-          // Borde sutil
-          ctx.strokeStyle = '#334155';
-          ctx.lineWidth = Math.max(2, Math.round(size * 0.03));
-          ctx.strokeRect(ctx.lineWidth / 2, ctx.lineWidth / 2, size - ctx.lineWidth, size - ctx.lineWidth);
+          // Marco sutil gris claro
+          const pad = Math.round(size * 0.18);
+          const w = size - pad * 2;
+          const h = Math.round(size * 0.56);
+          const top = Math.round(size * 0.26);
+          const r = Math.round(size * 0.12);
 
-          // Emoji lata de tomate centrado
-          ctx.font = `${Math.round(size * 0.66)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('🥫', size / 2, size / 2 + Math.round(size * 0.04));
+          ctx.fillStyle = '#f1f3f4';
+          ctx.strokeStyle = '#5f6368';
+          ctx.lineWidth = Math.max(4, Math.round(size * 0.045));
+
+          ctx.beginPath();
+          ctx.roundRect(pad, top, w, h, r);
+          ctx.fill();
+          ctx.stroke();
+
+          // Línea superior de calendario y anillas
+          const lineY = top + Math.round(h * 0.3);
+          ctx.beginPath();
+          ctx.moveTo(pad, lineY);
+          ctx.lineTo(pad + w, lineY);
+          ctx.moveTo(pad + Math.round(w * 0.25), top - Math.round(size * 0.07));
+          ctx.lineTo(pad + Math.round(w * 0.25), top + Math.round(size * 0.06));
+          ctx.moveTo(pad + Math.round(w * 0.75), top - Math.round(size * 0.07));
+          ctx.lineTo(pad + Math.round(w * 0.75), top + Math.round(size * 0.06));
+          ctx.stroke();
+
+          // Punto central minimalista
+          ctx.fillStyle = '#5f6368';
+          ctx.beginPath();
+          ctx.arc(size / 2, top + Math.round(h * 0.66), Math.round(size * 0.075), 0, Math.PI * 2);
+          ctx.fill();
 
           return canvas.toDataURL('image/png');
         };
 
-        const icon192 = generateIconPng(192);
-        const icon512 = generateIconPng(512);
+        const icon192 = generateMinimalIconPng(192);
+        const icon512 = generateMinimalIconPng(512);
 
         const startUrl = window.location.href.split('#')[0];
         const manifestObj = {
           name: 'Caduca2 · Control de Caducidades',
           short_name: 'Caduca2',
-          description: 'Control inteligente de fechas de caducidad con IA y sincronización en la nube.',
+          description: 'Control minimalista de fechas de caducidad con IA y sincronización en la nube.',
           start_url: startUrl,
           scope: './',
           display: 'standalone',
           orientation: 'portrait',
-          background_color: '#0f172a',
-          theme_color: '#0f172a',
+          background_color: '#ffffff',
+          theme_color: '#ffffff',
           icons: [
             {
               src: icon192,
@@ -1788,11 +2081,8 @@
         if (linkEl) {
           linkEl.setAttribute('href', manifestUrl);
         }
-      } catch (e) {
-        // Ignorar si el entorno restringe Blob URLs
-      }
+      } catch (e) {}
 
-      // Ocultar sección de instalación si ya se ejecuta en modo standalone (pantalla completa)
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
       if (isStandalone) {
         const installSection = document.getElementById('installSettingsSection');
@@ -1814,9 +2104,7 @@
     window.addEventListener('appinstalled', () => {
       deferredInstallPrompt = null;
       const installSection = document.getElementById('installSettingsSection');
-      if (installSection) {
-        installSection.classList.add('hidden');
-      }
+      if (installSection) installSection.classList.add('hidden');
       showToast('Caduca2 instalada a pantalla completa.', 'info');
     });
 
@@ -1841,6 +2129,7 @@
     window.addEventListener('DOMContentLoaded', async () => {
       setupDynamicPwaManifest();
       loadSettingsFromStorage();
+      updateNotifPermissionLabel();
       loadLocalProducts();
       renderProducts();
 
@@ -1886,6 +2175,20 @@
     function updateWarningSummaryLabel() {
       const badge = document.getElementById('warningDaysBadge');
       badge.textContent = `Preaviso: ${warningDays} ${warningDays === 1 ? 'día' : 'días'}`;
+    }
+
+    function updateNotifPermissionLabel() {
+      const statusEl = document.getElementById('notifPermissionStatus');
+      if (!statusEl) return;
+      if (!('Notification' in window)) {
+        statusEl.textContent = 'Este navegador no soporta notificaciones nativas';
+      } else if (Notification.permission === 'granted') {
+        statusEl.textContent = 'Notificaciones activas en este dispositivo';
+      } else if (Notification.permission === 'denied') {
+        statusEl.textContent = 'Permiso bloqueado en los ajustes del navegador';
+      } else {
+        statusEl.textContent = 'Pulsa activar para recibir alertas al abrir';
+      }
     }
 
     // =========================================================================
@@ -2005,7 +2308,7 @@
         });
 
         if (!isAutoBoot) {
-          showToast('Firebase conectado. Pulsa "G Entrar" en la cabecera.', 'info');
+          showToast('Firebase conectado. Inicia sesión en Cuenta y Sincronización.', 'info');
         }
       } catch (err) {
         firebaseApp = null;
@@ -2056,70 +2359,72 @@
     }
 
     function updateSyncUIState() {
-      const badge = document.getElementById('syncStatusBadge');
+      const cloudBtn = document.getElementById('cloudStatusBtn');
+      const cloudSvg = document.getElementById('cloudIconSvg');
       const loginBtn = document.getElementById('googleLoginBtn');
-      const profileBox = document.getElementById('userProfileBox');
-      const avatarImg = document.getElementById('userAvatarImg');
-      const avatarInitial = document.getElementById('userAvatarInitial');
-      const hintBar = document.getElementById('localModeHint');
-      const hintText = document.getElementById('localModeHintText');
-      const hintBtn = document.getElementById('localModeHintBtn');
+      const logoutBtn = document.getElementById('googleLogoutBtn');
+      const avatarImg = document.getElementById('accountAvatarImg');
+      const avatarFallback = document.getElementById('accountAvatarFallback');
+      const nameLabel = document.getElementById('accountNameLabel');
+      const subLabel = document.getElementById('accountSubLabel');
 
       const hasFirebaseConfigured = Boolean(firebaseAuth && firestoreDb);
 
       if (hasFirebaseConfigured && currentUser) {
-        badge.className = 'sync-badge cloud';
-        badge.textContent = '☁️ Nube';
+        const displayName = currentUser.displayName || 'Usuario Google';
+        const emailText = currentUser.email || 'Sincronizado en la nube';
 
+        // Icono nube conectada en barra superior
+        cloudBtn.className = 'cloud-status-icon connected';
+        cloudBtn.title = `Conectado en la nube (${emailText})`;
+        cloudSvg.innerHTML = CLOUD_ON_SVG;
+
+        // Estado dentro del menú de cuenta
         loginBtn.classList.add('hidden');
-        profileBox.classList.remove('hidden');
-        hintBar.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+        nameLabel.textContent = displayName;
+        subLabel.textContent = emailText;
 
-        const displayName = currentUser.displayName || currentUser.email || 'Usuario';
         if (currentUser.photoURL) {
           avatarImg.src = currentUser.photoURL;
           avatarImg.classList.remove('hidden');
-          avatarInitial.classList.add('hidden');
+          avatarFallback.classList.add('hidden');
         } else {
           avatarImg.classList.add('hidden');
-          avatarInitial.textContent = displayName.charAt(0).toUpperCase();
-          avatarInitial.classList.remove('hidden');
+          avatarFallback.textContent = displayName.charAt(0).toUpperCase();
+          avatarFallback.classList.remove('hidden');
         }
-        profileBox.title = `Conectado como ${displayName}`;
       } else {
-        badge.className = 'sync-badge local';
-        badge.textContent = '📱 Local';
-        profileBox.classList.add('hidden');
-        hintBar.classList.remove('hidden');
+        // Icono nube desconectada en barra superior
+        cloudBtn.className = 'cloud-status-icon offline';
+        cloudBtn.title = hasFirebaseConfigured
+          ? 'Modo local (sin sesión). Pulsa para iniciar sesión con Google.'
+          : 'Modo local (Firebase sin configurar).';
+        cloudSvg.innerHTML = CLOUD_OFF_SVG;
 
-        if (hasFirebaseConfigured) {
-          loginBtn.classList.remove('hidden');
-          hintText.textContent = 'Firebase listo. Inicia sesión con Google para compartir la lista en la nube.';
-          hintBtn.textContent = 'G Entrar';
-        } else {
-          loginBtn.classList.add('hidden');
-          hintText.textContent = 'Modo local activo. Configura Firebase en ⚙️ para sincronizar entre dispositivos.';
-          hintBtn.textContent = 'Configurar';
-        }
+        // Estado dentro del menú de cuenta
+        loginBtn.classList.remove('hidden');
+        logoutBtn.classList.add('hidden');
+        avatarImg.classList.add('hidden');
+        avatarFallback.innerHTML = `<svg class="m-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88a9.947 9.947 0 0 1 12.28 0C16.43 19.18 14.03 20 12 20z"/></svg>`;
+        avatarFallback.classList.remove('hidden');
+        nameLabel.textContent = 'Modo local (sin sesión)';
+        subLabel.textContent = 'Inicia sesión con Google para sincronizar en la nube';
       }
     }
 
-    function handleHintAction() {
-      if (firebaseAuth && firestoreDb) {
-        signInWithGoogle();
-      } else {
-        const panel = document.getElementById('settingsPanel');
-        panel.classList.remove('hidden');
-        const firstAccordion = panel.querySelector('details.settings-accordion');
-        if (firstAccordion) firstAccordion.open = true;
-        document.getElementById('firebaseConfigInput').focus();
-      }
+    function handleCloudStatusClick() {
+      const panel = document.getElementById('settingsPanel');
+      const acc = document.getElementById('accountAccordion');
+      panel.classList.remove('hidden');
+      if (acc) acc.open = true;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     async function signInWithGoogle() {
       if (!firebaseAuth) {
-        showToast('Configura primero firebaseConfig en Ajustes (⚙️).', 'warn');
-        document.getElementById('settingsPanel').classList.remove('hidden');
+        showToast('Configura primero firebaseConfig en Cuenta y Sincronización.', 'warn');
+        handleCloudStatusClick();
         return;
       }
 
@@ -2182,7 +2487,7 @@
     }
 
     // =========================================================================
-    // Panel de Configuración ('⚙️') y Modelos Gemini
+    // Panel de Configuración y Modelos Gemini
     // =========================================================================
     function toggleSettingsPanel() {
       document.getElementById('settingsPanel').classList.toggle('hidden');
@@ -2243,7 +2548,7 @@
 
       const btn = document.getElementById('syncModelsBtn');
       const originalText = btn.textContent;
-      btn.textContent = '⏳...';
+      btn.textContent = '...';
       btn.disabled = true;
 
       try {
@@ -2388,7 +2693,6 @@
       hideToast();
       cancelApiAnalysis(true);
 
-      // Resetear formulario previo
       editingId = null;
       editingExistingPhotos = [];
       document.getElementById('existingPhotosNotice').classList.add('hidden');
@@ -2551,15 +2855,15 @@
       li.className = 'step-item';
       if (state === 'active') {
         li.classList.add('active');
-        icon.textContent = '⏳';
+        icon.textContent = '•';
       } else if (state === 'done') {
         li.classList.add('done');
-        icon.textContent = '✅';
+        icon.textContent = '✓';
       } else if (state === 'error') {
         li.classList.add('error');
-        icon.textContent = '❌';
+        icon.textContent = '✕';
       } else {
-        icon.textContent = '⏳';
+        icon.textContent = '•';
       }
 
       if (text) span.textContent = text;
@@ -2671,11 +2975,11 @@ Responde ÚNICAMENTE con un objeto JSON válido:
 
       const apiKey = localStorage.getItem(API_KEY_STORAGE);
       if (!apiKey) {
-        showToast('Para el Modo A configura tu API Key de Gemini en ⚙️ (o usa el Modo B).', 'warn');
+        showToast('Para el Modo A configura tu API Key de Gemini en Ajustes (o usa el Modo B).', 'warn');
         const panel = document.getElementById('settingsPanel');
         panel.classList.remove('hidden');
         const accordions = panel.querySelectorAll('details.settings-accordion');
-        if (accordions[1]) accordions[1].open = true;
+        if (accordions[2]) accordions[2].open = true;
         return;
       }
 
@@ -3013,11 +3317,11 @@ Responde ÚNICAMENTE con un objeto JSON válido:
 
       section.classList.remove('hidden');
       section.classList.add('editing-active');
-      heading.textContent = '✏️ Editando producto';
+      heading.textContent = 'Editando producto';
       heading.classList.add('is-editing');
 
       if (editingExistingPhotos.length > 0) {
-        photosText.textContent = `🖼️ Este producto conserva ${editingExistingPhotos.length} ${editingExistingPhotos.length === 1 ? 'foto guardada' : 'fotos guardadas'}.`;
+        photosText.textContent = `Este producto conserva ${editingExistingPhotos.length} ${editingExistingPhotos.length === 1 ? 'foto guardada' : 'fotos guardadas'}.`;
         photosNotice.classList.remove('hidden');
       } else {
         photosNotice.classList.add('hidden');
@@ -3078,7 +3382,6 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       const wasEditing = editingId !== null;
       const targetEditId = editingId;
 
-      // Recopilar fotos en color comprimidas: las nuevas adjuntas o las que ya tenía al editar
       const newColorPhotos = attachedImages
         .map((item) => item.colorDataUrl)
         .filter(Boolean);
@@ -3139,7 +3442,6 @@ Responde ÚNICAMENTE con un objeto JSON válido:
           renderProducts();
         }
 
-        // Cerrar y limpiar formulario y galería de fotos adjuntas
         closeProductForm();
         clearAllSelectedImages();
       } catch (err) {
@@ -3185,7 +3487,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       const msg = document.getElementById('undoMessage');
       if (!snackbar || !msg) return;
 
-      msg.textContent = `🗑️ Eliminado: ${productName}`;
+      msg.textContent = `Eliminado: ${productName}`;
       snackbar.classList.remove('hidden');
 
       if (undoSnackbarTimer) {
@@ -3241,7 +3543,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     }
 
     // =========================================================================
-    // Modal Visor de Fotos por Producto ('🖼️')
+    // Modal Visor de Fotos por Producto
     // =========================================================================
     function openProductPhotos(id) {
       const target = products.find((p) => String(p.id) === String(id));
@@ -3251,7 +3553,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       }
 
       document.getElementById('photoModalTitle').textContent = target.name;
-      const locStr = target.note ? ` • 📍 ${target.note}` : '';
+      const locStr = target.note ? ` · ${target.note}` : '';
       document.getElementById('photoModalSub').textContent = `Caducidad: ${formatDisplayDate(target.date)}${locStr}`;
 
       const body = document.getElementById('photoModalBody');
@@ -3317,6 +3619,13 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       const urgentThreshold = warningDays;
       const warnThreshold = warningDays + 4;
 
+      // Iconos SVG monocromos Material Design para las tarjetas
+      const ICON_PHOTO = `<svg style="width:15px;height:15px;fill:currentColor" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
+      const ICON_EDIT = `<svg style="width:15px;height:15px;fill:currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
+      const ICON_CAL = `<svg style="width:15px;height:15px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>`;
+      const ICON_DEL = `<svg style="width:15px;height:15px;fill:currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`;
+      const ICON_PIN = `<svg style="width:12px;height:12px;fill:currentColor;flex-shrink:0" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>`;
+
       container.innerHTML = sorted.map((item) => {
         const days = getDaysRemaining(item.date);
         let cardClass = '';
@@ -3354,7 +3663,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         return `
           <div class="swipe-wrapper" data-id="${safeId}">
             <div class="swipe-delete-bg">
-              <span>🗑️ Eliminar</span>
+              <span>Eliminar</span>
             </div>
             <article class="product-card ${cardClass}${editingHighlight}" data-id="${safeId}"${authorHint}>
               <div class="product-left-col">
@@ -3366,12 +3675,12 @@ Responde ÚNICAMENTE con un objeto JSON válido:
               </div>
               <div class="product-right-col">
                 <div class="card-actions">
-                  ${hasPhotos ? `<button type="button" class="action-mini-btn photos-btn" onclick="openProductPhotos('${jsId}')" title="Ver ${item.photos.length} foto(s) del producto">🖼️</button>` : ''}
-                  <button type="button" class="action-mini-btn" onclick="editProduct('${jsId}')" title="Editar producto">✏️</button>
-                  <button type="button" class="action-mini-btn" onclick="downloadICS('${jsTitle}', '${escapeHtml(item.date)}')" title="Descargar recordatorio .ics (${warningDays} días antes a las 09:00)">📅</button>
-                  <button type="button" class="action-mini-btn delete-btn" onclick="deleteProduct('${jsId}')" title="Eliminar producto">🗑️</button>
+                  ${hasPhotos ? `<button type="button" class="action-mini-btn photos-btn" onclick="openProductPhotos('${jsId}')" title="Ver ${item.photos.length} foto(s) del producto">${ICON_PHOTO}</button>` : ''}
+                  <button type="button" class="action-mini-btn" onclick="editProduct('${jsId}')" title="Editar producto">${ICON_EDIT}</button>
+                  <button type="button" class="action-mini-btn" onclick="downloadICS('${jsTitle}', '${escapeHtml(item.date)}')" title="Descargar recordatorio .ics (${warningDays} días antes a las 09:00)">${ICON_CAL}</button>
+                  <button type="button" class="action-mini-btn delete-btn" onclick="deleteProduct('${jsId}')" title="Eliminar producto">${ICON_DEL}</button>
                 </div>
-                ${safeNote ? `<div class="meta-location-right">📍 ${safeNote}</div>` : ''}
+                ${safeNote ? `<div class="meta-location-right">${ICON_PIN}<span>${safeNote}</span></div>` : ''}
               </div>
             </article>
           </div>
@@ -3464,7 +3773,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         `UID:caduca2-${Date.now()}@local`,
         `DTSTART:${dtStart}`,
         `DTEND:${dtEnd}`,
-        `SUMMARY:⚠️ Caduca pronto: ${title} (${displayDate})`,
+        `SUMMARY:Caduca pronto: ${title} (${displayDate})`,
         `DESCRIPTION:Recordatorio (${warningDays} días de preaviso): "${title}" caduca el ${displayDate}.`,
         'BEGIN:VALARM',
         'TRIGGER:-PT0M',
@@ -3496,6 +3805,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
         return;
       }
       Notification.requestPermission().then((permission) => {
+        updateNotifPermissionLabel();
         if (permission === 'granted') {
           new Notification('Caduca2 · Avisos activados', {
             body: `Te avisaremos al abrir la app si algún producto caduca en ${warningDays} días o menos.`
@@ -3510,7 +3820,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     function checkUrgentNotificationsOnLoad() {
       const urgent = products.filter((p) => getDaysRemaining(p.date) <= warningDays);
       if (urgent.length > 0 && 'Notification' in window && Notification.permission === 'granted') {
-        new Notification(`⚠️ Caduca2: ${urgent.length} producto(s) por caducar`, {
+        new Notification(`Caduca2: ${urgent.length} producto(s) por caducar`, {
           body: urgent.map((u) => `${u.name} (${formatDisplayDate(u.date)})`).join(', ')
         });
       }
@@ -3602,6 +3912,7 @@ Responde ÚNICAMENTE con un objeto JSON válido:
     Object.assign(window, {
       triggerPwaInstall,
       toggleSettingsPanel,
+      handleCloudStatusClick,
       saveAndConnectFirebase,
       resetDefaultFirebase,
       saveApiKeyOnly,
@@ -3609,7 +3920,6 @@ Responde ÚNICAMENTE con un objeto JSON válido:
       saveGeneralSettings,
       signInWithGoogle,
       signOutGoogle,
-      handleHintAction,
       requestNotifPermission,
       hideToast,
       handlePrimaryImageSelected,
