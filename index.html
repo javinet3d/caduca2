@@ -928,7 +928,7 @@
 
     <div class="topbar-actions">
       <!-- Single Cloud Connectivity Icon -->
-      <button type="button" id="cloudStatusBtn" class="icon-badge-btn cloud-offline" title="Modo local (sin sesión en la nube)">
+      <button type="button" id="cloudStatusBtn" class="icon-badge-btn cloud-offline" title="Base de datos local IndexedDB activa">
         <svg id="cloudIconSvg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
         </svg>
@@ -970,7 +970,7 @@
             <div class="user-avatar" id="userAvatar">G</div>
             <div style="flex:1; min-width:0;">
               <div id="userNameText" style="font-weight:600; color:var(--text-primary); font-size:0.84rem;">Sin sesión iniciada</div>
-              <div id="userEmailText" style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Guardado local activo (offline listo)</div>
+              <div id="userEmailText" style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Base de datos local IndexedDB activa</div>
             </div>
           </div>
 
@@ -1045,7 +1045,7 @@
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </summary>
         <div class="accordion-body">
-          <p style="margin:6px 0 10px 0;">Exporta o restaura tus productos en un archivo JSON local.</p>
+          <p style="margin:6px 0 10px 0;">Tus datos ya se sincronizan automáticamente en la base de datos local del navegador. Usa estas opciones si deseas mover una copia a otro equipo.</p>
           <div style="display:flex; gap:8px;">
             <button type="button" id="btnExportJson" class="btn btn-tonal btn-sm btn-full">Exportar JSON</button>
             <button type="button" id="btnImportJson" class="btn btn-tonal btn-sm btn-full">Importar JSON</button>
@@ -1192,7 +1192,7 @@
 
     <div class="list-meta">
       <span id="countLabel">0 productos</span>
-      <span id="syncModeLabel">Almacenamiento local</span>
+      <span id="syncModeLabel">BD local (IndexedDB)</span>
     </div>
 
     <!-- Product List -->
@@ -1224,7 +1224,7 @@
       </div>
 
       <p style="font-size:0.86rem; color:var(--text-secondary); margin:0 0 10px 0;">
-        <strong>Caduca2</strong> te ayuda a controlar las fechas de caducidad de tus alimentos y productos domésticos para evitar desperdicios, funcionando tanto <strong>sin conexión (offline)</strong> como sincronizado en tiempo real con tu cuenta de Google.
+        <strong>Caduca2</strong> te ayuda a controlar las fechas de caducidad de tus alimentos y productos domésticos para evitar desperdicios, manteniendo de forma transparente una <strong>base de datos local (IndexedDB)</strong> para uso inmediato sin conexión y sincronizándola en tiempo real con la nube al iniciar sesión con Google.
       </p>
 
       <div style="font-size:0.84rem; font-weight:600; color:var(--text-primary); margin-top:10px;">Cómo usar la aplicación:</div>
@@ -1232,7 +1232,7 @@
         <li><strong>Añadir por foto (IA):</strong> Pulsa <em>Cámara</em> o <em>Galería</em>. Si la fecha está en otra cara del envase, añade una segunda foto antes de pulsar <em>Analizar fotos con IA</em>.</li>
         <li><strong>Añadir manualmente:</strong> Pulsa <em>Manual</em> para escribir el nombre, fecha y ubicación sin necesidad de internet.</li>
         <li><strong>Gestionar lista:</strong> Cada tarjeta muestra los días restantes en color, permite ver sus fotos guardadas, editar datos, exportar evento al calendario (<code>.ics</code>) o <strong>deslizar a la izquierda para borrar</strong> (con opción <em>Deshacer</em>).</li>
-        <li><strong>Modo Offline y Nube:</strong> Todos tus cambios se guardan al instante en el dispositivo; si inicias sesión con Google desde el menú superior derecho, se sincronizarán automáticamente con la nube en cuanto tengas conexión.</li>
+        <li><strong>Sincronización transparente:</strong> Todos tus cambios (incluidas las fotos) se guardan al instante en la base de datos local del navegador y se fusionan automáticamente con tu cuenta de Google en cuanto hay conexión.</li>
       </ol>
 
       <button type="button" id="btnOkInfoModal" class="btn btn-primary btn-full" style="margin-top:8px;">Entendido</button>
@@ -1256,7 +1256,19 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+    import {
+      initializeFirestore,
+      persistentLocalCache,
+      persistentMultipleTabManager,
+      collection,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      doc,
+      onSnapshot,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     // Default embedded Firebase config (caduca2-app)
     const DEFAULT_FIREBASE_CONFIG = {
@@ -1270,12 +1282,128 @@
     };
 
     // Storage Keys
-    const LS_PRODUCTS = 'caduca2_products_v6';
-    const LS_PENDING_QUEUE = 'caduca2_offline_queue_v6';
+    const LS_LEGACY_PRODUCTS = 'caduca2_products_v6';
     const LS_API_KEY = 'caduca2_gemini_key';
     const LS_MODEL = 'caduca2_gemini_model';
     const LS_WARNING_DAYS = 'caduca2_warning_days';
     const LS_FB_CONFIG = 'caduca2_fb_config';
+
+    // ==========================================
+    // Transparent Local IndexedDB Engine
+    // ==========================================
+    const IDB_NAME = 'Caduca2LocalDB';
+    const IDB_VERSION = 1;
+    const STORE_PRODUCTS = 'products';
+    const STORE_OUTBOX = 'outbox';
+
+    function openLocalDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(IDB_NAME, IDB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_PRODUCTS)) {
+            db.createObjectStore(STORE_PRODUCTS, { keyPath: 'id' });
+          }
+          if (!db.objectStoreNames.contains(STORE_OUTBOX)) {
+            db.createObjectStore(STORE_OUTBOX, { keyPath: 'opId', autoIncrement: true });
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbGetAllProducts() {
+      const db = await openLocalDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_PRODUCTS, 'readonly');
+        const req = tx.objectStore(STORE_PRODUCTS).getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbReplaceAllProducts(items) {
+      const db = await openLocalDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_PRODUCTS, 'readwrite');
+        const store = tx.objectStore(STORE_PRODUCTS);
+        store.clear();
+        for (const item of items) {
+          store.put(item);
+        }
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function idbPutProduct(item) {
+      const db = await openLocalDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_PRODUCTS, 'readwrite');
+        tx.objectStore(STORE_PRODUCTS).put(item);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function idbDeleteProduct(id) {
+      const db = await openLocalDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_PRODUCTS, 'readwrite');
+        tx.objectStore(STORE_PRODUCTS).delete(id);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function idbEnqueueOp(op) {
+      const db = await openLocalDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_OUTBOX, 'readwrite');
+        tx.objectStore(STORE_OUTBOX).add({ ...op, timestamp: Date.now() });
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function idbGetOutbox() {
+      const db = await openLocalDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_OUTBOX, 'readonly');
+        const req = tx.objectStore(STORE_OUTBOX).getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbDeleteOutboxOp(opId) {
+      const db = await openLocalDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_OUTBOX, 'readwrite');
+        tx.objectStore(STORE_OUTBOX).delete(opId);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    // Migrate any legacy localStorage items to IndexedDB transparently on first run
+    async function migrateLegacyLocalStorage() {
+      const raw = localStorage.getItem(LS_LEGACY_PRODUCTS);
+      if (!raw) return;
+      try {
+        const legacyItems = JSON.parse(raw);
+        if (Array.isArray(legacyItems) && legacyItems.length > 0) {
+          const current = await idbGetAllProducts();
+          if (current.length === 0) {
+            await idbReplaceAllProducts(legacyItems);
+          }
+        }
+        localStorage.removeItem(LS_LEGACY_PRODUCTS);
+      } catch {
+        // Ignore malformed legacy data
+      }
+    }
 
     // App State
     let products = [];
@@ -1292,7 +1420,6 @@
     let undoTimer = null;
     let deferredInstallPrompt = null;
 
-    // DOM Elements
     const $ = (id) => document.getElementById(id);
 
     // Register Service Worker for full Offline PWA support
@@ -1463,66 +1590,69 @@
       return `${d}-${m}-${y}`;
     }
 
-    // Local Storage & Offline Persistence
-    function loadLocalProducts() {
+    // Load from Local IndexedDB
+    async function loadLocalProducts() {
       try {
-        const raw = localStorage.getItem(LS_PRODUCTS);
-        products = raw ? JSON.parse(raw) : [];
+        products = await idbGetAllProducts();
       } catch {
         products = [];
       }
       renderProducts();
     }
 
-    function saveLocalProducts() {
-      try {
-        localStorage.setItem(LS_PRODUCTS, JSON.stringify(products));
-      } catch (e) {
-        console.warn('LocalStorage quota warning:', e);
-      }
-    }
-
-    // Offline Sync Queue when authenticated with Firebase
-    function getOfflineQueue() {
-      try {
-        return JSON.parse(localStorage.getItem(LS_PENDING_QUEUE) || '[]');
-      } catch {
-        return [];
-      }
-    }
-
-    function setOfflineQueue(q) {
-      localStorage.setItem(LS_PENDING_QUEUE, JSON.stringify(q));
-    }
-
-    async function flushOfflineQueue() {
+    // Transparent Bidirectional Sync (Local IndexedDB <-> Cloud Firestore)
+    async function syncLocalAndCloud() {
       if (!currentUser || !fbDb || !navigator.onLine) return;
-      const queueItems = getOfflineQueue();
-      if (queueItems.length === 0) return;
 
-      const remaining = [];
-      for (const op of queueItems) {
+      // 1. Flush any queued offline mutations (edits/deletes/adds done while offline)
+      const outbox = await idbGetOutbox();
+      let syncedCount = 0;
+
+      for (const op of outbox) {
         try {
           if (op.type === 'add') {
             await addDoc(collection(fbDb, 'productos'), op.data);
-          } else if (op.type === 'update' && !op.id.startsWith('local_')) {
+            if (op.localId) await idbDeleteProduct(op.localId);
+            await idbDeleteOutboxOp(op.opId);
+            syncedCount++;
+          } else if (op.type === 'update' && op.id && !op.id.startsWith('local_')) {
             await updateDoc(doc(fbDb, 'productos', op.id), op.data);
-          } else if (op.type === 'delete' && !op.id.startsWith('local_')) {
+            await idbDeleteOutboxOp(op.opId);
+            syncedCount++;
+          } else if (op.type === 'delete' && op.id && !op.id.startsWith('local_')) {
             await deleteDoc(doc(fbDb, 'productos', op.id));
+            await idbDeleteOutboxOp(op.opId);
+            syncedCount++;
+          } else {
+            await idbDeleteOutboxOp(op.opId);
           }
         } catch (err) {
-          remaining.push(op);
+          console.warn('Pending sync op kept for retry:', err);
         }
       }
-      setOfflineQueue(remaining);
-      if (remaining.length === 0) {
-        showToast('Cambios offline sincronizados con la nube');
+
+      // 2. Also upload any local-only items created before logging in
+      const allLocal = await idbGetAllProducts();
+      const orphanLocals = allLocal.filter((p) => String(p.id).startsWith('local_'));
+      for (const item of orphanLocals) {
+        try {
+          const { id, ...cleanPayload } = item;
+          await addDoc(collection(fbDb, 'productos'), cleanPayload);
+          await idbDeleteProduct(id);
+          syncedCount++;
+        } catch (err) {
+          console.warn('Orphan local upload deferred:', err);
+        }
+      }
+
+      if (syncedCount > 0) {
+        showToast(`${syncedCount} cambio(s) locales sincronizados con la nube`);
       }
     }
 
     window.addEventListener('online', () => {
       updateCloudIndicator();
-      flushOfflineQueue();
+      syncLocalAndCloud();
     });
     window.addEventListener('offline', () => updateCloudIndicator());
 
@@ -1553,16 +1683,16 @@
 
       if (currentUser && fbDb && online) {
         btn.className = 'icon-badge-btn cloud-online';
-        btn.title = `Conectado en la nube (${currentUser.email})`;
-        syncLabel.textContent = 'Nube sincronizada';
+        btn.title = `Nube + BD local sincronizadas (${currentUser.email})`;
+        syncLabel.textContent = 'Nube + BD local al día';
       } else if (currentUser && !online) {
         btn.className = 'icon-badge-btn cloud-offline';
-        btn.title = 'Sin conexión · Guardando localmente para sincronizar';
-        syncLabel.textContent = 'Offline (pendiente de red)';
+        btn.title = 'Offline · Guardando en BD local (se sincronizará al volver la red)';
+        syncLabel.textContent = 'BD local (sincronización pendiente)';
       } else {
         btn.className = 'icon-badge-btn cloud-offline';
-        btn.title = 'Modo local · Inicia sesión en ajustes para nube';
-        syncLabel.textContent = 'Almacenamiento local';
+        btn.title = 'BD local IndexedDB activa · Inicia sesión en ajustes para nube';
+        syncLabel.textContent = 'BD local (IndexedDB)';
       }
     }
 
@@ -1572,9 +1702,17 @@
         const cfg = parseFirebaseConfig(cfgStr);
         fbApp = initializeApp(cfg);
         fbAuth = getAuth(fbApp);
-        fbDb = getFirestore(fbApp);
 
-        onAuthStateChanged(fbAuth, (user) => {
+        // Enable Firestore native IndexedDB persistent cache
+        try {
+          fbDb = initializeFirestore(fbApp, {
+            localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+          });
+        } catch {
+          fbDb = initializeFirestore(fbApp, {});
+        }
+
+        onAuthStateChanged(fbAuth, async (user) => {
           currentUser = user;
           updateCloudIndicator();
 
@@ -1588,11 +1726,11 @@
             }
             $('btnGoogleLogin').style.display = 'none';
             $('btnGoogleLogout').style.display = 'inline-flex';
+            await syncLocalAndCloud();
             subscribeFirestore();
-            flushOfflineQueue();
           } else {
             $('userNameText').textContent = 'Sin sesión iniciada';
-            $('userEmailText').textContent = 'Guardado local activo (offline listo)';
+            $('userEmailText').textContent = 'Base de datos local IndexedDB activa';
             $('userAvatar').textContent = 'G';
             $('btnGoogleLogin').style.display = 'inline-flex';
             $('btnGoogleLogout').style.display = 'none';
@@ -1600,11 +1738,11 @@
               unsubscribeSnapshot();
               unsubscribeSnapshot = null;
             }
-            loadLocalProducts();
+            await loadLocalProducts();
           }
         });
       } catch (err) {
-        console.warn('Firebase init fallback to local:', err);
+        console.warn('Firebase init fallback to local IndexedDB:', err);
         loadLocalProducts();
       }
     }
@@ -1616,18 +1754,20 @@
       const q = query(collection(fbDb, 'productos'), orderBy('date', 'asc'));
       unsubscribeSnapshot = onSnapshot(
         q,
-        (snapshot) => {
+        async (snapshot) => {
           const cloudItems = [];
           snapshot.forEach((docSnap) => {
             cloudItems.push({ id: docSnap.id, ...docSnap.data() });
           });
-          products = cloudItems;
-          saveLocalProducts();
+          // Mirror every cloud change transparently into local IndexedDB
+          const localPending = (await idbGetAllProducts()).filter((p) => String(p.id).startsWith('local_'));
+          products = [...cloudItems, ...localPending];
+          await idbReplaceAllProducts(products);
           renderProducts();
         },
-        (error) => {
-          console.warn('Firestore snapshot offline/error, using cached mirror:', error);
-          loadLocalProducts();
+        async (error) => {
+          console.warn('Firestore snapshot offline, serving from IndexedDB:', error);
+          await loadLocalProducts();
         }
       );
     }
@@ -1929,7 +2069,7 @@
       }
     });
 
-    // Save Product (Create or Edit, Cloud + Offline)
+    // Save Product (Always writes to Local IndexedDB first + Cloud sync)
     $('btnSaveProduct').addEventListener('click', async () => {
       const name = $('prodName').value.trim();
       const date = $('prodDate').value;
@@ -1958,59 +2098,51 @@
       resetCaptureAndForm();
 
       if (isEditing) {
+        const updatedRecord = { id: targetId, ...payload };
         const idx = products.findIndex((p) => p.id === targetId);
-        if (idx !== -1) {
-          products[idx] = { ...products[idx], ...payload };
-        }
-        saveLocalProducts();
+        if (idx !== -1) products[idx] = updatedRecord;
+        await idbPutProduct(updatedRecord);
         renderProducts();
 
-        if (currentUser && fbDb && !targetId.startsWith('local_')) {
+        if (currentUser && fbDb && !String(targetId).startsWith('local_')) {
           if (navigator.onLine) {
             try {
               await updateDoc(doc(fbDb, 'productos', targetId), payload);
-              showToast('Producto actualizado en la nube');
+              showToast('Actualizado en BD local y nube');
             } catch {
-              const q = getOfflineQueue();
-              q.push({ type: 'update', id: targetId, data: payload });
-              setOfflineQueue(q);
-              showToast('Actualizado offline (se sincronizará al conectar)');
+              await idbEnqueueOp({ type: 'update', id: targetId, data: payload });
+              showToast('Actualizado en BD local (pendiente de red)');
             }
           } else {
-            const q = getOfflineQueue();
-            q.push({ type: 'update', id: targetId, data: payload });
-            setOfflineQueue(q);
-            showToast('Actualizado offline (pendiente de red)');
+            await idbEnqueueOp({ type: 'update', id: targetId, data: payload });
+            showToast('Actualizado en BD local (pendiente de red)');
           }
         } else {
-          showToast('Producto actualizado localmente');
+          showToast('Guardado en BD local');
         }
       } else {
-        const localTempId = 'local_' + Date.now();
+        const localTempId = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
         const newItem = { id: localTempId, ...payload };
         products.push(newItem);
-        saveLocalProducts();
+        await idbPutProduct(newItem);
         renderProducts();
 
         if (currentUser && fbDb) {
           if (navigator.onLine) {
             try {
               await addDoc(collection(fbDb, 'productos'), payload);
-              showToast('Guardado en la nube');
+              await idbDeleteProduct(localTempId);
+              showToast('Guardado en BD local y nube');
             } catch {
-              const q = getOfflineQueue();
-              q.push({ type: 'add', data: payload });
-              setOfflineQueue(q);
-              showToast('Guardado offline (pendiente de sincronización)');
+              await idbEnqueueOp({ type: 'add', localId: localTempId, data: payload });
+              showToast('Guardado en BD local (pendiente de red)');
             }
           } else {
-            const q = getOfflineQueue();
-            q.push({ type: 'add', data: payload });
-            setOfflineQueue(q);
-            showToast('Guardado offline (pendiente de red)');
+            await idbEnqueueOp({ type: 'add', localId: localTempId, data: payload });
+            showToast('Guardado en BD local (pendiente de red)');
           }
         } else {
-          showToast('Producto guardado en el dispositivo');
+          showToast('Guardado en BD local');
         }
       }
     });
@@ -2034,7 +2166,7 @@
     async function deleteProductWithUndo(product) {
       lastDeletedItem = { ...product };
       products = products.filter((p) => p.id !== product.id);
-      saveLocalProducts();
+      await idbDeleteProduct(product.id);
       renderProducts();
 
       $('undoText').textContent = `"${product.name}" eliminado`;
@@ -2045,19 +2177,15 @@
         lastDeletedItem = null;
       }, 6000);
 
-      if (currentUser && fbDb && !product.id.startsWith('local_')) {
+      if (currentUser && fbDb && !String(product.id).startsWith('local_')) {
         if (navigator.onLine) {
           try {
             await deleteDoc(doc(fbDb, 'productos', product.id));
           } catch {
-            const q = getOfflineQueue();
-            q.push({ type: 'delete', id: product.id });
-            setOfflineQueue(q);
+            await idbEnqueueOp({ type: 'delete', id: product.id });
           }
         } else {
-          const q = getOfflineQueue();
-          q.push({ type: 'delete', id: product.id });
-          setOfflineQueue(q);
+          await idbEnqueueOp({ type: 'delete', id: product.id });
         }
       }
     }
@@ -2073,23 +2201,23 @@
       if (currentUser && fbDb && navigator.onLine) {
         try {
           await addDoc(collection(fbDb, 'productos'), dataWithoutId);
-          showToast('Producto restaurado en la nube');
+          showToast('Producto restaurado en nube y BD local');
         } catch {
+          await idbPutProduct(itemToRestore);
           products.push(itemToRestore);
-          saveLocalProducts();
           renderProducts();
-          showToast('Producto restaurado localmente');
+          showToast('Producto restaurado en BD local');
         }
       } else {
-        products.push(itemToRestore);
-        saveLocalProducts();
+        const localRestoreId = String(id).startsWith('local_') ? id : 'local_' + Date.now();
+        const restored = { id: localRestoreId, ...dataWithoutId };
+        await idbPutProduct(restored);
+        products.push(restored);
         renderProducts();
         if (currentUser && fbDb) {
-          const q = getOfflineQueue();
-          q.push({ type: 'add', data: dataWithoutId });
-          setOfflineQueue(q);
+          await idbEnqueueOp({ type: 'add', localId: localRestoreId, data: dataWithoutId });
         }
-        showToast('Producto restaurado');
+        showToast('Producto restaurado en BD local');
       }
     });
 
@@ -2315,10 +2443,12 @@
             if (currentUser && fbDb && navigator.onLine) {
               await addDoc(collection(fbDb, 'productos'), cleanItem);
             } else {
-              products.push({ id: 'local_' + Date.now() + Math.random().toString(36).slice(2, 6), ...cleanItem });
+              const localId = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+              const rec = { id: localId, ...cleanItem };
+              await idbPutProduct(rec);
+              products.push(rec);
             }
           }
-          saveLocalProducts();
           renderProducts();
           showToast(`Importados ${imported.length} productos`);
         } catch {
@@ -2329,10 +2459,13 @@
     });
 
     // Boot Sequence
-    loadSettings();
-    loadLocalProducts();
-    initFirebase();
-    setTimeout(() => checkExpiringNotifications(false), 1800);
+    (async () => {
+      loadSettings();
+      await migrateLegacyLocalStorage();
+      await loadLocalProducts();
+      initFirebase();
+      setTimeout(() => checkExpiringNotifications(false), 1800);
+    })();
   </script>
 </body>
 </html>

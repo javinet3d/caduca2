@@ -1,4 +1,4 @@
-const CACHE_NAME = 'caduca2-offline-v2';
+const CACHE_NAME = 'caduca2-offline-v3';
 const ASSETS = [
   './',
   './index.html',

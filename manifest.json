@@ -1,7 +1,7 @@
 {
   "name": "Caduca2 — Control de Caducidades",
   "short_name": "Caduca2",
-  "description": "Control inteligente de fechas de caducidad con reconocimiento por IA, modo offline y sincronización en la nube.",
+  "description": "Control inteligente de fechas de caducidad con reconocimiento por IA, base de datos local offline y sincronización en la nube.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
