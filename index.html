@@ -1232,7 +1232,7 @@
         <li><strong>Añadir por foto (IA):</strong> Pulsa <em>Cámara</em> o <em>Galería</em>. Si la fecha está en otra cara del envase, añade una segunda foto antes de pulsar <em>Analizar fotos con IA</em>.</li>
         <li><strong>Añadir manualmente:</strong> Pulsa <em>Manual</em> para escribir el nombre, fecha y ubicación sin necesidad de internet.</li>
         <li><strong>Gestionar lista:</strong> Cada tarjeta muestra los días restantes en color, permite ver sus fotos guardadas, editar datos, exportar evento al calendario (<code>.ics</code>) o <strong>deslizar a la izquierda para borrar</strong> (con opción <em>Deshacer</em>).</li>
-        <li><strong>Modo Offline y Nube:</strong> Todos tus cambios se guardan al instante en el dispositivo; si inicias sesión con Google desde el botón superior derecho, se sincronizarán automáticamente con la nube en cuanto tengas conexión.</li>
+        <li><strong>Modo Offline y Nube:</strong> Todos tus cambios se guardan al instante en el dispositivo; si inicias sesión con Google desde el menú superior derecho, se sincronizarán automáticamente con la nube en cuanto tengas conexión.</li>
       </ol>
 
       <button type="button" id="btnOkInfoModal" class="btn btn-primary btn-full" style="margin-top:8px;">Entendido</button>
@@ -1285,7 +1285,7 @@
     let fbDb = null;
     let unsubscribeSnapshot = null;
 
-    let capturedImages = []; // Array of { aiBase64, colorThumbDataUrl }
+    let capturedImages = []; // Array of { aiBase64, colorThumbDataUrl, file }
     let editingProductId = null;
     let preservedEditPhotos = [];
     let lastDeletedItem = null;
@@ -1622,7 +1622,7 @@
             cloudItems.push({ id: docSnap.id, ...docSnap.data() });
           });
           products = cloudItems;
-          saveLocalProducts(); // Keep offline mirror updated
+          saveLocalProducts();
           renderProducts();
         },
         (error) => {
@@ -1662,7 +1662,6 @@
         reader.onload = (ev) => {
           const img = new Image();
           img.onload = () => {
-            // 1. AI Image (max 768px for crisp expiry date reading)
             const aiMax = 768;
             let aw = img.width, ah = img.height;
             if (aw > aiMax || ah > aiMax) {
@@ -1674,7 +1673,6 @@
             cAi.getContext('2d').drawImage(img, 0, 0, aw, ah);
             const aiBase64 = cAi.toDataURL('image/jpeg', 0.78).split(',')[1];
 
-            // 2. Compact Color Thumbnail for Firestore/LocalStorage (max 340px, ~18KB)
             const thMax = 340;
             let tw = img.width, th = img.height;
             if (tw > thMax || th > thMax) {
@@ -1714,7 +1712,6 @@
       }
       renderCapturedThumbs();
       $('previewCard').classList.add('visible');
-      // Place productForm inside previewCard right below Mode A
       const modeABox = $('previewCard').querySelector('.mode-box');
       modeABox.insertAdjacentElement('afterend', $('productForm'));
     }
@@ -1958,7 +1955,6 @@
       const isEditing = Boolean(editingProductId);
       const targetId = editingProductId;
 
-      // Close and reset form immediately for snappy UX
       resetCaptureAndForm();
 
       if (isEditing) {
@@ -2041,7 +2037,6 @@
       saveLocalProducts();
       renderProducts();
 
-      // Show Undo Bar
       $('undoText').textContent = `"${product.name}" eliminado`;
       $('undoBar').classList.add('show');
       clearTimeout(undoTimer);
@@ -2121,8 +2116,7 @@
         `DESCRIPTION:El producto "${product.name}" (${product.location || ''}) caduca el ${formatDisplayDate(product.date)}.`,
         'END:VEVENT',
         'END:VCALENDAR'
-      ].join('
-');
+      ].join('\r\n');
 
       const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
       const url = URL.createObjectURL(blob);

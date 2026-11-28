@@ -1,4 +1,4 @@
-const CACHE_NAME = 'caduca2-offline-v1';
+const CACHE_NAME = 'caduca2-offline-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -30,7 +30,6 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
 
-  // For same-origin app shell files: Cache-first with background update
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(event.request).then((cached) => {
@@ -49,7 +48,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // For external CDN scripts (e.g. Firebase SDK): Network-first with cache fallback
   if (url.hostname.includes('gstatic.com')) {
     event.respondWith(
       fetch(event.request)
